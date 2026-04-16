@@ -570,7 +570,11 @@
             }
             animate() {
                 requestAnimationFrame(() => this.animate());
-                if (!_pageVisible) return; // PERF: tab hidden â€” skip all GPU work
+                if (!_pageVisible) return;
+
+                // PERF: Pause heavy WebGL when Fullscreen Video Reveal is active to prevent video/GPU stuttering!
+                const prOverlay = document.getElementById('project-reveal');
+                if (prOverlay && prOverlay.classList.contains('active')) return;
 
                 const t = this.clock.getElapsedTime();
                 
