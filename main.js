@@ -2256,8 +2256,10 @@
                         const safetyTimer = setTimeout(() => {
                             if (vid.paused) {
                                 vid.removeEventListener('canplaythrough', onReady);
-                                if (vid.readyState >= 2) {
-                                    onReady(); // try anyway with what we have
+                                if (vid.readyState >= 3) {
+                                    onReady(); // try anyway but ONLY if we have future data
+                                } else {
+                                    vid.addEventListener('canplay', onReady, { once: true });
                                 }
                             }
                         }, 8000);
