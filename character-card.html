@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Talent Archive | Limitless Productions</title>
+    <link rel="icon" type="image/png" href="public/images/logo.png">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;700&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
+    
+    <!-- Scripts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
+    <style>
+        :root {
+            --scene-accent: #E8A832;
+            --scene-accent-rgb: 232, 168, 50;
+            --void: #000000;
+            --light: #EFECE6;
+        }
+
+        body {
+            background-color: var(--void);
+            color: var(--light);
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            cursor: none;
+        }
+
+        /* Universe Viewport */
+        .universe-canvas {
+            position: fixed;
+            inset: 0;
+            perspective: 2500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .bg-text-layer {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+            pointer-events: none;
+        }
+        .bg-glow-text {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 20vw;
+            line-height: 0.8;
+            color: rgba(255, 255, 255, 0.02);
+            text-transform: uppercase;
+            letter-spacing: -0.05em;
+            white-space: nowrap;
+        }
+
+        .cylinder-track {
+            position: relative;
+            transform-style: preserve-3d;
+            width: 320px;
+            height: 480px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* CARD WRAPPER - NO BACKGROUND BLUR */
+        .card-wrapper {
+            position: absolute;
+            width: 290px;
+            aspect-ratio: 4/5.5;
+            transform-style: preserve-3d;
+            cursor: pointer;
+            visibility: hidden;
+            opacity: 0;
+            will-change: transform, opacity;
+            transition: opacity 0.4s ease;
+        }
+
+        .edgeless-node {
+            width: 100%; height: 100%;
+            background: rgba(15, 14, 20, 0.85); /* Darker solid background for performance */
+            backdrop-filter: blur(10px); 
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 40px;
+            position: relative;
+            will-change: transform;
+            transform: translateZ(0);
+            overflow: hidden;
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            -webkit-mask-image: radial-gradient(circle at center, black 65%, transparent 100%);
+            mask-image: radial-gradient(circle at center, black 65%, transparent 100%);
+        }
+
+        .card-wrapper:hover .edgeless-node {
+            transform: scale(1.1) translateZ(100px);
+            background: rgba(var(--scene-accent-rgb), 0.15);
+            box-shadow: 0 0 50px rgba(var(--scene-accent-rgb), 0.1);
+        }
+
+        .image-box img { 
+            width: 100%; height: 100%; object-fit: cover; 
+            filter: grayscale(100%) brightness(0.6); 
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .card-wrapper:hover img { filter: grayscale(0%) brightness(1.2); transform: scale(1.1); }
+        
+        /* CENTRAL CORE LOGO */
+        .central-core {
+            position: absolute;
+            width: 150px; height: 150px;
+            display: flex; align-items: center; justify-content: center;
+            z-index: 5;
+            pointer-events: none;
+            opacity: 0.15;
+            filter: drop-shadow(0 0 30px var(--scene-accent));
+        }
+        .central-core img {
+            width: 100%; height: auto;
+            animation: corePulse 8s ease-in-out infinite alternate;
+        }
+        @keyframes corePulse {
+            0% { transform: scale(0.9) rotateY(0deg); opacity: 0.1; }
+            100% { transform: scale(1.1) rotateY(15deg); opacity: 0.2; }
+        }
+
+        .label-ui {
+            position: absolute; bottom: 40px; left: 35px;
+            font-family: 'Space Mono', monospace; text-align: left;
+            opacity: 0.7;
+            z-index: 10;
+        }
+
+        .digital-signature {
+            position: absolute;
+            bottom: 30px;
+            right: 35px;
+            font-family: 'Mrs Saint Delafield', cursive;
+            font-size: 38px;
+            color: var(--scene-accent);
+            opacity: 0.5;
+            transform: rotate(-8deg);
+            pointer-events: none;
+            transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+            filter: drop-shadow(0 0 10px rgba(var(--scene-accent-rgb), 0.3));
+            z-index: 20;
+        }
+        .card-wrapper:hover .digital-signature {
+            opacity: 1;
+            transform: rotate(-4deg) scale(1.1) translateY(-10px);
+            filter: drop-shadow(0 0 20px rgba(var(--scene-accent-rgb), 0.6));
+        }
+
+        .model-comment {
+            position: absolute;
+            top: 40px;
+            left: 35px;
+            font-family: 'Space Mono', monospace;
+            font-size: 7px;
+            letter-spacing: 0.1em;
+            color: rgba(255,255,255,0.3);
+            max-width: 160px;
+            line-height: 1.8;
+            text-transform: uppercase;
+            pointer-events: none;
+            z-index: 10;
+        }
+        .card-wrapper:hover .model-comment {
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* FIXED UI */
+        .fixed-ui {
+            position: fixed; inset: 0; z-index: 1000; pointer-events: none;
+            padding: 50px 60px;
+        }
+
+        .fixed-header {
+            position: absolute; top: 50px; left: 0; width: 100%;
+            padding: 0 60px;
+            display: flex; justify-content: space-between; align-items: center;
+            pointer-events: auto;
+        }
+        .logo-wrap img { height: 35px; opacity: 0.6; }
+
+        .btn-exit {
+            font-family: 'Space Mono', monospace; font-size: 10px;
+            letter-spacing: 0.5em; color: rgba(255,255,255,0.3);
+            transition: all 0.4s; pointer-events: auto;
+        }
+        .btn-exit:hover { color: var(--scene-accent); transform: translateX(-10px); }
+
+        /* FILTER SYSTEM */
+        .filter-nav {
+            position: absolute; bottom: 120px; left: 60px;
+            display: flex; gap: 12px; pointer-events: auto;
+        }
+        .filter-chip {
+            font-family: 'Space Mono', monospace; font-size: 8px;
+            letter-spacing: 0.25em; color: rgba(255,255,255,0.2);
+            padding: 8px 18px; border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 100px; cursor: pointer; transition: all 0.4s;
+            text-transform: uppercase;
+        }
+        .filter-chip.active {
+            color: var(--scene-accent); border-color: var(--scene-accent);
+            background: rgba(var(--scene-accent-rgb), 0.04);
+        }
+        .filter-chip:hover:not(.active) { color: white; border-color: rgba(255,255,255,0.15); }
+
+        .hero-tagline {
+            position: absolute; top: 160px; left: 50%;
+            transform: translateX(-50%); text-align: center; width: 100%;
+        }
+        .tagline-text {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px; letter-spacing: 0.5em;
+            color: rgba(255,255,255,0.4); text-transform: uppercase;
+        }
+
+        .fixed-footer {
+            position: absolute; bottom: 50px; width: 100%;
+            padding: 0 60px;
+            display: flex; justify-content: space-between; align-items: flex-end;
+        }
+        .footer-info {
+            font-family: 'Space Mono', monospace; font-size: 8px;
+            letter-spacing: 0.4em; color: rgba(255,255,255,0.2);
+            text-transform: uppercase;
+        }
+
+        /* CURSOR */
+        #dot {
+            width: 10px; height: 10px; background: var(--scene-accent);
+            border-radius: 50%; position: fixed; z-index: 10001; pointer-events: none;
+            box-shadow: 0 0 20px var(--scene-accent);
+        }
+
+        /* MODAL */
+        #modal {
+            display: none; opacity: 0; background: rgba(0,0,0,0.995); z-index: 10000;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="dot"></div>
+
+    <div class="bg-text-layer">
+        <div class="bg-glow-text">CHARACTER</div>
+        <div class="bg-glow-text" style="margin-top: -5vw; -webkit-text-stroke: 1px rgba(255,255,255,0.05); color: transparent;">CARD</div>
+    </div>
+
+    <!-- UI Overlay -->
+    <div class="fixed-ui">
+        <header class="fixed-header">
+            <a href="index.html" class="logo-wrap">
+                <img src="public/images/logo.png" alt="Limitless">
+            </a>
+            <a href="index.html" class="btn-exit uppercase">EXIT ARCHIVE</a>
+        </header>
+
+        <div class="hero-tagline">
+            <div class="tagline-text">CURATED VOICES // CINEMATIC FACES</div>
+            <div class="tagline-text" style="opacity: 0.2; margin-top: 5px;">THE FUTURE OF GLOBAL REPRESENTATION</div>
+            <div class="mt-8 max-w-lg mx-auto opacity-40 font-soft text-[10px] leading-relaxed tracking-wider">
+                Our roster is an engineered collective of high-fidelity talent. Each node represents a cinematic identity, 
+                refined for the global stage. Navigate the cylinder to discover the next face of premium narrative.
+            </div>
+        </div>
+
+        <!-- Filter System Removed per request -->
+        <div class="filter-nav" id="filters" style="display:none;">
+            <div class="filter-chip active" data-filter="all">ALL NODES</div>
+        </div>
+
+        <footer class="fixed-footer">
+            <div class="footer-info">VADODARA ΓêÖ MUMBAI ΓêÖ DUBAI</div>
+            <div class="footer-info" style="color: var(--scene-accent); opacity: 0.5;">SELECT A NODE TO VIEW DOSSIER</div>
+        </footer>
+    </div>
+
+    <main class="universe-canvas">
+        <div class="cylinder-track" id="track">
+            <div class="central-core">
+                <img src="public/images/logo.png" alt="Limitless">
+            </div>
+        </div>
+    </main>
+
+    <!-- Profile Modal -->
+    <div id="modal" class="fixed inset-0 flex items-center justify-center p-12">
+        <div class="w-full max-w-7xl flex flex-col md:flex-row gap-20 items-center relative z-20">
+            <div class="md:w-[450px] aspect-[4/6] edgeless-node border-none shadow-3xl">
+                <img id="m-img" src="" class="w-full h-full object-cover" alt="">
+            </div>
+            <div class="flex-1 text-left">
+                <span id="m-id" class="font-counter text-[10px] text-[var(--scene-accent)] tracking-[0.5em] uppercase mb-8 block">SECURE NODE // ARCHIVE-ID</span>
+                <h2 id="m-name" class="font-display text-8xl md:text-[11rem] text-white leading-[0.75] mb-12 uppercase">NAME</h2>
+                <div id="m-works" class="flex flex-wrap gap-4 mb-20"></div>
+                <div id="m-video" class="w-full max-w-3xl aspect-video rounded-3xl border border-white/10 overflow-hidden shadow-2xl bg-black"></div>
+                <button class="mt-20 font-counter text-[10px] tracking-widest text-white/30 hover:text-white close-btn uppercase transition-colors">[ CLOSE DATASET ]</button>
+            </div>
+        </div>
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-3xl"></div>
+        <div class="absolute top-10 right-10 text-white cursor-pointer close-btn text-5xl z-30">&times;</div>
+    </div>
+
+    <script>
+        const talents = [
+            { name: "Aria Vance", id: "001", cat: "EDITORIAL", img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb", works: "LUCE & OMBRA, KOA", vids: "https://res.cloudinary.com/dfstyia4c/video/upload/v1775388052/LUCE_OMBRA_-_TEASER_1_p7y5x5.mp4", comment: "CRAFTING SILENCES IN A WORLD OF NOISE." },
+            { name: "Julian Ross", id: "002", cat: "COMMERCIAL", img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d", works: "SIGNATURE EYEWEAR", vids: "https://res.cloudinary.com/dfstyia4c/video/upload/v1775389629/Signature_feb_compilation_2_yxwc0v.mp4", comment: "EVERY FRAME IS A LEGACY IN THE MAKING." },
+            { name: "Elara Sky", id: "003", cat: "LIFESTYLE", img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1", works: "DR. PRIYANKA", vids: "https://res.cloudinary.com/dfstyia4c/video/upload/v1775561554/Dr._Priyanka_-_March_UEB_Horizontal_Reel_1_hzq046.mp4", comment: "AUTHENTICITY OVER PERFECTION, ALWAYS." },
+            { name: "Kai Ren", id: "004", cat: "COMMERCIAL", img: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce", works: "THE DENTAL PROJECT", vids: "https://res.cloudinary.com/dfstyia4c/video/upload/v1775558775/TDP_-_Script_2_xwnchw.mp4", comment: "WHERE PRECISION MEETS PURE EMOTION." },
+            { name: "Sofia Kim", id: "005", cat: "LIFESTYLE", img: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04", works: "SUBA ELITE", vids: "", comment: "DEFINING THE MODERN LUXURY NARRATIVE." },
+            { name: "Oscar Wilde", id: "006", cat: "EDITORIAL", img: "https://images.unsplash.com/photo-1488161628813-04466f872be2", works: "OPTIC HOUSE", vids: "", comment: "CHASING THE LIGHT, FINDING THE SOUL." },
+            { name: "Mia Thorne", id: "007", cat: "EDITORIAL", img: "https://images.unsplash.com/photo-1517841905240-472988babdf9", works: "JAWED HABIB", vids: "", comment: "VIBRANCE IS A REVOLUTION OF STRENGTH." },
+            { name: "Zayn Carter", id: "008", cat: "LIFESTYLE", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e", works: "BROOKFIELDZ", vids: "", comment: "MINIMALISM IS THE ULTIMATE SOPHISTICATION." },
+            { name: "Bella Rae", id: "009", cat: "COMMERCIAL", img: "https://images.unsplash.com/photo-1515562141207-7a88fb0ce33e", works: "WHITE LION JEWELS", vids: "", comment: "GLOW FROM WITHIN, SHINE FOR THE WORLD." },
+            { name: "Victor D.", id: "010", cat: "EDITORIAL", img: "https://images.unsplash.com/photo-1497366216548-37526070297c", works: "LIXUS SPACE", vids: "", comment: "SPACE IS THE CANVAS OF OUR DREAMS." },
+            { name: "Elena G.", id: "011", cat: "LIFESTYLE", img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2", works: "KIDSTER", vids: "", comment: "YOUTH IS THE INFINITE SOURCE OF ENERGY." },
+            { name: "Marcus T.", id: "012", cat: "EDITORIAL", img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e", works: "CROSSBOUNDRIES", vids: "", comment: "BOUNDARIES ARE MADE TO BE BROKEN." },
+            { name: "Stella Nova", id: "013", cat: "EDITORIAL", img: "https://images.unsplash.com/photo-1529626455594-4ff5d020a5a1", works: "LUCE OMBRA 2", vids: "", comment: "BEYOND THE HORIZON LIES THE TRUTH." },
+            { name: "Aiden Flux", id: "014", cat: "COMMERCIAL", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d", works: "TRICHUP", vids: "", comment: "FLOW LIKE WATER, STAND LIKE A MOUNTAIN." },
+            { name: "Grace Field", id: "015", cat: "EDITORIAL", img: "https://images.unsplash.com/photo-1560066984-138dadb4c035", works: "JAWED HABIB 2", vids: "", comment: "ELEGANCE IS THE ONLY BEAUTY THAT NEVER FADES." }
+        ];
+
+        const track = document.getElementById('track');
+        talents.forEach((t, i) => {
+            const card = document.createElement('div');
+            card.className = 'card-wrapper';
+            card.setAttribute('data-category', t.cat);
+            card.innerHTML = `
+                <div class="edgeless-node shadow-2xl">
+                    <div class="image-box"><img src="${t.img}?q=80&w=800" alt=""></div>
+                    <div class="model-comment font-counter">ΓÇ£${t.comment}ΓÇ¥</div>
+                    <div class="label-ui">
+                        <span class="text-[var(--scene-accent)] text-[8px] tracking-[0.4em] block mb-1">NODE // ${t.cat}</span>
+                        <span class="text-white text-[18px] font-display uppercase tracking-widest">${t.name}</span>
+                    </div>
+                    <div class="digital-signature">${t.name.split(' ')[0]}</div>
+                </div>
+            `;
+            card.onclick = () => openDossier(t);
+            track.appendChild(card);
+        });
+
+        let allNodes = Array.from(document.querySelectorAll('.card-wrapper'));
+        let activeNodes = [...allNodes];
+        const radius = 1100;
+        let rotation = 0;
+        let targetRotation = 0;
+        let isDossierOpen = false;
+
+        let lastUpdate = 0;
+        function update() {
+            if(!isDossierOpen) {
+                const now = performance.now();
+                if (now - lastUpdate < 16) { // Throttle to roughly 60fps
+                    requestAnimationFrame(update);
+                    return;
+                }
+                lastUpdate = now;
+
+                rotation += (targetRotation - rotation) * 0.08;
+                targetRotation += 0.00015; 
+                activeNodes.forEach((node, i) => {
+                    const angle = (i / activeNodes.length) * Math.PI * 2 + rotation;
+                    const x = Math.sin(angle) * radius;
+                    const z = Math.cos(angle) * (radius * 0.9);
+                    const rY = angle * (180 / Math.PI);
+                    gsap.set(node, { x, z, rotateY: rY, overwrite: 'auto' });
+                });
+            }
+            requestAnimationFrame(update);
+        }
+
+        function intro() {
+            gsap.set(allNodes, { x: 0, y: 100, z: -800, opacity: 0, visibility: 'visible' });
+            gsap.to(activeNodes, { opacity: 1, y: 0, z: 0, duration: 1.8, stagger: 0.1, ease: "power4.out", onComplete: update });
+        }
+
+        window.addEventListener('wheel', (e) => {
+            if(isDossierOpen) return;
+            // Enhanced scroll control: support both axes and scale delta for premium feel
+            const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+            targetRotation += delta * 0.0008; 
+            
+            // Add a subtle kick to the background text when scrolling
+            gsap.to('.bg-glow-text', { x: (delta > 0 ? -20 : 20), duration: 0.8, ease: 'power2.out', overwrite: 'auto' });
+        });
+
+        const filterChips = document.querySelectorAll('.filter-chip');
+        filterChips.forEach(chip => {
+            chip.onclick = () => {
+                const category = chip.getAttribute('data-filter');
+                filterChips.forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+
+                const newActiveNodes = allNodes.filter(node => 
+                    category === 'all' || node.getAttribute('data-category') === category
+                );
+
+                const inactiveNodes = allNodes.filter(n => !newActiveNodes.includes(n));
+                gsap.to(inactiveNodes, { opacity: 0, scale: 0.5, z: -500, duration: 0.6 });
+
+                activeNodes = newActiveNodes;
+                gsap.to(activeNodes, { opacity: 1, scale: 1, z: 0, duration: 0.8, stagger: 0.05, ease: "power2.inOut" });
+            };
+        });
+
+        const modal = document.getElementById('modal');
+        function openDossier(t) {
+            isDossierOpen = true;
+            document.getElementById('m-name').innerText = t.name;
+            document.getElementById('m-id').innerText = `SECURE NODE // ARCHIVE-ID-${t.id}`;
+            document.getElementById('m-img').src = t.img + "?q=80&w=1200";
+            document.getElementById('m-works').innerHTML = t.works.split(',').map(w => `<span class="px-6 py-2 rounded-full border border-white/10 text-[9px] uppercase tracking-widest text-white/50">${w.trim()}</span>`).join('');
+            document.getElementById('m-video').innerHTML = t.vids ? `<video src="${t.vids}" class="w-full h-full object-cover" controls autoplay muted></video>` : '';
+            modal.style.display = 'flex';
+            gsap.to(modal, { opacity: 1, duration: 0.8 });
+        }
+
+        document.querySelectorAll('.close-btn').forEach(b => b.onclick = () => {
+            gsap.to(modal, { opacity: 0, duration: 0.4, onComplete: () => {
+                modal.style.display = 'none';
+                document.getElementById('m-video').innerHTML = '';
+                isDossierOpen = false;
+            }});
+        });
+
+        const dot = document.getElementById('dot');
+        window.onmousemove = (e) => gsap.to(dot, { x: e.clientX, y: e.clientY, duration: 0.12 });
+        window.onload = intro;
+    </script>
+</body>
+</html>

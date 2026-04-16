@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Journal - Limitless Productions</title>
+    <meta name="description" content="Read the latest from Limitless Productions. Insights on cinematography, post-production, event management, and digital marketing.">
+    <link rel="stylesheet" href="index.css">
+    <link href="https://api.fontshare.com/v2/css?f[]=general-sans@300,400,500,600&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #030605; color: #fff; font-family: 'General Sans', sans-serif; }
+        .page-header { padding: 150px 5vw 50px; text-align: center; }
+        .page-title { font-size: 4rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 20px; font-weight: 300; }
+        .page-desc { color: rgba(255,255,255,0.6); max-width: 600px; margin: 0 auto; line-height: 1.6; }
+        .journal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 40px; padding: 50px 5vw 100px; max-width: 1400px; margin: 0 auto; }
+        .article-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; overflow: hidden; transition: transform 0.3s ease, border-color 0.3s ease; }
+        .article-card:hover { transform: translateY(-5px); border-color: var(--scene-accent, #E8A832); }
+        .article-img { width: 100%; height: 200px; object-fit: cover; background: #111; }
+        .article-content { padding: 30px; }
+        .article-date { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--scene-accent, #E8A832); margin-bottom: 10px; display: block; }
+        .article-title { font-size: 1.5rem; margin-bottom: 15px; font-weight: 400; line-height: 1.3; }
+        .article-excerpt { font-size: 0.9rem; color: rgba(255,255,255,0.6); line-height: 1.6; }
+    </style>
+</head>
+<body>
+    <header style="padding: 20px 5vw; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1);">
+        <a href="index.html" style="color: #fff; text-decoration: none; font-weight: 600; letter-spacing: 0.1em; font-size: 1.2rem;">LIMITLESS</a>
+        <a href="index.html" style="color: rgba(255,255,255,0.6); text-decoration: none; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.2em;">Back to Home</a>
+    </header>
+
+    <main>
+        <section class="page-header">
+            <h1 class="page-title">The Journal</h1>
+            <p class="page-desc">Insights, behind-the-scenes, and cinematic musings from the Limitless team. This space is engineered to provide value to our community and boost domain authority.</p>
+        </section>
+
+        <section class="journal-grid">
+            <!-- Article Placeholder 1 -->
+            <article class="article-card">
+                <div class="article-img"></div>
+                <div class="article-content">
+                    <span class="article-date">SEP 15, 2026 // CINEMATOGRAPHY</span>
+                    <h2 class="article-title">The Art of Storytelling Through the Lens</h2>
+                    <p class="article-excerpt">How we manipulate light, shadow, and movement to evoke powerful emotional responses in commercial fashion shoots.</p>
+                </div>
+            </article>
+
+            <!-- Article Placeholder 2 -->
+            <article class="article-card">
+                <div class="article-img"></div>
+                <div class="article-content">
+                    <span class="article-date">AUG 22, 2026 // POST-PRODUCTION</span>
+                    <h2 class="article-title">Color Grading Secrets for a Premium Cinematic Look</h2>
+                    <p class="article-excerpt">Discover the technical workflows we use to transform raw footage into breathtaking visual masterpieces during post.</p>
+                </div>
+            </article>
+
+            <!-- Article Placeholder 3 -->
+            <article class="article-card">
+                <div class="article-img"></div>
+                <div class="article-content">
+                    <span class="article-date">JUL 10, 2026 // DIGITAL MARKETING</span>
+                    <h2 class="article-title">Why Video Strategy is Your Ultimate Conversion Tool</h2>
+                    <p class="article-excerpt">In a scrolling economy, high-retention video content is the difference between being seen and being forgotten.</p>
+                </div>
+            </article>
+        </section>
+    </main>
+</body>
+</html>
