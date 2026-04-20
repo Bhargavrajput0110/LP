@@ -1,4 +1,4 @@
-
+﻿
         import * as THREE from 'three';
         import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
         import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
@@ -152,8 +152,9 @@
             }
             resize() {
                 if (!this.canvas) return;
-                this.canvas.width = Math.floor(window.innerWidth * 0.4);
-                this.canvas.height = Math.floor(window.innerHeight * 0.4);
+                // PERF: 0.3x resolution — grain is blurry by nature, halving saves ~55% pixel ops
+                this.canvas.width = Math.floor(window.innerWidth * 0.3);
+                this.canvas.height = Math.floor(window.innerHeight * 0.3);
             }
             frame() {
                 if (!this.canvas) return;
@@ -233,21 +234,24 @@
                     });
                 });
             }
-            render() {
+            render(ts) {
+                // PERF: Cap cursor at 60fps using rAF timestamp; skip updates when hidden
                 if (_pageVisible) {
                     const lerp = (a, b, t) => a + (b - a) * t;
                     this.ring.x = lerp(this.ring.x, this.mouse.x, 0.15);
                     this.ring.y = lerp(this.ring.y, this.mouse.y, 0.15);
                     this.ringEl.style.transform = `translate(${this.ring.x}px, ${this.ring.y}px) translate(-50%,-50%)`;
                     let px = this.mouse.x, py = this.mouse.y;
-                    this.trails.forEach((t) => {
+                    const trails = this.trails;
+                    for (let i = 0; i < trails.length; i++) {
+                        const t = trails[i];
                         t.x = lerp(t.x, px, t.lag);
                         t.y = lerp(t.y, py, t.lag);
                         t.el.style.transform = `translate(${t.x}px, ${t.y}px) translate(-50%,-50%)`;
                         px = t.x; py = t.y;
-                    });
+                    }
                 }
-                requestAnimationFrame(() => this.render());
+                requestAnimationFrame((ts) => this.render(ts));
             }
         }
 
@@ -256,7 +260,14 @@
         // -------------------------------------------------------------
         const tcEl = document.getElementById('timecode');
         const start = Date.now();
-        function updateTC() {
+        // PERF: Throttle timecode to 6fps and skip when hidden
+        let _tcLast = 0;
+        const _TC_INTERVAL = 1000 / 6;
+        function updateTC(ts) {
+            requestAnimationFrame(updateTC);
+            if (!_pageVisible) return;
+            if (ts - _tcLast < _TC_INTERVAL) return;
+            _tcLast = ts;
             const ms = Date.now() - start;
             const f = Math.floor(ms / (1000/24)) % 24;
             const s = Math.floor(ms / 1000) % 60;
@@ -264,9 +275,8 @@
             const h = Math.floor(ms / 3600000);
             const p = n => String(n).padStart(2,'0');
             tcEl.textContent = `TC ${p(h)}:${p(m)}:${p(s)}:${p(f)}`;
-            requestAnimationFrame(updateTC);
         }
-        updateTC();
+        requestAnimationFrame(updateTC);
 
         // -------------------------------------------------------------
         // THREE.JS VOID STAGE
@@ -293,6 +303,10 @@
                 this.cursorPos = new THREE.Vector3(0,0,0);
                 this.clock = new THREE.Clock();
                 this.lastLightPos = new THREE.Vector3();
+                // PERF: Pre-allocate reusable objects to avoid per-frame GC pressure
+                this._rayVec = new THREE.Vector3();
+                this._rayDir = new THREE.Vector3();
+                this._rayPos = new THREE.Vector3();
 
                 this.build();
                 this.buildCursorParticles();
@@ -581,15 +595,15 @@
                 // Dust gentle rotation
                 this.dust.rotation.y = t * 0.02;
                 
-                // Raycast mouse to world plane for light
-                const vector = new THREE.Vector3(this.mouse.x, this.mouse.y, 0.5);
-                vector.unproject(this.camera);
-                const dir = vector.sub(this.camera.position).normalize();
-                const distance = -this.camera.position.z / dir.z;
-                const pos = this.camera.position.clone().add(dir.multiplyScalar(distance));
+                // PERF: Reuse pre-allocated vectors — avoids ~3 new THREE.Vector3() allocations per frame
+                this._rayVec.set(this.mouse.x, this.mouse.y, 0.5);
+                this._rayVec.unproject(this.camera);
+                this._rayDir.copy(this._rayVec).sub(this.camera.position).normalize();
+                const distance = -this.camera.position.z / this._rayDir.z;
+                this._rayPos.copy(this.camera.position).addScaledVector(this._rayDir, distance);
                 
                 // Lerp light position
-                this.light.position.lerp(pos, 0.1);
+                this.light.position.lerp(this._rayPos, 0.1);
 
                 // --- Cinematic Cursor Particles Logic ---
                 const distMoved = this.light.position.distanceTo(this.lastLightPos);
@@ -1583,6 +1597,25 @@
 
             // (card-float-wrapper logic removed to prevent DOM breaking and vertical stagger)
 
+            // PERF: Pause all CSS marquee/loop animations when off-screen via IntersectionObserver
+            (function initMarqueePause() {
+                const io = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        entry.target.classList.toggle('is-visible', entry.isIntersecting);
+                    });
+                }, { threshold: 0.01 });
+                document.querySelectorAll('.testi-marquee-wrapper').forEach(el => io.observe(el));
+                document.querySelectorAll('.client-track-inner').forEach(el => io.observe(el));
+                document.querySelectorAll('.reel-track').forEach(el => {
+                    const ioReel = new IntersectionObserver((entries) => {
+                        entries.forEach(e => {
+                            e.target.style.animationPlayState = e.isIntersecting ? 'running' : 'paused';
+                        });
+                    }, { threshold: 0.01 });
+                    ioReel.observe(el);
+                });
+            })();
+
             // Setup Lenis â€“ shorter duration on mobile for snappier native-like feel
             lenis = new Lenis({ duration: isMobile ? 1.2 : 2.0, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), direction: 'vertical', gestureDirection: 'vertical', smooth: !isMobile, mouseMultiplier: 1, smoothTouch: false, touchMultiplier: 2, infinite: false });
             lenis.on('scroll', ScrollTrigger.update);
@@ -1593,12 +1626,33 @@
             gsap.ticker.lagSmoothing(0);
 
             // Î“Ã¶Ã‡Î“Ã¶Ã‡ DA OVERLAY STATE (declared early so openDaOverlay is always in scope) Î“Ã¶Ã‡Î“Ã¶Ã‡
+            // LAZY OVERLAY LOADER
+            // Overlays are NOT in index.html — fetched once on first interaction
+            const _mount = document.getElementById('lazy-overlays-mount');
+            const _fragmentCache = {};
+
+            async function _loadFragment(name) {
+                if (_fragmentCache[name]) return;
+                try {
+                    const res = await fetch(`/public/fragments/${name}.html`);
+                    if (!res.ok) throw new Error(`Fragment ${name} not found`);
+                    const html = await res.text();
+                    const wrapper = document.createElement('div');
+                    wrapper.innerHTML = html;
+                    _mount.appendChild(wrapper.firstElementChild);
+                    _fragmentCache[name] = true;
+                } catch(e) { console.warn('[LP] Fragment load failed:', name, e); }
+            }
+
+            // DA OVERLAY STATE
             let isDaOpen = false;
             let daReqFrame;
-            const daOverlay = document.getElementById('da-overlay');
 
-            function openDaOverlay() {
+            async function openDaOverlay() {
                 if (isDaOpen) return;
+                await _loadFragment('da-overlay');
+                const daOverlay = document.getElementById('da-overlay');
+                if (!daOverlay) return;
                 isDaOpen = true;
                 lenis.stop();
                 initDaThreeJS();
@@ -1610,13 +1664,14 @@
                     { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: 'power3.out', delay: 0.2 }
                 );
             }
-
             function closeDaOverlay() {
                 if (!isDaOpen) return;
                 isDaOpen = false;
                 cancelAnimationFrame(daReqFrame);
+                const _daEl = document.getElementById('da-overlay');
+                if (!_daEl) return;
                 gsap.to('.da-animate-element', { y: -20, opacity: 0, duration: 0.3, ease: 'power2.in' });
-                gsap.to(daOverlay, {
+                gsap.to(_daEl, {
                     opacity: 0, pointerEvents: 'none', duration: 0.6, ease: 'power2.inOut', delay: 0.1,
                     onComplete: () => { lenis.start(); }
                 });
@@ -1742,27 +1797,20 @@
 
             // --- 3D CONTACT OVERLAY LOGIC ---
             let isContactOpen = false;
-            const contactOverlay = document.getElementById('contact-overlay');
-            const contactPerspective = document.getElementById('contact-perspective');
-            const contactCard = document.querySelector('.contact-card-3d');
-            
-            function openContactOverlay() {
+
+            async function openContactOverlay() {
                 if(isContactOpen) return;
+                await _loadFragment('contact-overlay');
+                const contactOverlay = document.getElementById('contact-overlay');
+                const contactCard = document.querySelector('.contact-card-3d');
+                if (!contactOverlay) return;
                 isContactOpen = true;
-                
-                // Freeze background
                 lenis.stop();
-                
-                // Set mood to a vibrant Dark Editorial (Red) for the contact screen
                 voidStage.setMood('darkEditorial');
                 if (voidStage.triggerBurst) voidStage.triggerBurst();
-
-                // Fade in overlay backdrop
                 gsap.to(contactOverlay, { opacity: 1, pointerEvents: 'auto', duration: 0.6, ease: 'power2.out' });
-                
-                // 3D Card Entrance Animation
-                gsap.fromTo(contactCard, 
-                    { y: 150, rotateX: -30, scale: 0.8, opacity: 0 }, 
+                gsap.fromTo(contactCard,
+                    { y: 150, rotateX: -30, scale: 0.8, opacity: 0 },
                     { y: 0, rotateX: 0, scale: 1, opacity: 1, duration: 1.2, ease: 'expo.out', delay: 0.1 }
                 );
             }
@@ -1770,25 +1818,20 @@
             function closeContactOverlay() {
                 if(!isContactOpen) return;
                 isContactOpen = false;
-                
-                // Unfreeze background
                 lenis.start();
-
-                // Animate card out
-                gsap.to(contactCard, { y: -100, rotateX: 20, scale: 0.9, opacity: 0, duration: 0.6, ease: 'power2.in' });
-                
-                // Fade out overlay backdrop
-                gsap.to(contactOverlay, { opacity: 0, pointerEvents: 'none', duration: 0.6, ease: 'power2.in', delay: 0.2, onComplete: () => {
-                    // Trigger a scroll update to revert the mood back to whatever section they are currently looking at
+                const _co = document.getElementById('contact-overlay');
+                const _cc = document.querySelector('.contact-card-3d');
+                if (_cc) gsap.to(_cc, { y: -100, rotateX: 20, scale: 0.9, opacity: 0, duration: 0.6, ease: 'power2.in' });
+                if (_co) gsap.to(_co, { opacity: 0, pointerEvents: 'none', duration: 0.6, ease: 'power2.in', delay: 0.2, onComplete: () => {
                     ScrollTrigger.refresh(true);
                 }});
             }
 
-            // Close button click
-            document.querySelector('.contact-close-btn').addEventListener('click', closeContactOverlay);
-            
-            // Close on background click
-            document.querySelector('.contact-backdrop').addEventListener('click', closeContactOverlay);
+            // Close button + backdrop — use event delegation since overlay is lazy-injected
+            document.addEventListener('click', (e) => {
+                if (e.target.closest('.contact-close-btn')) closeContactOverlay();
+                if (e.target.classList.contains('contact-backdrop')) closeContactOverlay();
+            });
 
             // Escape key to close
             document.addEventListener('keydown', (e) => {
@@ -1796,6 +1839,8 @@
             });
 
             // Interactive 3D Tilt Logic for Contact Card
+            const contactPerspective = document.getElementById('contact-perspective') || document.querySelector('.perspective-1000');
+            const contactCard = document.querySelector('.contact-card-3d');
             if(contactPerspective && contactCard) {
                 contactPerspective.addEventListener('mousemove', (e) => {
                     if(!isContactOpen || window.innerWidth < 768) return; // Skip heavy tilt on mobile
@@ -2672,17 +2717,18 @@
                 });
             }
 
-            // Profile Modal Logic
+            // Profile Modal Logic — lazy-loaded from /public/fragments/model-profile.html
             const modelCards = document.querySelectorAll('.talent-card');
-            const profileModal = document.getElementById('model-profile');
-            const mpName = document.getElementById('mp-name');
-            const mpImg = document.getElementById('mp-img');
-            const mpWorks = document.getElementById('mp-works-list');
-            const mpVids = document.getElementById('mp-videos-container');
-            const mpCloseBtns = document.querySelectorAll('.mp-close-btn');
 
             modelCards.forEach(card => {
-                card.addEventListener('click', () => {
+                card.addEventListener('click', async () => {
+                    await _loadFragment('model-profile');
+                    const profileModal = document.getElementById('model-profile');
+                    const mpName = document.getElementById('mp-name');
+                    const mpImg = document.getElementById('mp-img');
+                    const mpWorks = document.getElementById('mp-works-list');
+                    const mpVids = document.getElementById('mp-videos-container');
+                    if (!profileModal) return;
                     const name = card.dataset.model;
                     const img = card.querySelector('img').src;
                     const works = card.dataset.works.split(',');
@@ -2712,18 +2758,21 @@
                 });
             });
 
-            mpCloseBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    gsap.to(profileModal, { 
-                        opacity: 0, 
-                        pointerEvents: 'none', 
-                        duration: 0.4, 
-                        ease: 'power2.in',
-                        onComplete: () => { 
-                            profileModal.style.display = 'none';
-                            mpVids.innerHTML = ''; // Stop and clear videos
-                        }
-                    });
+            // Close modal via event delegation (element is lazy-injected)
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.mp-close-btn')) return;
+                const _pm = document.getElementById('model-profile');
+                const _mv = document.getElementById('mp-videos-container');
+                if (!_pm) return;
+                gsap.to(_pm, {
+                    opacity: 0,
+                    pointerEvents: 'none',
+                    duration: 0.4,
+                    ease: 'power2.in',
+                    onComplete: () => {
+                        _pm.style.display = 'none';
+                        if (_mv) _mv.innerHTML = '';
+                    }
                 });
             });
         });

@@ -365,7 +365,7 @@
         .project-card:hover .card-leak { opacity: 0.25; }
         .project-card:hover .card-overlay { background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, rgba(var(--scene-accent-rgb), 0.1) 100%); }
 
-        .work-grid { position: absolute; inset: -100vw; pointer-events: none; z-index: -1; opacity: 0.15; background-image: radial-gradient(rgba(255,255,255,0.4) 1px, transparent 1.5px); background-size: 32px 32px; animation: gridDrift 60s linear infinite; mix-blend-mode: overlay; }
+        .work-grid { position: absolute; inset: -100vw; pointer-events: none; z-index: -1; opacity: 0.15; background-image: radial-gradient(rgba(255,255,255,0.4) 1px, transparent 1.5px); background-size: 32px 32px; animation: gridDrift 60s linear infinite; mix-blend-mode: overlay; contain: strict; }
         @keyframes gridDrift { from { transform: translate(0, 0); } to { transform: translate(32px, 32px); } }
         .work-vignette { position: absolute; inset: 0; pointer-events: none; z-index: 0; background: radial-gradient(ellipse at 50% 40%, transparent 20%, rgba(0,0,0,0.5) 80%, rgba(0,0,0,0.95) 100%); }
         .work-glow { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: radial-gradient(circle at center, rgba(var(--scene-accent-rgb), 0.15) 0%, transparent 80%); pointer-events: none; z-index: 0; mix-blend-mode: screen; opacity: 0; transition: opacity 1.5s; }
@@ -623,22 +623,23 @@
             -webkit-backdrop-filter: none !important;
         }
         .cat-grid article.project-card:hover { box-shadow: 0 32px 80px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.1) !important; }
-        /* Browser Window Header */
-        .cat-grid article.project-card::before { content: ''; display: block; width: 100%; height: 28px; background: #0B0D12; border-bottom: 1px solid rgba(255,255,255,0.05); flex-shrink: 0; position: relative; z-index: 2; }
-        .cat-grid article.project-card::after { content: ''; position: absolute; top: 12px; left: 16px; width: 6px; height: 6px; border-radius: 50%; background: #FF5F56; box-shadow: 12px 0 0 #FFBD2E, 24px 0 0 #27C93F; z-index: 3; }
-        /* Image Media */
-        .cat-grid article.project-card .card-media { position: relative !important; inset: auto !important; width: 100% !important; height: 230px !important; border-radius: 0 !important; flex-shrink: 0; border-bottom: 1px solid #2A2A2A; overflow: hidden; background: #000; }
-        .cat-grid article.project-card .card-media img, .cat-grid article.project-card .card-media video { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s ease; }
-        .cat-grid article.project-card:hover .card-media img, .cat-grid article.project-card:hover .card-media video { transform: scale(1.05); }
-        .cat-grid article.project-card .spine-connector { display: none; }
-        /* Info Block */
-        .cat-grid article.project-card .card-info { 
-            position: relative !important; padding: 24px 28px !important; background: #0B0D12 !important; z-index: 4; flex: 1; display: flex; flex-direction: column; justify-content: center; 
-        }
-        .cat-grid article.project-card .card-name { font-family: 'Playfair Display', serif; font-size: 1.8rem; letter-spacing: 0.02em; color: #FFF; margin: 0 0 10px; font-weight: 600; line-height: 1.2; text-transform: uppercase; }
-        .cat-grid article.project-card .card-sub { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.22em; color: var(--scene-accent); text-transform: uppercase; display: flex; align-items: center; gap: 12px; font-weight: 500; opacity: 0.8; }
-        .cat-grid article.project-card .card-sub::before { content: ''; width: 24px; height: 1px; background: currentColor; opacity: 0.4; }
+.card-cursor-inner { top: 0; left: 0; position: absolute; pointer-events: none; opacity: 0; z-index: 5; color: #fff; font-size: 8px; letter-spacing: 0.25em; text-transform: uppercase; padding: 10px 20px; border: 1px solid rgba(255,255,255,0.25); border-radius: 30px; background: rgba(var(--scene-accent-rgb), 0.15); backdrop-filter: blur(8px); transform: scale(0.8); transition: opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1); white-space: nowrap; }
+        .project-card:hover .card-cursor-inner { opacity: 1; }
 
+        .card-scroll-wheel { position: absolute; bottom: 25px; right: 25px; width: 16px; height: 28px; border: 1.5px solid rgba(255,255,255,0.45); border-radius: 10px; opacity: 0; z-index: 5; transition: opacity 0.5s ease; pointer-events: none; }
+        .project-card:hover .card-scroll-wheel { opacity: 0.8; }
+        .card-scroll-wheel .wheel { position: absolute; top: 5px; left: 50%; width: 2px; height: 6px; background: var(--scene-accent); border-radius: 2px; transform: translateX(-50%); animation: scroll-wheel-anim 1.8s cubic-bezier(0.645, 0.045, 0.355, 1) infinite; }
+        @keyframes scroll-wheel-anim { 0% { transform: translate(-50%, 0); opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { transform: translate(-50%, 12px); opacity: 0; } }
+
+        .card-brand-logo {
+            display: none !important;
+        }
+        .card-brand-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: brightness(0) invert(1) contrast(1.2);
+        }
 
         /* ABOUT / CONTACT VIEWS */
         .marquee-section { overflow: hidden; padding: 40px 0; border-top: 1px solid #222; border-bottom: 1px solid #222;}
@@ -657,7 +658,11 @@
             display: flex;
             width: max-content;
             animation: testiLoop 40s linear infinite;
+            animation-play-state: paused; /* PERF: JS enables when in view */
             will-change: transform;
+        }
+        .testi-marquee-wrapper.is-visible {
+            animation-play-state: running;
         }
         .testi-marquee-wrapper:hover {
             animation-play-state: paused;
@@ -706,10 +711,6 @@
             opacity: 0;
             transition: opacity 0.5s ease;
         }
-        
-        .clients-spotlight-wrapper:hover .clients-hover-glow {
-            opacity: 1;
-        }
 
         /* Premium 3D Glass Lens - Fully Transparent Center */
         .clients-hover-lens {
@@ -723,28 +724,18 @@
             opacity: 0;
             transition: opacity 0.4s ease;
             display: flex; align-items: center; justify-content: center;
-            
-            /* No white background to stop fogging! */
             background: transparent;
             border: 1px solid rgba(255, 255, 255, 0.4);
-            
-            /* Dynamic curved glass bevel & shadows */
-            box-shadow: 
-                0 30px 60px rgba(0,0,0,0.05), /* Outer drop shadow dropping off the curve */
-                inset 0 30px 50px rgba(255,255,255,1), /* Thick bright top curve inside */
-                inset 0 -20px 40px rgba(0,0,0,0.03); /* Subtle dark bottom curve inside */
-
-            /* Just enhance the colors through the lens */
+            box-shadow: 0 30px 60px rgba(0,0,0,0.05), inset 0 30px 50px rgba(255,255,255,1), inset 0 -20px 40px rgba(0,0,0,0.03);
             backdrop-filter: saturate(1.1) contrast(1.05);
             -webkit-backdrop-filter: saturate(1.1) contrast(1.05);
         }
         
         .clients-blur-overlay {
             position: absolute; inset: 0; z-index: 10; pointer-events: none;
-            background: rgba(255, 255, 255, 0.2); /* Much lighter frost so logos remain extremely legible */
+            background: rgba(255, 255, 255, 0.2); 
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            /* Sharp transparent hole matching the lens radius (160px for 320px dia) */
             mask-image: radial-gradient(circle 160px at var(--mx) var(--my), transparent 0%, transparent 95%, black 100%);
             -webkit-mask-image: radial-gradient(circle 160px at var(--mx) var(--my), transparent 0%, transparent 95%, black 100%);
             transition: opacity 0.5s ease;
@@ -753,10 +744,12 @@
         .client-track { display: flex; width: max-content; margin-bottom: 50px; position: relative; z-index: 5; }
         .client-track:last-child { margin-bottom: 0; }
         
-        .track-left .client-track-inner { display: flex; animation: clientLoopLeft 50s linear infinite; }
-        .track-right .client-track-inner { display: flex; animation: clientLoopRight 45s linear infinite; }
+        .track-left .client-track-inner { display: flex; animation: clientLoopLeft 50s linear infinite; animation-play-state: paused; }
+        .track-right .client-track-inner { display: flex; animation: clientLoopRight 45s linear infinite; animation-play-state: paused; }
         
-        .client-track:hover .client-track-inner { animation-play-state: paused; }
+        /* PERF: JS adds is-visible when scrolled in view */
+        .client-track-inner.is-visible { animation-play-state: running !important; }
+        .client-track:hover .client-track-inner { animation-play-state: paused !important; }
 
         @keyframes clientLoopLeft {
             0% { transform: translateX(0); }
@@ -774,17 +767,14 @@
         
         .client-logo-item img {
             height: 70px; width: auto; max-width: 260px; object-fit: contain;
-            /* Enhance resting contrast slightly and guard white logos */
             filter: drop-shadow(0 6px 16px rgba(0,0,0,0.12));
-            opacity: 0.85; /* Higher base opacity for better visibility */
-            transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.4s ease, filter 0.4s ease;
+            opacity: 0.85;
+            transition: opacity 0.4s ease, filter 0.4s ease;
         }
 
         .client-logo-item:hover img {
             opacity: 1;
-            /* Aggressively boost color saturation when hovered without casting a fake dark shadow behind bright logos! */
-            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.15)) saturate(1.2) contrast(1.1);
-            transform: scale(1.18) translateY(-15px);
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1)) saturate(1.1);
         }
 
         /* ============================================================ */
