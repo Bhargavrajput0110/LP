@@ -1,76 +1,99 @@
-// firebase-admin.js — Wires Firebase into the CMS admin panel
+// firebase-admin.js v2 — Auto-syncs seed version bumps to Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyD1vnMRo_cCcqpzuV9prlrOiUIavz7nv6g",
-  authDomain: "limitless-cms.firebaseapp.com",
-  projectId: "limitless-cms",
-  storageBucket: "limitless-cms.firebasestorage.app",
-  messagingSenderId: "795014578598",
-  appId: "1:795014578598:web:449def7c57453637480f67"
+    apiKey: "AIzaSyD1vnMRo_cCcqpzuV9prlrOiUIavz7nv6g",
+    authDomain: "limitless-cms.firebaseapp.com",
+    projectId: "limitless-cms",
+    storageBucket: "limitless-cms.firebasestorage.app",
+    messagingSenderId: "795014578598",
+    appId: "1:795014578598:web:449def7c57453637480f67"
 };
 
-const app = initializeApp(firebaseConfig);
-const db  = getFirestore(app);
+const app    = initializeApp(firebaseConfig);
+const db     = getFirestore(app);
 const CMS_REF = doc(db, 'cms', 'data');
 
-// ── Load from Firebase on boot (overrides localStorage if cloud data exists) ──
-async function initFromFirebase() {
-    try {
-        const snap = await getDoc(CMS_REF);
-        if (snap.exists()) {
-            const data = snap.data();
-            // Only overwrite local if cloud data is newer
-            const localRaw = localStorage.getItem('lp_cms_data');
-            const local = localRaw ? JSON.parse(localRaw) : null;
-            const cloudTime = data.updatedAt || '0';
-            const localTime = local?.updatedAt || '0';
-            if (cloudTime >= localTime && data.projects?.length > 0) {
-                window.state = { categories: data.categories || [], projects: data.projects || [] };
-                // Sync into localStorage for offline use
-                const existing = JSON.parse(localStorage.getItem('lp_cms_data') || '{}');
-                localStorage.setItem('lp_cms_data', JSON.stringify({
-                    ...existing,
-                    categories: data.categories,
-                    projects: data.projects,
-                    updatedAt: data.updatedAt
-                }));
-                // Re-render with cloud data
-                if (typeof render === 'function') render();
-                console.log('[Firebase] Loaded from cloud:', data.projects.length, 'projects');
-            }
-        } else {
-            // First time — push local data to Firebase
-            const localRaw = localStorage.getItem('lp_cms_data');
-            if (localRaw) {
-                const local = JSON.parse(localRaw);
-                if (local.projects?.length > 0) {
-                    await saveToFirebase({ categories: local.categories, projects: local.projects });
-                    console.log('[Firebase] First sync — pushed local data to cloud');
-                }
-            }
-        }
-    } catch (err) {
-        console.warn('[Firebase] Could not load from cloud:', err.message);
-    }
-}
-
-// ── Save to Firebase ──────────────────────────────────────
+// ── Save to Firebase ───────────────────────────────────────
 async function saveToFirebase(state) {
+    const localVersion = JSON.parse(localStorage.getItem('lp_cms_data') || '{}')._version || 4;
     const payload = {
         categories: state.categories || [],
         projects:   state.projects   || [],
-        updatedAt:  new Date().toISOString()
+        updatedAt:  new Date().toISOString(),
+        _version:   state._version || localVersion
     };
     await setDoc(CMS_REF, payload);
-    // Update updatedAt in localStorage too
+    // Stamp updatedAt in localStorage too
     const existing = JSON.parse(localStorage.getItem('lp_cms_data') || '{}');
     localStorage.setItem('lp_cms_data', JSON.stringify({ ...existing, updatedAt: payload.updatedAt }));
+    console.log('[Firebase Admin] Saved v' + payload._version + ' to Firebase');
 }
 
-// ── Wire into admin.js ────────────────────────────────────
+// ── Init: sync seed version with Firebase ─────────────────
+async function initFromFirebase() {
+    try {
+        const snap         = await getDoc(CMS_REF);
+        const localRaw     = localStorage.getItem('lp_cms_data');
+        const local        = localRaw ? JSON.parse(localRaw) : null;
+        const localVersion = local?._version || 0;
+
+        if (snap.exists()) {
+            const fbData      = snap.data();
+            const fbVersion   = fbData._version || 0;
+
+            if (localVersion > fbVersion) {
+                // ── Local seed is NEWER → auto-push to Firebase ──
+                console.log(`[Firebase Admin] Local v${localVersion} > Firebase v${fbVersion} → auto-pushing`);
+                await saveToFirebase({
+                    categories: local.categories,
+                    projects:   local.projects,
+                    _version:   localVersion
+                });
+                window.state = { categories: local.categories, projects: local.projects };
+            } else {
+                // ── Firebase is current or newer → load from Firebase ──
+                console.log(`[Firebase Admin] Using Firebase v${fbVersion}`);
+                window.state = { categories: fbData.categories, projects: fbData.projects };
+                // Sync into localStorage for offline use
+                localStorage.setItem('lp_cms_data', JSON.stringify({
+                    ...local,
+                    _version:   fbVersion,
+                    categories: fbData.categories,
+                    projects:   fbData.projects,
+                    updatedAt:  fbData.updatedAt
+                }));
+            }
+        } else {
+            // ── First time: no Firebase data → push local ──
+            if (local?.projects?.length > 0) {
+                console.log('[Firebase Admin] First sync → pushing local data to Firebase');
+                await saveToFirebase({
+                    categories: local.categories,
+                    projects:   local.projects,
+                    _version:   localVersion
+                });
+            }
+            window.state = { categories: local?.categories || [], projects: local?.projects || [] };
+        }
+
+        // Re-render CMS UI with (possibly updated) state
+        if (typeof render === 'function') render();
+
+    } catch (err) {
+        console.warn('[Firebase Admin] Init failed:', err.message);
+        // Fallback: use localStorage data
+        const local = JSON.parse(localStorage.getItem('lp_cms_data') || '{}');
+        if (local.projects) {
+            window.state = { categories: local.categories || [], projects: local.projects || [] };
+            if (typeof render === 'function') render();
+        }
+    }
+}
+
+// ── Wire _fbSave for admin.js to call on "Save All Changes" ─
 window._fbSave = saveToFirebase;
 
-// ── Init ─────────────────────────────────────────────────
+// ── Go ────────────────────────────────────────────────────
 initFromFirebase();

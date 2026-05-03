@@ -1460,6 +1460,12 @@
                     }
                 }
 
+                // ── Firebase CMS: Render cards for this category ──────────────
+                // Replaces static collage.html cards with live CMS data
+                if (typeof window.renderCategoryCards === 'function') {
+                    window.renderCategoryCards(categoryName);
+                }
+
                 catGrids.forEach(g => {
                     g.classList.remove('active', 'cat-single-wrap');
                     const decoded = (g.dataset.cat || '').replace(/&amp;/g,'&');
@@ -1576,6 +1582,8 @@
             });
 
             function wireCollageCardListeners() {
+                // Expose globally so firebase-site.js can re-wire after live updates
+                window.__wireCollageCards = wireCollageCardListeners;
                 catOverlay.querySelectorAll('.project-card').forEach((card) => {
                     if (card._collageWired) return;
                     card._collageWired = true;
