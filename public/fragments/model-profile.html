@@ -1,0 +1,49 @@
+<div id="model-profile" class="fixed inset-0 z-[10020] bg-[#050507] opacity-0 pointer-events-none hidden flex-col overflow-y-auto" style="transition: opacity 0.5s ease;">
+    <div class="mp-container max-w-6xl w-full mx-auto px-6 py-16 md:px-16 md:py-20 relative">
+
+        <button class="mp-close-btn fixed top-8 right-8 z-[10025] font-counter text-[10px] tracking-[0.3em] text-white/40 hover:text-white transition-colors uppercase cursor-pointer flex items-center gap-3">
+            CLOSE <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+
+            <!-- Left: Portrait -->
+            <div class="lg:col-span-4 flex flex-col gap-6">
+                <div class="mp-image-wrap overflow-hidden rounded-xl border border-white/10 relative" style="aspect-ratio: 3/4; max-height: 520px;">
+                    <img id="mp-img" src="" alt="Talent Profile" class="w-full h-full object-cover object-top">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+                </div>
+            </div>
+
+            <!-- Right: Info + Reels -->
+            <div class="lg:col-span-8 flex flex-col gap-8 pt-2">
+
+                <!-- Name + Categories -->
+                <div>
+                    <span class="font-counter text-[9px] tracking-[0.3em] text-white/30 uppercase block mb-3">TALENT PROFILE</span>
+                    <h2 id="mp-name" class="font-display text-white uppercase leading-none mb-5" style="font-size: clamp(2rem, 5vw, 3.5rem);">TALENT NAME</h2>
+                    <div id="mp-works-list" class="flex flex-wrap gap-2">
+                        <!-- Categories injected here -->
+                    </div>
+                </div>
+
+                <!-- Videos -->
+                <div>
+                    <span class="font-counter text-[9px] tracking-[0.3em] text-white/30 uppercase block mb-5">FEATURED REELS</span>
+                    <div id="mp-videos-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Videos injected here -->
+                    </div>
+                </div>
+
+                <!-- CTA -->
+                <div class="p-8 rounded-2xl bg-white/5 border border-dashed border-white/15 flex flex-col md:flex-row items-center justify-between gap-6">
+                    <p class="font-soft text-white/40 text-sm">Want to collaborate with this talent?</p>
+                    <button class="nav-trigger py-3 px-8 bg-white text-black font-counter text-[10px] tracking-[0.2em] uppercase hover:bg-[var(--scene-accent)] hover:text-white transition-all rounded-full" data-target="contact">
+                        BOOK TALENT
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

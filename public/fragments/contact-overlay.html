@@ -1,0 +1,65 @@
+<div id="contact-overlay"
+    class="fixed inset-0 z-[10011] bg-[#050507] opacity-0 pointer-events-none flex flex-col items-center justify-center p-6 md:p-10 overflow-y-auto"
+    style="transition: opacity 0.6s ease;">
+    <div class="contact-header absolute top-10 left-10 right-10 flex justify-between items-center z-20">
+        <div class="font-counter text-[10px] tracking-[0.3em] text-white/40 uppercase">Direct Access / 2026</div>
+        <button
+            class="contact-close-btn font-counter text-[10px] tracking-[0.3em] text-white hover:text-[var(--scene-accent)] transition-colors uppercase cursor-pointer"
+            onclick="this.closest('#contact-overlay').style.opacity = '0'; setTimeout(() => { this.closest('#contact-overlay').style.pointerEvents = 'none'; document.body.style.overflow = ''; }, 600);">
+            CLOSE [ESC]
+        </button>
+    </div>
+
+    <div
+        class="contact-content-inner max-w-5xl w-full mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 py-20 items-center">
+        <div class="contact-info-side">
+            <h2 class="font-display text-[4rem] md:text-[7rem] leading-[0.85] text-white mb-8 tracking-tighter">LET'S
+                <br><span class="text-[var(--scene-accent)]">TALK.</span></h2>
+            <p class="font-soft text-lg text-white/60 mb-12 max-w-md leading-relaxed">Whether it's a global campaign or
+                a specialized creative project, we're ready to amplify your brand's presence.</p>
+
+            <div class="contact-methods flex flex-col gap-6">
+                <div class="method flex flex-col">
+                    <span class="font-counter text-[9px] tracking-[0.2em] text-white/30 uppercase mb-2">Email</span>
+                    <a href="mailto:contact@limitlessproductions.in"
+                        class="font-editorial text-2xl text-white hover:text-[var(--scene-accent)] transition-colors">contact@limitlessproductions.in</a>
+                </div>
+                <div class="method flex flex-col">
+                    <span class="font-counter text-[9px] tracking-[0.2em] text-white/30 uppercase mb-2">Location</span>
+                    <span class="font-soft text-xl text-white">Vadodara, India / Remote</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-form-side">
+            <div class="contact-card-3d glass p-8 md:p-12 rounded-3xl border border-white/10 relative overflow-hidden">
+                <div class="absolute -top-24 -right-24 w-48 h-48 bg-[var(--scene-accent)] opacity-10 blur-[80px]"></div>
+
+                <form id="contact-form" class="flex flex-col gap-8 relative z-10">
+                    <div class="form-group flex flex-col gap-2">
+                        <label class="font-counter text-[9px] tracking-[0.2em] text-white/40 uppercase">Full
+                            Name</label>
+                        <input type="text" required
+                            class="bg-white/5 border-b border-white/10 p-3 focus:border-[var(--scene-accent)] outline-none transition-colors text-white font-soft">
+                    </div>
+                    <div class="form-group flex flex-col gap-2">
+                        <label class="font-counter text-[9px] tracking-[0.2em] text-white/40 uppercase">Work
+                            Email</label>
+                        <input type="email" required
+                            class="bg-white/5 border-b border-white/10 p-3 focus:border-[var(--scene-accent)] outline-none transition-colors text-white font-soft">
+                    </div>
+                    <div class="form-group flex flex-col gap-2">
+                        <label class="font-counter text-[9px] tracking-[0.2em] text-white/40 uppercase">Message</label>
+                        <textarea rows="3" required
+                            class="bg-white/5 border-b border-white/10 p-3 focus:border-[var(--scene-accent)] outline-none transition-colors text-white font-soft resize-none"></textarea>
+                    </div>
+
+                    <button type="submit"
+                        class="w-full py-5 bg-[var(--scene-accent)] text-white font-counter text-[11px] tracking-[0.3em] uppercase hover:bg-white hover:text-black transition-all duration-500 rounded-lg">
+                        SEND MESSAGE
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

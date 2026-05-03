@@ -1,4 +1,4 @@
-﻿
+
         import * as THREE from 'three';
         import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
         import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
@@ -1410,11 +1410,11 @@
 
             // ===================== CATEGORY COLLAGE OVERLAY =====================
             const catOverlay = document.getElementById('cat-collage-overlay');
-            const catCloseBtn = document.getElementById('cat-collage-close');
-            const catChapterEl = document.getElementById('cat-collage-chapter');
-            const catNameEl = document.getElementById('cat-collage-name');
-            const catCountEl = document.getElementById('cat-collage-count');
-            const catGrids = document.querySelectorAll('.cat-grid');
+            let catCloseBtn = document.getElementById('cat-collage-close');
+            let catChapterEl = document.getElementById('cat-collage-chapter');
+            let catNameEl = document.getElementById('cat-collage-name');
+            let catCountEl = document.getElementById('cat-collage-count');
+            let catGrids = document.querySelectorAll('.cat-grid');
 
             const CHAPTER_MAP = {
                 'ENTERTAINMENT & EVENTS': 'CHAPTER 01',
@@ -1428,7 +1428,36 @@
                 'RETAIL & ACCESSORIES': 'CHAPTER 09',
             };
 
-            function openCatCollage(categoryName) {
+            async function openCatCollage(categoryName) {
+                if (catOverlay && catOverlay.hasAttribute('data-lazy-partial')) {
+                    try {
+                        const url = catOverlay.getAttribute('data-lazy-partial');
+                        const res = await fetch(url);
+                        if (res.ok) {
+                            catOverlay.innerHTML = await res.text();
+                            catOverlay.removeAttribute('data-lazy-partial');
+                            
+                            catCloseBtn = document.getElementById('cat-collage-close');
+                            catChapterEl = document.getElementById('cat-collage-chapter');
+                            catNameEl = document.getElementById('cat-collage-name');
+                            catCountEl = document.getElementById('cat-collage-count');
+                            catGrids = document.querySelectorAll('.cat-grid');
+                            
+                            if (catCloseBtn) catCloseBtn.addEventListener('click', closeCatCollage);
+                            const catExitBtn = document.getElementById('cat-collage-exit');
+                            if (catExitBtn) {
+                                catExitBtn.addEventListener('click', () => {
+                                    closeCatCollage();
+                                    const backBtn = document.querySelector('.archive-back-btn');
+                                    if (backBtn) backBtn.click();
+                                });
+                            }
+                        }
+                    } catch (e) {
+                        console.error('[LP] Error loading collage partial:', e);
+                    }
+                }
+
                 catGrids.forEach(g => {
                     g.classList.remove('active', 'cat-single-wrap');
                     const decoded = (g.dataset.cat || '').replace(/&amp;/g,'&');
@@ -2160,8 +2189,6 @@
                 const reelSrc = card.dataset.reel || (cardVideo ? cardVideo.src : '');
                 
                 // Populate Typography
-                document.querySelector('.pr-title-left').innerText = titleLeft;
-                document.querySelector('.pr-title-right').innerText = titleRight;
                 document.querySelector('.pr-meta-tl').innerText = metaTl;
                 document.querySelector('.pr-meta-tr').innerText = metaTr;
                 document.querySelector('.pr-meta-bl').innerText = `0${index + 1}.`;
@@ -2349,20 +2376,18 @@
                 const yDist = window.innerHeight * 0.4 * direction;
 
                 // Dynamic Cascading/Stack Animation (Vertical & Scale)
-                gsap.to('.pr-center-stage, .pr-info-wrapper, .pr-title-side', { y: -yDist, opacity: 0, duration: 0.5, ease: 'power2.inOut' });
+                gsap.to('.pr-center-stage, .pr-info-wrapper', { y: -yDist, opacity: 0, duration: 0.5, ease: 'power2.inOut' });
                 gsap.to('.pr-reel-wrapper', { y: -yDist, opacity: 0, duration: 0.5, ease: 'power2.inOut', onComplete: () => {
                     populateRevealData(nextIndex);
                     
                     // Prep incoming elements (start from the opposite side)
-                    gsap.set('.pr-center-stage, .pr-info-wrapper, .pr-title-side', { y: yDist, opacity: 0 });
+                    gsap.set('.pr-center-stage, .pr-info-wrapper', { y: yDist, opacity: 0 });
                     gsap.set('.pr-reel-wrapper', { y: yDist, opacity: 0 });
                     
                     // Slide and scale in staggered
                     gsap.to('.pr-reel-wrapper', { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' });
                     gsap.to('.pr-center-stage', { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', delay: 0.1 });
-                    gsap.to('.pr-title-left', { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', delay: 0.15 });
-                    gsap.to('.pr-title-right', { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', delay: 0.2 });
-                    gsap.to('.pr-info-wrapper', { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', delay: 0.25 });
+                    gsap.to('.pr-info-wrapper', { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', delay: 0.2 });
                 }});
             }
 
@@ -2484,15 +2509,12 @@
                     });
 
                     // 3. Reveal the Reel and Typography Staggered
-                    gsap.set('.pr-title-side', { y: 60, opacity: 0 });
                     gsap.set('.pr-center-stage, .pr-info-wrapper', { y: 30, opacity: 0 });
                     gsap.set('.pr-reel-wrapper', { opacity: 0, scale: 1.05 });
                     
                     gsap.to('.pr-reel-wrapper', { scale: 1, opacity: 1, duration: 1.0, ease: 'power3.out', delay: 0.3 });
                     gsap.to('.pr-center-stage', { y: 0, opacity: 1, duration: 1.0, ease: 'power3.out', delay: 0.4 });
-                    gsap.to('.pr-title-left', { y: 0, opacity: 1, duration: 1.0, ease: 'power3.out', delay: 0.5 });
-                    gsap.to('.pr-title-right', { y: 0, opacity: 1, duration: 1.0, ease: 'power3.out', delay: 0.6 });
-                    gsap.to('.pr-info-wrapper', { y: 0, opacity: 1, duration: 1.0, ease: 'power3.out', delay: 0.7 });
+                    gsap.to('.pr-info-wrapper', { y: 0, opacity: 1, duration: 1.0, ease: 'power3.out', delay: 0.5 });
                     
                     // 4. UI Elements
                     gsap.to('.pr-close, .pr-cursor-pill, .pr-nav-btn', { opacity: 1, scale: 1, duration: 0.8, delay: 0.7 });

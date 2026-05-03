@@ -375,9 +375,9 @@
         /* PERF: Mobile performance overrides */
         @media (max-width: 768px), (pointer: coarse) {
             /* Cut backdrop-filter blur by ~65% on mobile â€” single biggest GPU win */
-            .glass { backdrop-filter: blur(8px) saturate(140%) !important; -webkit-backdrop-filter: blur(8px) saturate(140%) !important; }
+            .glass { backdrop-filter: blur(8px) saturate(140%) !important; -webkit-backdrop-filter: blur(8px) saturate(140%) !important;  will-change: transform, backdrop-filter; transform: translateZ(0); }
             .glass-pill { backdrop-filter: blur(6px) !important; -webkit-backdrop-filter: blur(6px) !important; }
-            .cat-collage-overlay { backdrop-filter: blur(10px) !important; -webkit-backdrop-filter: blur(10px) !important; }
+            .cat-collage-overlay { backdrop-filter: blur(10px) !important; -webkit-backdrop-filter: blur(10px) !important;  will-change: transform, backdrop-filter; transform: translateZ(0); }
             .cat-collage-header { backdrop-filter: blur(8px) !important; -webkit-backdrop-filter: blur(8px) !important; }
             /* Disable grain-overlay SVG backgrounds on mobile */
             .services-bg::after, .card-grain { display: none !important; }
@@ -527,7 +527,7 @@
         }
 
         /* ========= CATEGORY COLLAGE OVERLAY ========= */
-        .cat-collage-overlay { position: fixed; inset: 0; z-index: 10004; background: rgba(5,10,9,0.98); backdrop-filter: blur(24px); overflow-y: scroll; scroll-behavior: smooth; overscroll-behavior: contain; transition: opacity 0.5s ease; }
+        .cat-collage-overlay { position: fixed; inset: 0; z-index: 10004; background: rgba(5,10,9,0.98); backdrop-filter: blur(24px); overflow-y: scroll; scroll-behavior: smooth; overscroll-behavior: contain; transition: opacity 0.5s ease;  will-change: transform, backdrop-filter; transform: translateZ(0); }
         .cat-collage-header { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 28px 48px; background: rgba(5,10,9,0.9); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255,255,255,0.06); }
         .cat-collage-close { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); color: #EFECE6; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; padding: 10px 22px; border-radius: 30px; cursor: pointer; transition: all 0.3s; }
         .cat-collage-close:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.3); }
@@ -722,7 +722,7 @@
         }
 
         /* ========= CATEGORY COLLAGE OVERLAY ========= */
-        .cat-collage-overlay { position: fixed; inset: 0; z-index: 10004; background: rgba(5,10,9,0.98); backdrop-filter: blur(24px); overflow-y: scroll; scroll-behavior: smooth; overscroll-behavior: contain; transition: opacity 0.5s ease; }
+        .cat-collage-overlay { position: fixed; inset: 0; z-index: 10004; background: rgba(5,10,9,0.98); backdrop-filter: blur(24px); overflow-y: scroll; scroll-behavior: smooth; overscroll-behavior: contain; transition: opacity 0.5s ease;  will-change: transform, backdrop-filter; transform: translateZ(0); }
         .cat-collage-header { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 28px 48px; background: rgba(5,10,9,0.9); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255,255,255,0.06); }
         .cat-collage-close { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); color: #EFECE6; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; padding: 10px 22px; border-radius: 30px; cursor: pointer; transition: all 0.3s; }
         .cat-collage-close:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.3); }
@@ -866,7 +866,7 @@
         }
 
         /* Glassmorphism System */
-        .glass { background: rgba(8, 8, 12, 0.35); backdrop-filter: blur(22px) saturate(160%) brightness(1.08); -webkit-backdrop-filter: blur(22px) saturate(160%) brightness(1.08); border: 1px solid rgba(255, 255, 255, 0.07); border-top-color: rgba(255, 255, 255, 0.14); box-shadow: 0 12px 48px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06), inset 0 -1px 0 rgba(0,0,0,0.2); }
+        .glass { background: rgba(8, 8, 12, 0.35); backdrop-filter: blur(22px) saturate(160%) brightness(1.08); -webkit-backdrop-filter: blur(22px) saturate(160%) brightness(1.08); border: 1px solid rgba(255, 255, 255, 0.07); border-top-color: rgba(255, 255, 255, 0.14); box-shadow: 0 12px 48px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06), inset 0 -1px 0 rgba(0,0,0,0.2);  will-change: transform, backdrop-filter; transform: translateZ(0); }
         .glass-pill { backdrop-filter: blur(12px) saturate(140%); -webkit-backdrop-filter: blur(12px) saturate(140%); background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.11); border-top-color: rgba(255, 255, 255, 0.22); border-radius: 100px; padding: 10px 32px; box-shadow: 0 2px 16px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.1); font-size: 10px; letter-spacing: 0.2em; }
         .hero-glass-panel { padding: 20px 70px 16px; border-radius: 1000px; position: relative; overflow: hidden; will-change: transform; transition: box-shadow 0.4s ease; }
         .hero-glass-panel::after { content: ''; position: absolute; bottom: 0; left: 10%; width: 80%; height: 2px; background: linear-gradient(90deg, transparent, var(--scene-accent), transparent); opacity: 0.8; transition: background 1s; }
@@ -1031,22 +1031,74 @@
         #da-overlay .submit-btn { width: 100%; padding: 18px 24px; background: var(--audit-accent); border: none; border-radius: 8px; color: #fff; font-family: 'Space Mono', monospace; font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); position: relative; overflow: hidden; z-index: 1; margin-top: 10px;}
         #da-overlay .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(229, 9, 20, 0.4); filter: brightness(1.1); }
         
-        #da-overlay .da-hidden-tagline { 
-            position: absolute; bottom: 40px; right: 40px; 
-            font-family: 'Noto Serif JP', serif; font-size: 1.9rem; 
-            color: var(--audit-accent); opacity: 0.12; 
-            writing-mode: vertical-rl; text-orientation: upright; 
-            letter-spacing: 0.75em; pointer-events: none; 
+        #da-overlay .da-hidden-tagline {
+            position: fixed;
+            bottom: 30px;
+            right: 50px;
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.5rem;
+            color: var(--audit-accent);
+            opacity: 0.22;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            letter-spacing: 0.25em;
+            pointer-events: none;
             transition: all 1.2s cubic-bezier(0.19, 1, 0.22, 1);
-            filter: blur(2px);
+            filter: blur(0.6px);
+            z-index: 999;
         }
-        #da-overlay:hover .da-hidden-tagline { opacity: 0.35; filter: blur(0px); transform: translateY(-10px); }
+        #da-overlay:hover .da-hidden-tagline { opacity: 0.55; filter: blur(0px); transform: translateY(-6px); }
 
         @media (max-width: 1024px) {
             #da-overlay .da-main-grid { grid-template-columns: 1fr; gap: 40px; padding: 120px 20px 60px; align-items: start; }
-            #da-overlay .features-grid { grid-template-columns: 1fr; }
+            #da-overlay .features-grid { grid-template-columns: 1fr 1fr; }
             #da-overlay .audit-form { padding: 30px 20px; }
         }
+
+        /* Service Checkbox Grid inside Audit Form */
+        #da-overlay .da-services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 4px;
+        }
+        #da-overlay .da-service-check {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            background: rgba(232, 168, 50, 0.03);
+            border: 1px solid rgba(232, 168, 50, 0.12);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-size: 0.72rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--text-muted, rgba(255,255,255,0.5));
+            user-select: none;
+        }
+        #da-overlay .da-service-check:hover {
+            border-color: rgba(232, 168, 50, 0.35);
+            background: rgba(232, 168, 50, 0.07);
+            color: var(--text, #fff);
+        }
+        #da-overlay .da-service-check input[type="checkbox"] {
+            width: 14px; height: 14px;
+            accent-color: var(--audit-accent, #E50914);
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+        #da-overlay .da-service-check:has(input:checked) {
+            border-color: var(--audit-accent-alt, #E8A832);
+            background: rgba(232, 168, 50, 0.10);
+            color: var(--audit-accent-alt, #E8A832);
+        }
+        @media (max-width: 600px) {
+            #da-overlay .da-services-grid { grid-template-columns: repeat(2, 1fr); }
+            #da-overlay .features-grid { grid-template-columns: 1fr; }
+        }
+
 
         /* --- GLOBAL MOBILE OPTIMIZATIONS --- */
         @media (pointer: coarse) { * { cursor: auto !important; } .cursor-ring, .cursor-trail { display: none !important; } }
@@ -1234,4 +1286,26 @@
 #contact-overlay[style*="opacity: 0"],
 #da-overlay[style*="opacity: 0"] {
     content-visibility: hidden;
+}
+
+/* GPU ACCELERATED FILM GRAIN */
+.gpu-grain {
+    position: fixed;
+    top: -50%; left: -50%; width: 200%; height: 200%;
+    pointer-events: none; z-index: 9997; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
+    animation: grain-dance 8s steps(10) infinite;
+    opacity: 0.8;
+}
+@keyframes grain-dance {
+    0%, 100% { transform: translate(0, 0); }
+    10% { transform: translate(-5%, -10%); }
+    20% { transform: translate(-15%, 5%); }
+    30% { transform: translate(7%, -25%); }
+    40% { transform: translate(-5%, 25%); }
+    50% { transform: translate(-15%, 10%); }
+    60% { transform: translate(15%, 0%); }
+    70% { transform: translate(0%, 15%); }
+    80% { transform: translate(3%, 35%); }
+    90% { transform: translate(-10%, 10%); }
 }

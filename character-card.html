@@ -300,15 +300,15 @@
     <!-- Profile Modal -->
     <div id="modal" class="fixed inset-0 flex items-center justify-center p-12">
         <div class="w-full max-w-7xl flex flex-col md:flex-row gap-20 items-center relative z-20">
-            <div class="md:w-[450px] aspect-[4/6] edgeless-node border-none shadow-3xl">
+            <div class="md:w-[300px] flex-shrink-0 aspect-[4/5] edgeless-node border-none shadow-3xl">
                 <img id="m-img" src="" class="w-full h-full object-cover" alt="">
             </div>
             <div class="flex-1 text-left">
                 <span id="m-id" class="font-counter text-[10px] text-[var(--scene-accent)] tracking-[0.5em] uppercase mb-8 block">SECURE NODE // ARCHIVE-ID</span>
-                <h2 id="m-name" class="font-display text-8xl md:text-[11rem] text-white leading-[0.75] mb-12 uppercase">NAME</h2>
-                <div id="m-works" class="flex flex-wrap gap-4 mb-20"></div>
-                <div id="m-video" class="w-full max-w-3xl aspect-video rounded-3xl border border-white/10 overflow-hidden shadow-2xl bg-black"></div>
-                <button class="mt-20 font-counter text-[10px] tracking-widest text-white/30 hover:text-white close-btn uppercase transition-colors">[ CLOSE DATASET ]</button>
+                <h2 id="m-name" class="font-display text-white leading-[0.85] mb-6 uppercase" style="font-size: clamp(2.5rem, 5vw, 4.5rem);">NAME</h2>
+                <div id="m-works" class="flex flex-wrap gap-3 mb-8"></div>
+                <div id="m-video" class="w-full max-w-2xl aspect-video rounded-2xl border border-white/10 overflow-hidden shadow-2xl bg-black"></div>
+                <button class="mt-8 font-counter text-[10px] tracking-widest text-white/30 hover:text-white close-btn uppercase transition-colors">[ CLOSE DATASET ]</button>
             </div>
         </div>
         <div class="absolute inset-0 bg-black/60 backdrop-blur-3xl"></div>
@@ -444,3 +444,4 @@
     </script>
 </body>
 </html>
+
