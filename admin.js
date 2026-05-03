@@ -57,11 +57,12 @@ function saveToLocalStorage() {
         categories: state.categories,
         projects: state.projects
     }));
-    // Also push to Firebase if connected
-    if (typeof _fbSave === 'function') {
-        _fbSave(state)
+    // Push to Firebase via window._fbSave (set by firebase-admin.js module)
+    const fbSave = window._fbSave;
+    if (typeof fbSave === 'function') {
+        fbSave(state)
             .then(() => showToast('Saved & synced to cloud ☁️'))
-            .catch(() => showToast('Saved locally (cloud sync failed)'));
+            .catch(err => { console.error('[CMS] Firebase save failed:', err); showToast('Saved locally (cloud sync failed)'); });
     } else {
         showToast('All changes saved!');
     }
