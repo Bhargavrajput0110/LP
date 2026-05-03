@@ -46,6 +46,10 @@
     <!-- PERF: DNS prefetch + preconnect for Unsplash image CDN -->
     <link rel="dns-prefetch" href="https://images.unsplash.com">
     <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
+    <!-- PERF: Firebase / Firestore preconnect (used by CMS real-time sync) -->
+    <link rel="dns-prefetch" href="https://firestore.googleapis.com">
+    <link rel="dns-prefetch" href="https://www.gstatic.com">
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
     <!-- PERF: Preload critical logo asset -->
     <link rel="preload" href="/public/images/logo.png" as="image">
     <!-- PERF: Consolidated single Google Fonts request -->
@@ -1813,7 +1817,28 @@
     <div id="lazy-overlays-mount"></div>
 
     <!-- CORE LOGIC & SYSTEMS --> <!-- CORE LOGIC & SYSTEMS -->
-    <script type="module" src="/firebase-site.js"></script>
+    <!-- PERF: firebase-site.js is lazy-loaded only when categories section
+         is within 500px of viewport — saves a Firestore WebSocket connection
+         for users who never scroll to the archive section -->
+    <script type="module">
+        let _fbReady = false;
+        const _loadFB = () => {
+            if (_fbReady) return;
+            _fbReady = true;
+            import('/firebase-site.js').catch(e => console.warn('[FB] Load failed:', e));
+        };
+        const _fbTarget = document.querySelector('.spine-section') ||
+                          document.querySelector('.cat-clickable');
+        if (_fbTarget && 'IntersectionObserver' in window) {
+            const _io = new IntersectionObserver(entries => {
+                if (entries[0].isIntersecting) { _loadFB(); _io.disconnect(); }
+            }, { rootMargin: '500px' });
+            _io.observe(_fbTarget);
+        } else {
+            // Fallback: load 2.5s after page is interactive
+            setTimeout(_loadFB, 2500);
+        }
+    </script>
     <script type="module" src="/main.js"></script>
 </body>
 

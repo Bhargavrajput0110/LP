@@ -30,13 +30,31 @@ const CAT_LABELS = {
     'CORPORATE':                                 'CORPORATE'
 };
 
-const DEFAULT_THUMB = 'https://images.unsplash.com/photo-1618331835717-801e976710b2?q=80&w=2000';
+const DEFAULT_THUMB = 'https://images.unsplash.com/photo-1618331835717-801e976710b2?q=80&w=800&auto=format&fit=crop';
 const DEFAULT_LOGO  = 'https://res.cloudinary.com/dfstyia4c/image/upload/skaid-black_page-0001_wk4tyi.png';
+
+// ── Auto-optimize image URLs ───────────────────────────────
+// Adds quality/format transforms to Cloudinary & Unsplash URLs
+function optimizeImageUrl(url) {
+    if (!url) return url;
+    // Cloudinary: add q_auto,f_auto,w_800 if no transforms present
+    if (url.includes('res.cloudinary.com') && url.includes('/image/upload/')) {
+        if (!url.includes('q_auto') && !url.includes('q_')) {
+            return url.replace('/image/upload/', '/image/upload/q_auto,f_auto,w_800/');
+        }
+    }
+    // Unsplash: ensure quality params
+    if (url.includes('images.unsplash.com') && !url.includes('q=')) {
+        const sep = url.includes('?') ? '&' : '?';
+        return url + sep + 'q=80&w=800&auto=format&fit=crop';
+    }
+    return url;
+}
 
 // ── Build one project card HTML ────────────────────────────
 function makeCard(p, index, catLabel) {
-    const thumb = p.thumbnail || DEFAULT_THUMB;
-    const logo  = p.logo      || DEFAULT_LOGO;
+    const thumb = optimizeImageUrl(p.thumbnail || DEFAULT_THUMB);
+    const logo  = optimizeImageUrl(p.logo      || DEFAULT_LOGO);
     const num   = String(index).padStart(2, '0');
     const desc  = (p.desc || '').replace(/"/g, '&quot;');
     return `<article class="project-card glass"
