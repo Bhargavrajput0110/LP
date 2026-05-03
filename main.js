@@ -1436,6 +1436,8 @@
                         if (res.ok) {
                             catOverlay.innerHTML = await res.text();
                             catOverlay.removeAttribute('data-lazy-partial');
+                            // Signal firebase-site.js to patch video URLs from CMS
+                            window.dispatchEvent(new CustomEvent('collage:ready'));
                             
                             catCloseBtn = document.getElementById('cat-collage-close');
                             catChapterEl = document.getElementById('cat-collage-chapter');
