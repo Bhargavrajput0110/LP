@@ -1,5 +1,5 @@
-// admin-seed.js v4 — versioned reset (preserves edits between loads)
-const _V=4;
+// admin-seed.js v5 — versioned reset (preserves edits between loads)
+const _V=5;
 const _stored=JSON.parse(localStorage.getItem('lp_cms_data')||'{}');
 if((_stored._version||0)>=_V){} else {
 
@@ -10,7 +10,7 @@ const U='HIGH QUALITY UGC ADS',E='ENTERTAINMENT & EVENTS',FA='FASHION & JEWELS',
 const mk=(n,c,o={})=>({id:'p_'+n.replace(/[^a-z0-9]/gi,'_').toLowerCase(),name:n,desc:o.d||'',thumbnail:o.t||T,reel:o.r?CV+o.r:'',reel1:o.r1?CV+o.r1:'',reel2:o.r2?CV+o.r2:'',reel3:o.r3?CV+o.r3:'',logo:o.l?CI+o.l:'',mood:o.m||'pureWhite',instagram:o.i||'',categories:c});
 const V={
   'LUCE & OMBRA':{r:'v1775387773/L_O_-_Compilation_zhxxhh.mp4',r1:'v1775387779/L_O_Kirti_Reel_3_new_grade_drqhmh.mp4',r2:'v1775387792/L_O_-_FEB_Compilation_Reel_2_xbnbyh.mp4',r3:'v1775626019/L_O_-_Coming_Soon_Final_hkejpx.mp4',i:'@luceandombra.eyewear',m:'darkEditorial',l:'Optichouse_Signature___Corporate_Logo_page-0001-1_i28nqi.png'},
-  'FINCA RESTRO CAFE':{r:'v1775399525/Finca_-_Spaghetti_Reel_Horizontal_gcfa5g.mp4',i:'@finca.restrocafe',m:'goldenWarmth',l:'WhatsApp_Image_2023-08-19_at_12.37.24_PM_acnuea.png'},
+  'FINCA RESTRO CAFE':{r:'v1777794982/Finca_-_Model_Reel_Horizontal_CC_jv8538.mp4',i:'@finca.restrocafe',m:'goldenWarmth',l:'WhatsApp_Image_2023-08-19_at_12.37.24_PM_acnuea.png'},
   'KOA CAFE':{r:'v1775626654/KOA_-_Horizontal_a7illr.mp4',r1:'v1775390843/KOA_-_March_Compilation_klammi.mp4',r2:'v1775390851/KOA_-_Model_1_Glow_dspqoc.mp4',r3:'v1775388661/KOA_Cafe_-_March_Ultimate_Compilation_Reel_kue22s.mp4',i:'@koacafe.official',m:'goldenWarmth',l:'WhatsApp_Image_2023-08-19_at_12.37.24_PM_acnuea.png'},
   'FORTUNE INN PROMENADE':{r:'v1775559494/Fortune_Inn_Promenade_-_March_Desert_Reel_2_vs2xe8.mp4',r1:'v1775559587/FIP_-_FEB_Compilation_Reel_1_qqhbo5.mp4',r2:'v1775559490/FIP_-_3_friends_FINAL_qhnneg.mp4',r3:'v1775559486/FIP_-_Compilation_3_un77gd.mp4',i:'@fortuneinnpromenadevadodara',m:'goldenWarmth',l:'Suba_Logo_Original_-_Transparent_uv9wqy.png'},
   'DR. PRIYANKA':{r:'v1775561554/Dr._Priyanka_-_March_UEB_Horizontal_Reel_1_hzq046.mp4',r1:'v1775561547/DR_Priyanka_-_3_ew5p3r.mp4',r2:'v1775561591/DR_Priyanka_-_1_gl0y9p.mp4',r3:'v1775561547/DR_Priyanka_-_3_ew5p3r.mp4',l:'Vasu_Healthcare_Logo_pew3ww.png'},
