@@ -1823,7 +1823,7 @@
         const _loadFB = () => {
             if (_fbReady) return;
             _fbReady = true;
-            import('/firebase-site.js').catch(e => console.warn('[FB] Load failed:', e));
+            import('/firebase-site.js?v=2').catch(e => console.warn('[FB] Load failed:', e));
         };
         const _fbTarget = document.querySelector('.spine-section') ||
                           document.querySelector('.cat-clickable');
