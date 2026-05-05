@@ -1309,31 +1309,3 @@
     80% { transform: translate(3%, 35%); }
     90% { transform: translate(-10%, 10%); }
 }
-
-/* DEBUG VISIBILITY FORCE */
-.cat-grid.active {
-    display: flex !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    min-height: 500px !important;
-    border: 5px solid red !important;
-    background: rgba(255,0,0,0.2) !important;
-    z-index: 999999 !important;
-}
-.cat-grid.active article.project-card,
-.cat-grid.active .project-card {
-    display: flex !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    width: 350px !important;
-    height: 460px !important;
-    background: #FF00FF !important;
-    border: 5px solid yellow !important;
-    z-index: 999999 !important;
-    transform: none !important;
-}
-.cat-collage-body {
-    visibility: visible !important;
-    opacity: 1 !important;
-    display: flex !important;
-}

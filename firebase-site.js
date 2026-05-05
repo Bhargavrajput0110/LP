@@ -57,7 +57,7 @@ function makeCard(p, index, catLabel) {
     const logo  = optimizeImageUrl(p.logo      || DEFAULT_LOGO);
     const num   = String(index).padStart(2, '0');
     const desc  = (p.desc || '').replace(/"/g, '&quot;');
-    return `<article class="project-card glass"
+    return `<article class="project-card glass" style="opacity: 1 !important; visibility: visible !important;"
                 data-mood="${p.mood || 'pureWhite'}"
                 data-cursor="VIEW"
                 data-desc="${desc}"
