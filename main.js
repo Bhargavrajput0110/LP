@@ -2190,11 +2190,11 @@
                 const titleLeft = card.dataset.titleLeft ? card.dataset.titleLeft.replace(/\\n/g, '\n') : baseTitle.split(' ')[0] || 'Limitless';
                 const titleRight = card.dataset.titleRight ? card.dataset.titleRight.replace(/\\n/g, '\n') : baseTitle.split(' ')[1] || 'Productions';
                 
-                const metaTl = card.dataset.metaTl || "FASHION FILM";
-                const metaTr = card.dataset.metaTr || "EDITORIAL";
+                const metaTl = card.dataset.metaTl || "";
+                const metaTr = card.dataset.metaTr || "";
                 const metaBc = `${baseTitle} X LIMITLESS`;
                 
-                const desc = card.dataset.desc || "Engineered with cinematic precision. Original frames shot globally, polished beautifully.";
+                const desc = card.dataset.desc || "";
                 const cardVideo = card.querySelector('video');
                 const reelSrc = card.dataset.reel || (cardVideo ? cardVideo.src : '');
                 
@@ -2367,8 +2367,8 @@
                     };
                 }, 300);
 
-                // Inject Description at bottom
-                infoWrap.innerHTML = `<div class="pr-desc">${desc}</div>`;
+                // Inject Description at bottom (only if it exists)
+                infoWrap.innerHTML = desc ? `<div class="pr-desc">${desc}</div>` : '';
                 
                 const reveal = document.getElementById('project-reveal');
                 reveal._activeCard = card;
