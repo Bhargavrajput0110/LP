@@ -1445,7 +1445,7 @@
                             catCountEl = document.getElementById('cat-collage-count');
                             catGrids = document.querySelectorAll('.cat-grid');
                             
-                            if (catCloseBtn) catCloseBtn.addEventListener('click', closeCatCollage);
+                            // Listener handled via document delegation
                             const catExitBtn = document.getElementById('cat-collage-exit');
                             if (catExitBtn) {
                                 catExitBtn.addEventListener('click', () => {
@@ -1561,7 +1561,11 @@
                 });
             });
 
-            catCloseBtn && catCloseBtn.addEventListener('click', closeCatCollage);
+            document.addEventListener('click', (e) => {
+                if (e.target.closest('#cat-collage-close')) {
+                    closeCatCollage();
+                }
+            });
 
             const catExitBtn = document.getElementById('cat-collage-exit');
             if (catExitBtn) {
