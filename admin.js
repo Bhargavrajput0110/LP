@@ -159,7 +159,7 @@ function tip(icon, text) {
 function renderProjects() {
     const hdr = document.getElementById('header-actions');
     hdr.innerHTML = `
-        <input oninput="filterProjects(this.value)" placeholder="Search projects…" class="form-input w-full md:w-52 text-sm py-2 px-3 hidden md:block">
+        <input oninput="filterProjects(this.value)" placeholder="Search projects…" class="form-input w-full md:w-52 text-sm py-2 px-3 hidden md:block" style="background:#f5f6f8;">
         <button onclick="openProjectModal(null)" class="btn btn-primary ml-2 hidden md:inline-flex">
             <i data-lucide="plus" class="w-4 h-4"></i> Add New Project
         </button>
@@ -190,7 +190,7 @@ function renderProjectList(query) {
 
     area.innerHTML = `
         <div class="md:hidden mb-4 flex gap-2">
-            <input oninput="filterProjects(this.value)" placeholder="Search projects…" class="form-input flex-1 text-sm py-2 px-3">
+            <input oninput="filterProjects(this.value)" placeholder="Search projects…" class="form-input flex-1 text-sm py-2 px-3" style="background:#fff;">
         </div>
         <div class="space-y-3" id="project-list">
         ${filtered.map(p => projectRow(p)).join('')}
@@ -214,7 +214,7 @@ function projectRow(p) {
 
     const thumb = p.thumbnail
         ? `<img src="${p.thumbnail}" class="w-10 h-10 rounded-lg object-cover border border-border flex-shrink-0" onerror="this.style.display='none'">`
-        : `<div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style="background:var(--color-bg)"><i data-lucide="image" class="w-4 h-4" style="color:var(--color-muted)"></i></div>`;
+        : `<div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0"><i data-lucide="image" class="w-4 h-4 text-gray-300"></i></div>`;
 
     return `<div class="card p-4 flex flex-col sm:flex-row sm:items-center gap-4 group">
         <div class="flex items-center gap-4 flex-1 min-w-0">
@@ -227,7 +227,7 @@ function projectRow(p) {
                 </div>
             </div>
         </div>
-        <div class="flex items-center justify-between sm:justify-end gap-1 flex-shrink-0 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity mt-2 sm:mt-0 pt-3 sm:pt-0 border-t sm:border-0 border-border">
+        <div class="flex items-center justify-between sm:justify-end gap-1 flex-shrink-0 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity mt-2 sm:mt-0 pt-3 sm:pt-0 border-t sm:border-0 border-gray-100">
             <div class="flex items-center gap-1">
                 <button onclick="moveProjectUp('${p.id}')" class="btn-icon" title="Move Up">
                     <i data-lucide="arrow-up" class="w-4 h-4"></i>
@@ -235,7 +235,7 @@ function projectRow(p) {
                 <button onclick="moveProjectDown('${p.id}')" class="btn-icon" title="Move Down">
                     <i data-lucide="arrow-down" class="w-4 h-4"></i>
                 </button>
-                <div class="w-px h-4 mx-1" style="background:var(--color-border)"></div>
+                <div class="w-px h-4 bg-gray-200 mx-1"></div>
                 <button onclick="duplicateProject('${p.id}')" class="btn-icon" title="Duplicate">
                     <i data-lucide="copy" class="w-4 h-4"></i>
                 </button>
@@ -244,7 +244,7 @@ function projectRow(p) {
                 <button onclick="openProjectModal('${p.id}')" class="btn-icon" title="Edit">
                     <i data-lucide="pencil" class="w-4 h-4"></i>
                 </button>
-                <button onclick="deleteProject('${p.id}')" class="btn-icon text-red-400 hover:text-red-500" style="--btn-outline-hover:rgba(239, 68, 68, 0.1);" onmouseover="this.style.background='var(--btn-outline-hover)'" onmouseout="this.style.background='transparent'" title="Delete">
+                <button onclick="deleteProject('${p.id}')" class="btn-icon text-red-400 hover:bg-red-50 hover:text-red-500" title="Delete">
                     <i data-lucide="trash-2" class="w-4 h-4"></i>
                 </button>
             </div>
@@ -298,10 +298,10 @@ function projectForm(p) {
         </div>
 
         <!-- Landscape Video -->
-        <div class="rounded-xl p-4 border" style="background:rgba(34, 197, 94, 0.05); border-color:rgba(34, 197, 94, 0.2);">
+        <div class="bg-green-50/60 rounded-xl p-4 border border-green-100">
             <div class="flex items-center gap-2 mb-3">
-                <i data-lucide="monitor-play" class="w-4 h-4 text-green-500"></i>
-                <label class="form-label mb-0 text-green-600 dark:text-green-500">Landscape Video (16:9) — Main Reel</label>
+                <i data-lucide="monitor-play" class="w-4 h-4 text-green-600"></i>
+                <label class="form-label mb-0 text-green-700">Landscape Video (16:9) — Main Reel</label>
             </div>
             <div class="video-input-group">
                 <input id="f-reel" class="form-input" placeholder="Cloudinary or CDN video URL" value="${p?.reel || ''}">
@@ -309,21 +309,21 @@ function projectForm(p) {
                     <i data-lucide="play" class="w-3.5 h-3.5"></i> Preview
                 </button>
             </div>
-            <p class="text-xs mt-1.5" style="color:var(--color-muted)">This is the primary video shown in the cinematic project reveal.</p>
+            <p class="text-xs text-green-600/70 mt-1.5">This is the primary video shown in the cinematic project reveal.</p>
         </div>
 
         <!-- Portrait Reels -->
-        <div class="rounded-xl p-4 border" style="background:rgba(168, 85, 247, 0.05); border-color:rgba(168, 85, 247, 0.2);">
+        <div class="bg-purple-50/60 rounded-xl p-4 border border-purple-100">
             <div class="flex items-center gap-2 mb-3">
-                <i data-lucide="smartphone" class="w-4 h-4 text-purple-500"></i>
-                <label class="form-label mb-0 text-purple-600 dark:text-purple-500">Portrait Reels (9:16) — Up to 3</label>
+                <i data-lucide="smartphone" class="w-4 h-4 text-purple-600"></i>
+                <label class="form-label mb-0 text-purple-700">Portrait Reels (9:16) — Up to 3</label>
             </div>
             <div class="space-y-3">
                 ${portraitInput(1, p?.reel1)}
                 ${portraitInput(2, p?.reel2)}
                 ${portraitInput(3, p?.reel3)}
             </div>
-            <p class="text-xs mt-2" style="color:var(--color-muted)">These play on hover in the Deep Dive section. Must be vertical videos.</p>
+            <p class="text-xs text-purple-600/70 mt-2">These play on hover in the Deep Dive section. Must be vertical videos.</p>
         </div>
 
         <!-- Categories -->
@@ -524,16 +524,17 @@ function categoryRow(c, i) {
             <div class="flex-1 min-w-0">
                 <input class="form-input text-sm font-medium py-1.5" value="${c.id}"
                     onchange="updateCatId(${i},this.value)"
-                    style="background:transparent;border-color:transparent;box-shadow:none;color:var(--color-brand)"
-                    onfocus="this.style.borderColor='var(--color-accent)';this.style.background='var(--color-bg)'"
+                    style="background:transparent;border-color:transparent;"
+                    onfocus="this.style.borderColor='#2563eb';this.style.background='#fff'"
                     onblur="this.style.borderColor='transparent';this.style.background='transparent'">
-                <p class="text-xs ml-1" style="color:var(--color-muted)">${count} project${count !== 1 ? 's' : ''} assigned</p>
+                <p class="text-xs text-muted ml-1">${count} project${count !== 1 ? 's' : ''} assigned</p>
             </div>
         </div>
         <div class="flex items-center gap-2 flex-shrink-0">
             <input class="form-input text-xs py-1.5 w-28" value="${c.label}" placeholder="Short label"
-                onchange="updateCatLabel(${i},this.value)">
-            <button onclick="deleteCategory(${i})" class="btn-icon text-red-400 hover:text-red-500" style="--btn-outline-hover:rgba(239, 68, 68, 0.1);" onmouseover="this.style.background='var(--btn-outline-hover)'" onmouseout="this.style.background='transparent'">
+                onchange="updateCatLabel(${i},this.value)"
+                style="background:#f9fafb;">
+            <button onclick="deleteCategory(${i})" class="btn-icon text-red-400 hover:bg-red-50">
                 <i data-lucide="trash-2" class="w-4 h-4"></i>
             </button>
         </div>
