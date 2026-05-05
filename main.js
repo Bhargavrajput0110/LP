@@ -1469,6 +1469,9 @@
                     window.renderCategoryCards(categoryName);
                 }
 
+                // Refresh catGrids to handle dynamic/lazily loaded content
+                catGrids = document.querySelectorAll('.cat-grid');
+
                 catGrids.forEach(g => {
                     g.classList.remove('active', 'cat-single-wrap');
                     const decoded = (g.dataset.cat || '').replace(/&amp;/g,'&');
