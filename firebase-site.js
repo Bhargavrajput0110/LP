@@ -102,7 +102,7 @@ window.renderCategoryCards = function(categoryName) {
 
     const catLabel   = CAT_LABELS[categoryName] || categoryName;
     const projects   = data.projects.filter(p =>
-        Array.isArray(p.categories) && p.categories.some(c => c === categoryName)
+        Array.isArray(p.categories) && p.categories.some(c => c.toUpperCase() === categoryName.toUpperCase())
     );
 
     if (!projects.length) {
