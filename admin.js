@@ -720,8 +720,8 @@ function openTalentModal(id) {
                 </div>
             </div>
             <div>
-                <label class="form-label">Esign / Featured In / Designation (Featured works)</label>
-                <input id="t-works" class="form-input" placeholder="e.g. LUCE & OMBRA, KOA" value="${t?.works || ''}">
+                <label class="form-label">Featured In (Projects)</label>
+                <div id="t-works-container"></div>
             </div>
             <div>
                 <label class="form-label">Featured Video URL</label>
@@ -744,7 +744,92 @@ function openTalentModal(id) {
     saveBtn.setAttribute('onclick', 'saveTalent()');
 
     document.getElementById('modal-backdrop').classList.add('open');
+
+    // Build the project dropdown after injecting HTML
+    _buildWorksDropdown(t?.works || '');
     lucide.createIcons();
+}
+
+function _buildWorksDropdown(existingWorks) {
+    const container = document.getElementById('t-works-container');
+    if (!container) return;
+
+    // Parse existing works into array
+    let selected = existingWorks ? existingWorks.split(',').map(w => w.trim()).filter(Boolean) : [];
+
+    // Get all project names from state
+    const projectNames = (state.projects || []).map(p => p.name).sort();
+
+    function render() {
+        container.innerHTML = `
+            <div class="flex flex-wrap gap-2 mb-2 min-h-[32px]" id="works-tags">
+                ${selected.map(w => `
+                    <span class="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium"
+                          style="background:#f0f4ff;color:#2563eb;border:1px solid #bfdbfe;">
+                        ${w}
+                        <button type="button" onclick="_removeWork('${w.replace(/'/g,"\\'")}')">
+                            <i data-lucide="x" class="w-3 h-3"></i>
+                        </button>
+                    </span>
+                `).join('')}
+            </div>
+            <div class="relative">
+                <input id="t-works-search" class="form-input text-sm" 
+                    placeholder="Type to search projects or enter custom…"
+                    oninput="_filterWorkOptions(this.value)"
+                    onfocus="_filterWorkOptions(this.value)"
+                    autocomplete="off">
+                <div id="t-works-dropdown" class="absolute z-50 w-full bg-white border border-gray-200 rounded-lg shadow-lg mt-1 max-h-48 overflow-y-auto hidden"></div>
+            </div>
+            <input type="hidden" id="t-works" value="${selected.join(', ')}">
+        `;
+        lucide.createIcons();
+        _filterWorkOptions('');
+    }
+
+    window._removeWork = function(name) {
+        selected = selected.filter(w => w !== name);
+        document.getElementById('t-works').value = selected.join(', ');
+        render();
+    };
+
+    window._filterWorkOptions = function(query) {
+        const dd = document.getElementById('t-works-dropdown');
+        if (!dd) return;
+        const q = query.toLowerCase();
+        const opts = projectNames.filter(n => n.toLowerCase().includes(q) && !selected.includes(n));
+        if (!opts.length && !query) { dd.classList.add('hidden'); return; }
+        dd.classList.remove('hidden');
+        dd.innerHTML = opts.slice(0, 12).map(n => `
+            <div class="px-3 py-2 text-sm cursor-pointer hover:bg-blue-50 hover:text-blue-700 transition-colors"
+                 onmousedown="_addWork('${n.replace(/'/g,"\\'")}')">
+                ${n}
+            </div>
+        `).join('') + (query && !projectNames.includes(query) ? `
+            <div class="px-3 py-2 text-sm cursor-pointer text-gray-400 hover:bg-gray-50 border-t border-gray-100"
+                 onmousedown="_addWork('${query.replace(/'/g,"\\'")}')">
+                + Add "<strong>${query}</strong>"
+            </div>
+        ` : '');
+    };
+
+    window._addWork = function(name) {
+        if (!selected.includes(name)) selected.push(name);
+        document.getElementById('t-works').value = selected.join(', ');
+        const inp = document.getElementById('t-works-search');
+        if (inp) inp.value = '';
+        render();
+    };
+
+    // Close dropdown on outside click
+    document.addEventListener('click', function _closeDD(e) {
+        const dd = document.getElementById('t-works-dropdown');
+        if (dd && !dd.contains(e.target) && e.target.id !== 't-works-search') {
+            dd.classList.add('hidden');
+        }
+    }, { once: false });
+
+    render();
 }
 
 // Reset modal behavior when closing

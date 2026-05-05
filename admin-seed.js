@@ -1,5 +1,5 @@
-// admin-seed.js v6 — versioned reset (preserves edits between loads)
-const _V=6;
+// admin-seed.js v7 — versioned reset (preserves edits between loads)
+const _V=7;
 const _stored=JSON.parse(localStorage.getItem('lp_cms_data')||'{}');
 if((_stored._version||0)>=_V){} else {
 
@@ -71,6 +71,13 @@ const SEED_TALENTS = [
     { name: "Grace Field", id: "015", cat: "EDITORIAL", img: "https://images.unsplash.com/photo-1560066984-138dadb4c035", works: "JAWED HABIB 2", vids: "", comment: "ELEGANCE IS THE ONLY BEAUTY THAT NEVER FADES." }
 ];
 
-localStorage.setItem('lp_cms_data',JSON.stringify({_version:_V,categories:cats,projects:SEED_PROJECTS,talents:SEED_TALENTS}));
+const SEED_CATS=[
+    {id:'HIGH QUALITY UGC ADS',label:'UGC ADS'},{id:'ENTERTAINMENT & EVENTS',label:'ENT & EVENTS'},
+    {id:'FASHION & JEWELS',label:'FASHION'},{id:'SPORTS & ACTIVEWEAR',label:'SPORTS'},
+    {id:'FOOD & BEVERAGE',label:'FOOD & BEV'},{id:'REAL ESTATE & INTERIORS & ARCHITECTURE',label:'REAL ESTATE'},
+    {id:'HEALTHCARE & BEAUTY',label:'HEALTH & BEAUTY'},{id:'EDUCATION & CONSULTANCY',label:'EDUCATION'},
+    {id:'LIFESTYLE & LUXURY',label:'LIFESTYLE'},{id:'CORPORATE',label:'CORPORATE'}
+];
+localStorage.setItem('lp_cms_data',JSON.stringify({_version:_V,categories:SEED_CATS,projects:SEED_PROJECTS,talents:SEED_TALENTS}));
 
 }
