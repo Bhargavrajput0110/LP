@@ -96,7 +96,7 @@ window.renderCategoryCards = function(categoryName) {
     let targetGrid = null;
     document.querySelectorAll('.cat-grid').forEach(g => {
         const decoded = (g.dataset.cat || '').replace(/&amp;/g, '&');
-        if (decoded === categoryName) targetGrid = g;
+        if (decoded.toUpperCase() === categoryName.toUpperCase()) targetGrid = g;
     });
     if (!targetGrid) return;
 
