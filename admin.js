@@ -75,6 +75,17 @@ function switchTab(tab) {
         const el = document.getElementById('tab-' + t);
         if (el) el.classList.toggle('active', t === tab);
     });
+    
+    // Close sidebar on mobile
+    if (window.innerWidth < 768) {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('mobile-overlay');
+        if (sidebar && overlay) {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+        }
+    }
+    
     render();
 }
 
@@ -102,7 +113,7 @@ function renderOverview() {
     const withPortrait  = state.projects.filter(p => p.reel1 || p.reel2 || p.reel3).length;
 
     document.getElementById('content-area').innerHTML = `
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             ${statCard('Total Projects', totalProjects, 'film')}
             ${statCard('Categories', totalCats, 'tag')}
             ${statCard('With Landscape Video', withLandscape, 'monitor-play')}
@@ -148,9 +159,12 @@ function tip(icon, text) {
 function renderProjects() {
     const hdr = document.getElementById('header-actions');
     hdr.innerHTML = `
-        <input oninput="filterProjects(this.value)" placeholder="Search projects…" class="form-input w-52 text-sm py-2 px-3" style="background:#f5f6f8;">
-        <button onclick="openProjectModal(null)" class="btn btn-primary ml-2">
+        <input oninput="filterProjects(this.value)" placeholder="Search projects…" class="form-input w-full md:w-52 text-sm py-2 px-3 hidden md:block" style="background:#f5f6f8;">
+        <button onclick="openProjectModal(null)" class="btn btn-primary ml-2 hidden md:inline-flex">
             <i data-lucide="plus" class="w-4 h-4"></i> Add New Project
+        </button>
+        <button onclick="openProjectModal(null)" class="btn btn-primary md:hidden p-2 rounded-lg">
+            <i data-lucide="plus" class="w-4 h-4 m-0"></i>
         </button>`;
 
     renderProjectList('');
@@ -174,7 +188,11 @@ function renderProjectList(query) {
         return;
     }
 
-    area.innerHTML = `<div class="space-y-3" id="project-list">
+    area.innerHTML = `
+        <div class="md:hidden mb-4 flex gap-2">
+            <input oninput="filterProjects(this.value)" placeholder="Search projects…" class="form-input flex-1 text-sm py-2 px-3" style="background:#fff;">
+        </div>
+        <div class="space-y-3" id="project-list">
         ${filtered.map(p => projectRow(p)).join('')}
     </div>`;
     lucide.createIcons();
@@ -198,32 +216,38 @@ function projectRow(p) {
         ? `<img src="${p.thumbnail}" class="w-10 h-10 rounded-lg object-cover border border-border flex-shrink-0" onerror="this.style.display='none'">`
         : `<div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0"><i data-lucide="image" class="w-4 h-4 text-gray-300"></i></div>`;
 
-    return `<div class="card p-4 flex items-center gap-4 group">
-        ${thumb}
-        <div class="flex-1 min-w-0">
-            <p class="font-semibold text-sm truncate">${p.name}</p>
-            <p class="text-xs text-muted truncate mt-0.5">${p.desc || 'No description'}</p>
-            <div class="flex flex-wrap items-center gap-1.5 mt-2">
-                ${hasLand}${hasPort}${cats}
+    return `<div class="card p-4 flex flex-col sm:flex-row sm:items-center gap-4 group">
+        <div class="flex items-center gap-4 flex-1 min-w-0">
+            ${thumb}
+            <div class="flex-1 min-w-0">
+                <p class="font-semibold text-sm truncate">${p.name}</p>
+                <p class="text-xs text-muted truncate mt-0.5">${p.desc || 'No description'}</p>
+                <div class="flex flex-wrap items-center gap-1.5 mt-2">
+                    ${hasLand}${hasPort}${cats}
+                </div>
             </div>
         </div>
-        <div class="flex items-center gap-1 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-            <button onclick="moveProjectUp('${p.id}')" class="btn-icon" title="Move Up">
-                <i data-lucide="arrow-up" class="w-4 h-4"></i>
-            </button>
-            <button onclick="moveProjectDown('${p.id}')" class="btn-icon" title="Move Down">
-                <i data-lucide="arrow-down" class="w-4 h-4"></i>
-            </button>
-            <div class="w-px h-4 bg-gray-200 mx-1"></div>
-            <button onclick="duplicateProject('${p.id}')" class="btn-icon" title="Duplicate">
-                <i data-lucide="copy" class="w-4 h-4"></i>
-            </button>
-            <button onclick="openProjectModal('${p.id}')" class="btn-icon" title="Edit">
-                <i data-lucide="pencil" class="w-4 h-4"></i>
-            </button>
-            <button onclick="deleteProject('${p.id}')" class="btn-icon text-red-400 hover:bg-red-50 hover:text-red-500" title="Delete">
-                <i data-lucide="trash-2" class="w-4 h-4"></i>
-            </button>
+        <div class="flex items-center justify-between sm:justify-end gap-1 flex-shrink-0 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity mt-2 sm:mt-0 pt-3 sm:pt-0 border-t sm:border-0 border-gray-100">
+            <div class="flex items-center gap-1">
+                <button onclick="moveProjectUp('${p.id}')" class="btn-icon" title="Move Up">
+                    <i data-lucide="arrow-up" class="w-4 h-4"></i>
+                </button>
+                <button onclick="moveProjectDown('${p.id}')" class="btn-icon" title="Move Down">
+                    <i data-lucide="arrow-down" class="w-4 h-4"></i>
+                </button>
+                <div class="w-px h-4 bg-gray-200 mx-1"></div>
+                <button onclick="duplicateProject('${p.id}')" class="btn-icon" title="Duplicate">
+                    <i data-lucide="copy" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <div class="flex items-center gap-1">
+                <button onclick="openProjectModal('${p.id}')" class="btn-icon" title="Edit">
+                    <i data-lucide="pencil" class="w-4 h-4"></i>
+                </button>
+                <button onclick="deleteProject('${p.id}')" class="btn-icon text-red-400 hover:bg-red-50 hover:text-red-500" title="Delete">
+                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                </button>
+            </div>
         </div>
     </div>`;
 }
@@ -475,9 +499,13 @@ function tagKeyDown(e) {
 // ── CATEGORIES ─────────────────────────────────────────────
 function renderCategories() {
     const hdr = document.getElementById('header-actions');
-    hdr.innerHTML = `<button onclick="addCategory()" class="btn btn-primary">
-        <i data-lucide="plus" class="w-4 h-4"></i> Add Category
-    </button>`;
+    hdr.innerHTML = `
+        <button onclick="addCategory()" class="btn btn-primary hidden md:inline-flex">
+            <i data-lucide="plus" class="w-4 h-4"></i> Add Category
+        </button>
+        <button onclick="addCategory()" class="btn btn-primary md:hidden p-2 rounded-lg">
+            <i data-lucide="plus" class="w-4 h-4 m-0"></i>
+        </button>`;
 
     const area = document.getElementById('content-area');
     area.innerHTML = `
