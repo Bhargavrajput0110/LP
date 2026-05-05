@@ -1426,9 +1426,12 @@
                 'REAL ESTATE & SPACES': 'CHAPTER 07',
                 'HEALTHCARE & BEAUTY': 'CHAPTER 08',
                 'RETAIL & ACCESSORIES': 'CHAPTER 09',
+                'LIFESTYLE & LUXURY': 'CHAPTER 09',
+                'CORPORATE': 'CHAPTER 10',
             };
 
             async function openCatCollage(categoryName) {
+                console.log('[LP] Opening Category:', categoryName);
                 if (catOverlay && catOverlay.hasAttribute('data-lazy-partial')) {
                     try {
                         const url = catOverlay.getAttribute('data-lazy-partial');
@@ -1445,7 +1448,7 @@
                             catCountEl = document.getElementById('cat-collage-count');
                             catGrids = document.querySelectorAll('.cat-grid');
                             
-                            // Listener handled via document delegation
+                            if (catCloseBtn) catCloseBtn.addEventListener('click', closeCatCollage);
                             const catExitBtn = document.getElementById('cat-collage-exit');
                             if (catExitBtn) {
                                 catExitBtn.addEventListener('click', () => {
@@ -1555,17 +1558,14 @@
 
             document.querySelectorAll('.cat-clickable').forEach(catCard => {
                 catCard.addEventListener('click', (e) => {
+                    console.log('[LP] Category Clicked:', catCard.dataset.category);
                     e.stopPropagation();
                     const catName = (catCard.dataset.category || '').replace(/&amp;/g, '&');
                     openCatCollage(catName);
                 });
             });
 
-            document.addEventListener('click', (e) => {
-                if (e.target.closest('#cat-collage-close')) {
-                    closeCatCollage();
-                }
-            });
+            catCloseBtn && catCloseBtn.addEventListener('click', closeCatCollage);
 
             const catExitBtn = document.getElementById('cat-collage-exit');
             if (catExitBtn) {
@@ -1660,7 +1660,7 @@
             })();
 
             // Setup Lenis â€“ shorter duration on mobile for snappier native-like feel
-            lenis = new Lenis({ duration: isMobile ? 1.2 : 2.0, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), direction: 'vertical', gestureDirection: 'vertical', smooth: !isMobile, mouseMultiplier: 1, smoothTouch: false, touchMultiplier: 2, infinite: false });
+            lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), direction: 'vertical', gestureDirection: 'vertical', smooth: !isMobile, mouseMultiplier: 1, smoothTouch: false, touchMultiplier: 2, infinite: false });
             lenis.on('scroll', ScrollTrigger.update);
             lenis.on('scroll', ({ progress }) => {
                 document.getElementById('scroll-bar').style.transform = `scaleX(${progress})`;
