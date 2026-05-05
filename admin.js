@@ -302,7 +302,7 @@ function projectForm(p) {
             <div class="tag-wrap" id="cat-tag-wrap" onclick="this.querySelector('input').focus()">
                 <input class="tag-input-inline" id="cat-tag-input" placeholder="Type & Enter to add custom…" onkeydown="tagKeyDown(event)">
             </div>
-            <input type="hidden" id="f-categories" value="${JSON.stringify(p?.categories || [])}">
+            <input type="hidden" id="f-categories" value="${JSON.stringify(p?.categories || []).replace(/"/g, '&quot;')}">
         </div>
 
         <!-- Mood -->
