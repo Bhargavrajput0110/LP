@@ -1472,7 +1472,7 @@
                 catGrids.forEach(g => {
                     g.classList.remove('active', 'cat-single-wrap');
                     const decoded = (g.dataset.cat || '').replace(/&amp;/g,'&');
-                    if (decoded === categoryName) {
+                    if (decoded.toUpperCase() === categoryName.toUpperCase()) {
                         g.classList.add('active');
                         const cardCount = g.querySelectorAll('.project-card').length;
                         if (cardCount === 1) g.classList.add('cat-single-wrap');
