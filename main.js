@@ -2233,26 +2233,17 @@
                         vidEl.preload = 'metadata'; // metadata only until visible
                         vidEl.load();
 
-                        // PERF: IntersectionObserver — play only when portrait is in viewport
+                        // PERF: IntersectionObserver — preload when visible, but ONLY play on hover for performance
                         if (vidEl._ioObserver) vidEl._ioObserver.disconnect();
                         const observer = new IntersectionObserver((entries) => {
                             entries.forEach(entry => {
                                 if (entry.isIntersecting) {
                                     vidEl.preload = 'auto';
-                                    if (vidEl.readyState >= 3) {
-                                        vidEl.play().catch(() => {});
-                                    } else {
-                                        vidEl.addEventListener('canplay', () => {
-                                            if (vidEl.getBoundingClientRect().top < window.innerHeight && vidEl.getBoundingClientRect().bottom > 0) {
-                                                vidEl.play().catch(() => {});
-                                            }
-                                        }, { once: true });
-                                    }
                                 } else {
                                     vidEl.pause();
                                 }
                             });
-                        }, { threshold: 0.3 });
+                        }, { threshold: 0.1 });
                         observer.observe(vidEl);
                         vidEl._ioObserver = observer;
                     }, delay);
