@@ -159,7 +159,7 @@ function tip(icon, text) {
 function renderProjects() {
     const hdr = document.getElementById('header-actions');
     hdr.innerHTML = `
-        <input oninput="filterProjects(this.value)" placeholder="Search projects…" class="form-input w-full md:w-52 text-sm py-2 px-3 hidden md:block" style="background:#f5f6f8;">
+        <input oninput="filterProjects(this.value)" placeholder="Search projects…" class="form-input w-full md:w-52 text-sm py-2 px-3 hidden md:block" style="background:rgba(255,255,255,0.02);">
         <button onclick="openProjectModal(null)" class="btn btn-primary ml-2 hidden md:inline-flex">
             <i data-lucide="plus" class="w-4 h-4"></i> Add New Project
         </button>
@@ -180,9 +180,9 @@ function renderProjectList(query) {
 
     if (!filtered.length) {
         area.innerHTML = `<div class="empty-state">
-            <i data-lucide="film" class="w-12 h-12 mx-auto mb-4 text-gray-300"></i>
-            <p class="font-medium text-gray-400 mb-2">${query ? 'No results found' : 'No projects yet'}</p>
-            <p class="text-sm text-gray-300 mb-6">Add your first project card using the button above.</p>
+            <i data-lucide="film" class="w-12 h-12 mx-auto mb-4 text-white/20"></i>
+            <p class="font-medium text-white/40 mb-2">${query ? 'No results found' : 'No projects yet'}</p>
+            <p class="text-sm text-white/30 mb-6">Add your first project card using the button above.</p>
         </div>`;
         lucide.createIcons();
         return;
@@ -190,7 +190,7 @@ function renderProjectList(query) {
 
     area.innerHTML = `
         <div class="md:hidden mb-4 flex gap-2">
-            <input oninput="filterProjects(this.value)" placeholder="Search projects…" class="form-input flex-1 text-sm py-2 px-3" style="background:#fff;">
+            <input oninput="filterProjects(this.value)" placeholder="Search projects…" class="form-input flex-1 text-sm py-2 px-3" style="background:rgba(255,255,255,0.02);">
         </div>
         <div class="space-y-3" id="project-list">
         ${filtered.map(p => projectRow(p)).join('')}
@@ -214,7 +214,7 @@ function projectRow(p) {
 
     const thumb = p.thumbnail
         ? `<img src="${p.thumbnail}" class="w-10 h-10 rounded-lg object-cover border border-border flex-shrink-0" onerror="this.style.display='none'">`
-        : `<div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0"><i data-lucide="image" class="w-4 h-4 text-gray-300"></i></div>`;
+        : `<div class="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center flex-shrink-0"><i data-lucide="image" class="w-4 h-4 text-white/20"></i></div>`;
 
     return `<div class="card p-4 flex flex-col sm:flex-row sm:items-center gap-4 group">
         <div class="flex items-center gap-4 flex-1 min-w-0">
@@ -227,7 +227,7 @@ function projectRow(p) {
                 </div>
             </div>
         </div>
-        <div class="flex items-center justify-between sm:justify-end gap-1 flex-shrink-0 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity mt-2 sm:mt-0 pt-3 sm:pt-0 border-t sm:border-0 border-gray-100">
+        <div class="flex items-center justify-between sm:justify-end gap-1 flex-shrink-0 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity mt-2 sm:mt-0 pt-3 sm:pt-0 border-t sm:border-0 border-white/5">
             <div class="flex items-center gap-1">
                 <button onclick="moveProjectUp('${p.id}')" class="btn-icon" title="Move Up">
                     <i data-lucide="arrow-up" class="w-4 h-4"></i>
@@ -235,7 +235,7 @@ function projectRow(p) {
                 <button onclick="moveProjectDown('${p.id}')" class="btn-icon" title="Move Down">
                     <i data-lucide="arrow-down" class="w-4 h-4"></i>
                 </button>
-                <div class="w-px h-4 bg-gray-200 mx-1"></div>
+                <div class="w-px h-4 bg-white/10 mx-1"></div>
                 <button onclick="duplicateProject('${p.id}')" class="btn-icon" title="Duplicate">
                     <i data-lucide="copy" class="w-4 h-4"></i>
                 </button>
@@ -244,7 +244,7 @@ function projectRow(p) {
                 <button onclick="openProjectModal('${p.id}')" class="btn-icon" title="Edit">
                     <i data-lucide="pencil" class="w-4 h-4"></i>
                 </button>
-                <button onclick="deleteProject('${p.id}')" class="btn-icon text-red-400 hover:bg-red-50 hover:text-red-500" title="Delete">
+                <button onclick="deleteProject('${p.id}')" class="btn-icon text-red-400 hover:bg-red-500/10 hover:text-red-500" title="Delete">
                     <i data-lucide="trash-2" class="w-4 h-4"></i>
                 </button>
             </div>
@@ -298,10 +298,10 @@ function projectForm(p) {
         </div>
 
         <!-- Landscape Video -->
-        <div class="bg-green-50/60 rounded-xl p-4 border border-green-100">
+        <div class="bg-green-500/5 rounded-xl p-4 border border-green-500/20">
             <div class="flex items-center gap-2 mb-3">
-                <i data-lucide="monitor-play" class="w-4 h-4 text-green-600"></i>
-                <label class="form-label mb-0 text-green-700">Landscape Video (16:9) — Main Reel</label>
+                <i data-lucide="monitor-play" class="w-4 h-4 text-green-400"></i>
+                <label class="form-label mb-0 text-green-400">Landscape Video (16:9) — Main Reel</label>
             </div>
             <div class="video-input-group">
                 <input id="f-reel" class="form-input" placeholder="Cloudinary or CDN video URL" value="${p?.reel || ''}">
@@ -309,21 +309,21 @@ function projectForm(p) {
                     <i data-lucide="play" class="w-3.5 h-3.5"></i> Preview
                 </button>
             </div>
-            <p class="text-xs text-green-600/70 mt-1.5">This is the primary video shown in the cinematic project reveal.</p>
+            <p class="text-xs text-green-400/70 mt-1.5 font-mono uppercase tracking-widest">This is the primary video shown in the cinematic project reveal.</p>
         </div>
 
         <!-- Portrait Reels -->
-        <div class="bg-purple-50/60 rounded-xl p-4 border border-purple-100">
+        <div class="bg-purple-500/5 rounded-xl p-4 border border-purple-500/20">
             <div class="flex items-center gap-2 mb-3">
-                <i data-lucide="smartphone" class="w-4 h-4 text-purple-600"></i>
-                <label class="form-label mb-0 text-purple-700">Portrait Reels (9:16) — Up to 3</label>
+                <i data-lucide="smartphone" class="w-4 h-4 text-purple-400"></i>
+                <label class="form-label mb-0 text-purple-400">Portrait Reels (9:16) — Up to 3</label>
             </div>
             <div class="space-y-3">
                 ${portraitInput(1, p?.reel1)}
                 ${portraitInput(2, p?.reel2)}
                 ${portraitInput(3, p?.reel3)}
             </div>
-            <p class="text-xs text-purple-600/70 mt-2">These play on hover in the Deep Dive section. Must be vertical videos.</p>
+            <p class="text-xs text-purple-400/70 mt-2 font-mono uppercase tracking-widest">These play on hover in the Deep Dive section. Must be vertical videos.</p>
         </div>
 
         <!-- Categories -->
@@ -365,7 +365,7 @@ function projectForm(p) {
 
 function portraitInput(n, val) {
     return `<div class="video-input-group">
-        <span class="text-xs text-purple-500 font-semibold w-4 flex-shrink-0">${n}</span>
+        <span class="text-xs text-purple-400 font-mono tracking-widest font-semibold w-4 flex-shrink-0">${n}</span>
         <input id="f-reel${n}" class="form-input" placeholder="Portrait reel ${n} URL (9:16)" value="${val || ''}">
         <button class="preview-btn" onclick="previewVideo('f-reel${n}','Portrait Reel ${n}')">
             <i data-lucide="play" class="w-3.5 h-3.5"></i>
@@ -524,17 +524,17 @@ function categoryRow(c, i) {
             <div class="flex-1 min-w-0">
                 <input class="form-input text-sm font-medium py-1.5" value="${c.id}"
                     onchange="updateCatId(${i},this.value)"
-                    style="background:transparent;border-color:transparent;"
-                    onfocus="this.style.borderColor='#2563eb';this.style.background='#fff'"
+                    style="background:transparent;border-color:transparent;color:#F4F0E8;"
+                    onfocus="this.style.borderColor='rgba(200,135,30,0.5)';this.style.background='rgba(0,0,0,0.3)'"
                     onblur="this.style.borderColor='transparent';this.style.background='transparent'">
-                <p class="text-xs text-muted ml-1">${count} project${count !== 1 ? 's' : ''} assigned</p>
+                <p class="text-[10px] font-mono tracking-widest uppercase text-muted ml-1">${count} project${count !== 1 ? 's' : ''} assigned</p>
             </div>
         </div>
         <div class="flex items-center gap-2 flex-shrink-0">
             <input class="form-input text-xs py-1.5 w-28" value="${c.label}" placeholder="Short label"
                 onchange="updateCatLabel(${i},this.value)"
-                style="background:#f9fafb;">
-            <button onclick="deleteCategory(${i})" class="btn-icon text-red-400 hover:bg-red-50">
+                style="background:rgba(255,255,255,0.02);">
+            <button onclick="deleteCategory(${i})" class="btn-icon text-red-400 hover:bg-red-500/10">
                 <i data-lucide="trash-2" class="w-4 h-4"></i>
             </button>
         </div>
