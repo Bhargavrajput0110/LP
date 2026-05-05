@@ -21,6 +21,7 @@ async function saveToFirebase(state) {
     const payload = {
         categories: state.categories || [],
         projects:   state.projects   || [],
+        talents:    state.talents    || [],
         updatedAt:  new Date().toISOString(),
         _version:   state._version || localVersion
     };
@@ -49,19 +50,25 @@ async function initFromFirebase() {
                 await saveToFirebase({
                     categories: local.categories,
                     projects:   local.projects,
+                    talents:    local.talents,
                     _version:   localVersion
                 });
-                window.state = { categories: local.categories, projects: local.projects };
+                window.state = { categories: local.categories, projects: local.projects, talents: local.talents };
             } else {
                 // ── Firebase is current or newer → load from Firebase ──
                 console.log(`[Firebase Admin] Using Firebase v${fbVersion}`);
-                window.state = { categories: fbData.categories, projects: fbData.projects };
+                window.state = { 
+                    categories: fbData.categories || [], 
+                    projects: fbData.projects || [], 
+                    talents: fbData.talents || [] 
+                };
                 // Sync into localStorage for offline use
                 localStorage.setItem('lp_cms_data', JSON.stringify({
                     ...local,
                     _version:   fbVersion,
-                    categories: fbData.categories,
-                    projects:   fbData.projects,
+                    categories: fbData.categories || [],
+                    projects:   fbData.projects || [],
+                    talents:    fbData.talents || [],
                     updatedAt:  fbData.updatedAt
                 }));
             }
@@ -72,10 +79,15 @@ async function initFromFirebase() {
                 await saveToFirebase({
                     categories: local.categories,
                     projects:   local.projects,
+                    talents:    local.talents,
                     _version:   localVersion
                 });
             }
-            window.state = { categories: local?.categories || [], projects: local?.projects || [] };
+            window.state = { 
+                categories: local?.categories || [], 
+                projects: local?.projects || [],
+                talents: local?.talents || []
+            };
         }
 
         // Re-render CMS UI with (possibly updated) state
@@ -86,7 +98,11 @@ async function initFromFirebase() {
         // Fallback: use localStorage data
         const local = JSON.parse(localStorage.getItem('lp_cms_data') || '{}');
         if (local.projects) {
-            window.state = { categories: local.categories || [], projects: local.projects || [] };
+            window.state = { 
+                categories: local.categories || [], 
+                projects: local.projects || [],
+                talents: local.talents || []
+            };
             if (typeof render === 'function') render();
         }
     }

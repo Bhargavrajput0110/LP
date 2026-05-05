@@ -315,8 +315,23 @@
         <div class="absolute top-10 right-10 text-white cursor-pointer close-btn text-5xl z-30">&times;</div>
     </div>
 
-    <script>
-        const talents = [
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD1vnMRo_cCcqpzuV9prlrOiUIavz7nv6g",
+            authDomain: "limitless-cms.firebaseapp.com",
+            projectId: "limitless-cms",
+            storageBucket: "limitless-cms.firebasestorage.app",
+            messagingSenderId: "795014578598",
+            appId: "1:795014578598:web:449def7c57453637480f67"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db  = getFirestore(app);
+
+        let talents = [
             { name: "Aria Vance", id: "001", cat: "EDITORIAL", img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb", works: "LUCE & OMBRA, KOA", vids: "https://res.cloudinary.com/dfstyia4c/video/upload/v1775388052/LUCE_OMBRA_-_TEASER_1_p7y5x5.mp4", comment: "CRAFTING SILENCES IN A WORLD OF NOISE." },
             { name: "Julian Ross", id: "002", cat: "COMMERCIAL", img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d", works: "SIGNATURE EYEWEAR", vids: "https://res.cloudinary.com/dfstyia4c/video/upload/v1775389629/Signature_feb_compilation_2_yxwc0v.mp4", comment: "EVERY FRAME IS A LEGACY IN THE MAKING." },
             { name: "Elara Sky", id: "003", cat: "LIFESTYLE", img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1", works: "DR. PRIYANKA", vids: "https://res.cloudinary.com/dfstyia4c/video/upload/v1775561554/Dr._Priyanka_-_March_UEB_Horizontal_Reel_1_hzq046.mp4", comment: "AUTHENTICITY OVER PERFECTION, ALWAYS." },
@@ -335,31 +350,64 @@
         ];
 
         const track = document.getElementById('track');
-        talents.forEach((t, i) => {
-            const card = document.createElement('div');
-            card.className = 'card-wrapper';
-            card.setAttribute('data-category', t.cat);
-            card.innerHTML = `
-                <div class="edgeless-node shadow-2xl">
-                    <div class="image-box"><img src="${t.img}?q=80&w=800" alt=""></div>
-                    <div class="model-comment font-counter">ΓÇ£${t.comment}ΓÇ¥</div>
-                    <div class="label-ui">
-                        <span class="text-[var(--scene-accent)] text-[8px] tracking-[0.4em] block mb-1">NODE // ${t.cat}</span>
-                        <span class="text-white text-[18px] font-display uppercase tracking-widest">${t.name}</span>
-                    </div>
-                    <div class="digital-signature">${t.name.split(' ')[0]}</div>
-                </div>
-            `;
-            card.onclick = () => openDossier(t);
-            track.appendChild(card);
-        });
-
-        let allNodes = Array.from(document.querySelectorAll('.card-wrapper'));
-        let activeNodes = [...allNodes];
+        let allNodes = [];
+        let activeNodes = [];
         const radius = 1100;
         let rotation = 0;
         let targetRotation = 0;
         let isDossierOpen = false;
+        let isInitialized = false;
+
+        function initTalents(data) {
+            if (data && data.length > 0) talents = data;
+            
+            // Clear existing except core
+            const core = track.querySelector('.central-core');
+            track.innerHTML = '';
+            if (core) track.appendChild(core);
+
+            talents.forEach((t, i) => {
+                const card = document.createElement('div');
+                card.className = 'card-wrapper';
+                card.setAttribute('data-category', t.cat);
+                card.innerHTML = `
+                    <div class="edgeless-node shadow-2xl">
+                        <div class="image-box"><img src="${t.img}?q=80&w=800" alt=""></div>
+                        <div class="model-comment font-counter">“${t.comment}”</div>
+                        <div class="label-ui">
+                            <span class="text-[var(--scene-accent)] text-[8px] tracking-[0.4em] block mb-1">NODE // ${t.cat}</span>
+                            <span class="text-white text-[18px] font-display uppercase tracking-widest">${t.name}</span>
+                        </div>
+                        <div class="digital-signature">${t.name.split(' ')[0]}</div>
+                    </div>
+                `;
+                card.onclick = () => openDossier(t);
+                track.appendChild(card);
+            });
+
+            allNodes = Array.from(document.querySelectorAll('.card-wrapper'));
+            activeNodes = [...allNodes];
+
+            if (!isInitialized) {
+                intro();
+                isInitialized = true;
+            }
+        }
+
+        // Real-time CMS Sync
+        onSnapshot(doc(db, 'cms', 'data'), (snap) => {
+            if (snap.exists()) {
+                const data = snap.data();
+                if (data.talents && data.talents.length > 0) {
+                    console.log('[CMS] Syncing talents:', data.talents.length);
+                    initTalents(data.talents);
+                } else {
+                    initTalents(); // Fallback to seed
+                }
+            } else {
+                initTalents(); // Fallback to seed
+            }
+        });
 
         let lastUpdate = 0;
         function update() {
@@ -440,8 +488,7 @@
 
         const dot = document.getElementById('dot');
         window.onmousemove = (e) => gsap.to(dot, { x: e.clientX, y: e.clientY, duration: 0.12 });
-        window.onload = intro;
+        // window.onload = intro; // Triggered by initTalents
     </script>
 </body>
 </html>
-

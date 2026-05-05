@@ -53,11 +53,24 @@ const RAW=[
   ['SHAILY',[CO]],['METSO',[CO]],['CONCENTRIX',[CO]],['PAUSHAK',[CO]],['ART DADA PROP STUDIO',[CO]],
 ];
 const SEED_PROJECTS=RAW.map(([n,c])=>mk(n,c,V[n]||{}));
-const cats=[
-  {id:U,label:'UGC ADS'},{id:E,label:'ENT & EVENTS'},{id:FA,label:'FASHION'},
-  {id:SP,label:'SPORTS'},{id:FB,label:'FOOD & BEV'},{id:RE,label:'REAL ESTATE'},
-  {id:HB,label:'HEALTH & BEAUTY'},{id:ED,label:'EDUCATION'},{id:LI,label:'LIFESTYLE'},{id:CO,label:'CORPORATE'},
+const SEED_TALENTS = [
+    { name: "Aria Vance", id: "001", cat: "EDITORIAL", img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb", works: "LUCE & OMBRA, KOA", vids: "https://res.cloudinary.com/dfstyia4c/video/upload/v1775388052/LUCE_OMBRA_-_TEASER_1_p7y5x5.mp4", comment: "CRAFTING SILENCES IN A WORLD OF NOISE." },
+    { name: "Julian Ross", id: "002", cat: "COMMERCIAL", img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d", works: "SIGNATURE EYEWEAR", vids: "https://res.cloudinary.com/dfstyia4c/video/upload/v1775389629/Signature_feb_compilation_2_yxwc0v.mp4", comment: "EVERY FRAME IS A LEGACY IN THE MAKING." },
+    { name: "Elara Sky", id: "003", cat: "LIFESTYLE", img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1", works: "DR. PRIYANKA", vids: "https://res.cloudinary.com/dfstyia4c/video/upload/v1775561554/Dr._Priyanka_-_March_UEB_Horizontal_Reel_1_hzq046.mp4", comment: "AUTHENTICITY OVER PERFECTION, ALWAYS." },
+    { name: "Kai Ren", id: "004", cat: "COMMERCIAL", img: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce", works: "THE DENTAL PROJECT", vids: "https://res.cloudinary.com/dfstyia4c/video/upload/v1775558775/TDP_-_Script_2_xwnchw.mp4", comment: "WHERE PRECISION MEETS PURE EMOTION." },
+    { name: "Sofia Kim", id: "005", cat: "LIFESTYLE", img: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04", works: "SUBA ELITE", vids: "", comment: "DEFINING THE MODERN LUXURY NARRATIVE." },
+    { name: "Oscar Wilde", id: "006", cat: "EDITORIAL", img: "https://images.unsplash.com/photo-1488161628813-04466f872be2", works: "OPTIC HOUSE", vids: "", comment: "CHASING THE LIGHT, FINDING THE SOUL." },
+    { name: "Mia Thorne", id: "007", cat: "EDITORIAL", img: "https://images.unsplash.com/photo-1517841905240-472988babdf9", works: "JAWED HABIB", vids: "", comment: "VIBRANCE IS A REVOLUTION OF STRENGTH." },
+    { name: "Zayn Carter", id: "008", cat: "LIFESTYLE", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e", works: "BROOKFIELDZ", vids: "", comment: "MINIMALISM IS THE ULTIMATE SOPHISTICATION." },
+    { name: "Bella Rae", id: "009", cat: "COMMERCIAL", img: "https://images.unsplash.com/photo-1515562141207-7a88fb0ce33e", works: "WHITE LION JEWELS", vids: "", comment: "GLOW FROM WITHIN, SHINE FOR THE WORLD." },
+    { name: "Victor D.", id: "010", cat: "EDITORIAL", img: "https://images.unsplash.com/photo-1497366216548-37526070297c", works: "LIXUS SPACE", vids: "", comment: "SPACE IS THE CANVAS OF OUR DREAMS." },
+    { name: "Elena G.", id: "011", cat: "LIFESTYLE", img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2", works: "KIDSTER", vids: "", comment: "YOUTH IS THE INFINITE SOURCE OF ENERGY." },
+    { name: "Marcus T.", id: "012", cat: "EDITORIAL", img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e", works: "CROSSBOUNDRIES", vids: "", comment: "BOUNDARIES ARE MADE TO BE BROKEN." },
+    { name: "Stella Nova", id: "013", cat: "EDITORIAL", img: "https://images.unsplash.com/photo-1529626455594-4ff5d020a5a1", works: "LUCE OMBRA 2", vids: "", comment: "BEYOND THE HORIZON LIES THE TRUTH." },
+    { name: "Aiden Flux", id: "014", cat: "COMMERCIAL", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d", works: "TRICHUP", vids: "", comment: "FLOW LIKE WATER, STAND LIKE A MOUNTAIN." },
+    { name: "Grace Field", id: "015", cat: "EDITORIAL", img: "https://images.unsplash.com/photo-1560066984-138dadb4c035", works: "JAWED HABIB 2", vids: "", comment: "ELEGANCE IS THE ONLY BEAUTY THAT NEVER FADES." }
 ];
-localStorage.setItem('lp_cms_data',JSON.stringify({_version:_V,categories:cats,projects:SEED_PROJECTS}));
+
+localStorage.setItem('lp_cms_data',JSON.stringify({_version:_V,categories:cats,projects:SEED_PROJECTS,talents:SEED_TALENTS}));
 
 }

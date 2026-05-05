@@ -2199,11 +2199,11 @@
                 const reelSrc = card.dataset.reel || (cardVideo ? cardVideo.src : '');
                 
                 // Populate Typography
-                document.querySelector('.pr-meta-tl').innerText = metaTl;
-                document.querySelector('.pr-meta-tr').innerText = metaTr;
-                document.querySelector('.pr-meta-bl').innerText = `0${index + 1}.`;
                 document.querySelector('.pr-meta-bc').innerText = metaBc;
-                document.querySelector('.pr-meta-br').innerText = `.${String(activeCardsList.length).padStart(2, '0')}`;
+                // document.querySelector('.pr-meta-tl').innerText = metaTl;
+                // document.querySelector('.pr-meta-tr').innerText = metaTr;
+                // document.querySelector('.pr-meta-bl').innerText = `0${index + 1}.`;
+                // document.querySelector('.pr-meta-br').innerText = `.${String(activeCardsList.length).padStart(2, '0')}`;
                 
                 // Populate deep-dive cinematic showcase
                 document.getElementById('pr-extended-title').innerText = baseTitle.replace('\n', ' ');
@@ -2367,8 +2367,8 @@
                     };
                 }, 300);
 
-                // Inject Description at bottom (only if it exists)
-                infoWrap.innerHTML = desc ? `<div class="pr-desc">${desc}</div>` : '';
+                // Inject Description at bottom (REMOVED per request)
+                infoWrap.innerHTML = ''; 
                 
                 const reveal = document.getElementById('project-reveal');
                 reveal._activeCard = card;

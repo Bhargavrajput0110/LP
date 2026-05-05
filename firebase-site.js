@@ -138,3 +138,4 @@ onSnapshot(doc(db, 'cms', 'data'), (snap) => {
 window.getCMSProject    = (name) =>
     window.__CMS_DATA__?.projects?.find(p => p.name.toUpperCase() === name.toUpperCase()) || null;
 window.getCMSCategories = () => window.__CMS_DATA__?.categories || [];
+window.getCMSTalents    = () => window.__CMS_DATA__?.talents || [];

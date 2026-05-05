@@ -16,13 +16,15 @@ const DEFAULT_DATA = {
         { id: "LIFESTYLE & LUXURY", label: "LIFESTYLE" },
         { id: "CORPORATE", label: "CORPORATE" }
     ],
-    projects: typeof SEED_PROJECTS !== 'undefined' ? SEED_PROJECTS : []
+    projects: typeof SEED_PROJECTS !== 'undefined' ? SEED_PROJECTS : [],
+    talents: typeof SEED_TALENTS !== 'undefined' ? SEED_TALENTS : []
 };
 
 // ── State ──────────────────────────────────────────────────
-let state = { categories: [], projects: [] };
+let state = { categories: [], projects: [], talents: [] };
 let currentTab = 'overview';
 let editingProjectId = null;
+let editingTalentId = null;
 let confirmCallback = null;
 
 // ── Firebase (loaded as module in admin.html) ─────────────
@@ -41,7 +43,11 @@ function loadState() {
         if (saved) {
             const parsed = JSON.parse(saved);
             // Strip internal _version key from state
-            state = { categories: parsed.categories || [], projects: parsed.projects || [] };
+            state = { 
+                categories: parsed.categories || [], 
+                projects: parsed.projects || [],
+                talents: parsed.talents || []
+            };
         } else {
             state = JSON.parse(JSON.stringify(DEFAULT_DATA));
         }
@@ -55,7 +61,8 @@ function saveToLocalStorage() {
     localStorage.setItem('lp_cms_data', JSON.stringify({
         _version: existing._version || 4,
         categories: state.categories,
-        projects: state.projects
+        projects: state.projects,
+        talents: state.talents
     }));
     // Push to Firebase via window._fbSave (set by firebase-admin.js module)
     const fbSave = window._fbSave;
@@ -71,7 +78,7 @@ function saveToLocalStorage() {
 // ── Tab Routing ────────────────────────────────────────────
 function switchTab(tab) {
     currentTab = tab;
-    ['overview','projects','categories'].forEach(t => {
+    ['overview','projects','categories', 'models'].forEach(t => {
         const el = document.getElementById('tab-' + t);
         if (el) el.classList.toggle('active', t === tab);
     });
@@ -90,7 +97,7 @@ function switchTab(tab) {
 }
 
 function render() {
-    const titles = { overview: 'Overview', projects: 'Projects', categories: 'Categories' };
+    const titles = { overview: 'Overview', projects: 'Projects', categories: 'Categories', models: 'Talent Archive' };
     document.getElementById('page-title').textContent = titles[currentTab] || '';
 
     const sub = document.getElementById('page-subtitle');
@@ -101,6 +108,7 @@ function render() {
     if (currentTab === 'overview')   renderOverview();
     if (currentTab === 'projects')   renderProjects();
     if (currentTab === 'categories') renderCategories();
+    if (currentTab === 'models')     renderTalents();
 
     lucide.createIcons();
 }
@@ -109,15 +117,16 @@ function render() {
 function renderOverview() {
     const totalProjects = state.projects.length;
     const totalCats = state.categories.length;
+    const totalTalents = state.talents.length;
     const withLandscape = state.projects.filter(p => p.reel).length;
     const withPortrait  = state.projects.filter(p => p.reel1 || p.reel2 || p.reel3).length;
 
     document.getElementById('content-area').innerHTML = `
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             ${statCard('Total Projects', totalProjects, 'film')}
+            ${statCard('Total Models', totalTalents, 'users')}
             ${statCard('Categories', totalCats, 'tag')}
-            ${statCard('With Landscape Video', withLandscape, 'monitor-play')}
-            ${statCard('With Portrait Reels', withPortrait, 'smartphone')}
+            ${statCard('With Video', withLandscape, 'monitor-play')}
         </div>
 
         <div class="card p-6 mb-6">
@@ -263,6 +272,10 @@ function openProjectModal(id) {
 
     // Init category tags
     if (p) (p.categories || []).forEach(addCategoryTag);
+
+    // Ensure save button handler is correct
+    const saveBtn = document.querySelector('#modal-panel .btn-primary');
+    if (saveBtn) saveBtn.setAttribute('onclick', 'saveProject()');
 
     lucide.createIcons();
 }
@@ -594,6 +607,189 @@ function previewImage(inputId) {
     const src = document.getElementById(inputId)?.value?.trim();
     if (!src) { alert('Please paste an image URL first.'); return; }
     window.open(src, '_blank');
+}
+
+// ── TALENTS (MODELS) ──────────────────────────────────────
+function renderTalents() {
+    const hdr = document.getElementById('header-actions');
+    hdr.innerHTML = `
+        <input oninput="filterTalents(this.value)" placeholder="Search models…" class="form-input w-full md:w-52 text-sm py-2 px-3 hidden md:block" style="background:#f5f6f8;">
+        <button onclick="openTalentModal(null)" class="btn btn-primary ml-2 hidden md:inline-flex">
+            <i data-lucide="plus" class="w-4 h-4"></i> Add New Model
+        </button>
+        <button onclick="openTalentModal(null)" class="btn btn-primary md:hidden p-2 rounded-lg">
+            <i data-lucide="plus" class="w-4 h-4 m-0"></i>
+        </button>`;
+
+    renderTalentList('');
+}
+
+function renderTalentList(query) {
+    const area = document.getElementById('content-area');
+    const filtered = (state.talents || []).filter(t =>
+        !query || t.name.toLowerCase().includes(query.toLowerCase()) ||
+        t.cat.toLowerCase().includes(query.toLowerCase())
+    );
+
+    if (!filtered.length) {
+        area.innerHTML = `<div class="empty-state">
+            <i data-lucide="users" class="w-12 h-12 mx-auto mb-4 text-gray-300"></i>
+            <p class="font-medium text-gray-400 mb-2">${query ? 'No results found' : 'No models yet'}</p>
+            <p class="text-sm text-gray-300 mb-6">Add your first model using the button above.</p>
+        </div>`;
+        lucide.createIcons();
+        return;
+    }
+
+    area.innerHTML = `
+        <div class="md:hidden mb-4 flex gap-2">
+            <input oninput="filterTalents(this.value)" placeholder="Search models…" class="form-input flex-1 text-sm py-2 px-3" style="background:#fff;">
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            ${filtered.map(t => talentCard(t)).join('')}
+        </div>`;
+    lucide.createIcons();
+}
+
+function filterTalents(q) {
+    renderTalentList(q);
+}
+
+function talentCard(t) {
+    const thumb = t.img
+        ? `<img src="${t.img}" class="w-full h-48 object-cover rounded-t-xl" onerror="this.src='https://via.placeholder.com/300x400?text=No+Image'">`
+        : `<div class="w-full h-48 bg-gray-100 rounded-t-xl flex items-center justify-center"><i data-lucide="user" class="w-12 h-12 text-gray-300"></i></div>`;
+
+    return `<div class="card group overflow-hidden">
+        ${thumb}
+        <div class="p-4">
+            <div class="flex items-start justify-between mb-1">
+                <h4 class="font-bold text-base truncate">${t.name}</h4>
+                <span class="badge badge-blue text-[9px] uppercase tracking-wider">${t.cat}</span>
+            </div>
+            <p class="text-xs text-muted truncate mb-4">${t.works || 'No featured works'}</p>
+            
+            <div class="flex items-center justify-between pt-3 border-t border-gray-50">
+                <div class="flex items-center gap-1">
+                    <button onclick="previewVideoUrl('${t.vids}')" class="btn-icon ${!t.vids ? 'opacity-20 pointer-events-none' : ''}">
+                        <i data-lucide="play-circle" class="w-4 h-4"></i>
+                    </button>
+                </div>
+                <div class="flex items-center gap-1">
+                    <button onclick="openTalentModal('${t.id}')" class="btn-icon">
+                        <i data-lucide="pencil" class="w-4 h-4"></i>
+                    </button>
+                    <button onclick="deleteTalent('${t.id}')" class="btn-icon text-red-400 hover:text-red-500">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>`;
+}
+
+function previewVideoUrl(url) {
+    if(!url) return;
+    document.getElementById('preview-video').src = url;
+    document.getElementById('preview-label').textContent = 'Featured Video Preview';
+    document.getElementById('video-preview-modal').classList.add('open');
+}
+
+function openTalentModal(id) {
+    editingTalentId = id;
+    const t = id ? state.talents.find(x => x.id === id) : null;
+
+    document.getElementById('modal-title').textContent = t ? `Edit Model — ${t.name}` : 'Add New Model';
+    document.getElementById('modal-content').innerHTML = `
+        <div class="p-6 space-y-5">
+            <div>
+                <label class="form-label">Name *</label>
+                <input id="t-name" class="form-input" placeholder="e.g. Aria Vance" value="${t?.name || ''}">
+            </div>
+            <div>
+                <label class="form-label">Category (Editorial, Commercial, etc.)</label>
+                <input id="t-cat" class="form-input" placeholder="e.g. EDITORIAL" value="${t?.cat || ''}">
+            </div>
+            <div>
+                <label class="form-label">Profile Picture URL</label>
+                <div class="video-input-group">
+                    <input id="t-img" class="form-input" placeholder="Unsplash or Cloudinary image URL" value="${t?.img || ''}">
+                    <button class="preview-btn" onclick="previewImage('t-img')">
+                        <i data-lucide="image" class="w-3.5 h-3.5"></i>
+                    </button>
+                </div>
+            </div>
+            <div>
+                <label class="form-label">Esign / Featured In / Designation (Featured works)</label>
+                <input id="t-works" class="form-input" placeholder="e.g. LUCE & OMBRA, KOA" value="${t?.works || ''}">
+            </div>
+            <div>
+                <label class="form-label">Featured Video URL</label>
+                <div class="video-input-group">
+                    <input id="t-vids" class="form-input" placeholder="Cloudinary video URL" value="${t?.vids || ''}">
+                    <button class="preview-btn" onclick="previewVideo('t-vids','Featured Video')">
+                        <i data-lucide="play" class="w-3.5 h-3.5"></i> Preview
+                    </button>
+                </div>
+            </div>
+            <div>
+                <label class="form-label">Dossier Comment (Short bio/quote)</label>
+                <textarea id="t-comment" class="form-input h-20 py-2" placeholder="e.g. CRAFTING SILENCES IN A WORLD OF NOISE.">${t?.comment || ''}</textarea>
+            </div>
+        </div>
+    `;
+
+    // Swap save button handler
+    const saveBtn = document.querySelector('#modal-panel .btn-primary');
+    saveBtn.setAttribute('onclick', 'saveTalent()');
+
+    document.getElementById('modal-backdrop').classList.add('open');
+    lucide.createIcons();
+}
+
+// Reset modal behavior when closing
+function closeModal() {
+    document.getElementById('modal-backdrop').classList.remove('open');
+    editingProjectId = null;
+    editingTalentId = null;
+    // Restore default save button for projects
+    const saveBtn = document.querySelector('#modal-panel .btn-primary');
+    saveBtn.setAttribute('onclick', 'saveProject()');
+}
+
+function saveTalent() {
+    const name = document.getElementById('t-name').value.trim();
+    if (!name) { alert('Please enter a name.'); return; }
+
+    const talent = {
+        id: editingTalentId || 'tal_' + Date.now(),
+        name,
+        cat:     document.getElementById('t-cat').value.trim().toUpperCase(),
+        img:     document.getElementById('t-img').value.trim(),
+        works:   document.getElementById('t-works').value.trim(),
+        vids:    document.getElementById('t-vids').value.trim(),
+        comment: document.getElementById('t-comment').value.trim()
+    };
+
+    if (editingTalentId) {
+        const i = state.talents.findIndex(x => x.id === editingTalentId);
+        if (i > -1) state.talents[i] = talent;
+    } else {
+        if(!state.talents) state.talents = [];
+        state.talents.push(talent);
+    }
+
+    saveToLocalStorage();
+    closeModal();
+    renderTalents();
+}
+
+function deleteTalent(id) {
+    showConfirm('Delete this model profile? This cannot be undone.', () => {
+        state.talents = state.talents.filter(x => x.id !== id);
+        saveToLocalStorage();
+        renderTalentList('');
+    });
 }
 
 // ── EXPORT ─────────────────────────────────────────────────
