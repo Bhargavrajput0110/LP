@@ -198,7 +198,7 @@ function projectRow(p) {
         ? `<img src="${p.thumbnail}" class="w-10 h-10 rounded-lg object-cover border border-border flex-shrink-0" onerror="this.style.display='none'">`
         : `<div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0"><i data-lucide="image" class="w-4 h-4 text-gray-300"></i></div>`;
 
-    return `<div class="card p-4 flex items-center gap-4">
+    return `<div class="card p-4 flex items-center gap-4 group">
         ${thumb}
         <div class="flex-1 min-w-0">
             <p class="font-semibold text-sm truncate">${p.name}</p>
@@ -207,11 +207,21 @@ function projectRow(p) {
                 ${hasLand}${hasPort}${cats}
             </div>
         </div>
-        <div class="flex items-center gap-1 flex-shrink-0">
+        <div class="flex items-center gap-1 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+            <button onclick="moveProjectUp('${p.id}')" class="btn-icon" title="Move Up">
+                <i data-lucide="arrow-up" class="w-4 h-4"></i>
+            </button>
+            <button onclick="moveProjectDown('${p.id}')" class="btn-icon" title="Move Down">
+                <i data-lucide="arrow-down" class="w-4 h-4"></i>
+            </button>
+            <div class="w-px h-4 bg-gray-200 mx-1"></div>
+            <button onclick="duplicateProject('${p.id}')" class="btn-icon" title="Duplicate">
+                <i data-lucide="copy" class="w-4 h-4"></i>
+            </button>
             <button onclick="openProjectModal('${p.id}')" class="btn-icon" title="Edit">
                 <i data-lucide="pencil" class="w-4 h-4"></i>
             </button>
-            <button onclick="deleteProject('${p.id}')" class="btn-icon text-red-400 hover:bg-red-50" title="Delete">
+            <button onclick="deleteProject('${p.id}')" class="btn-icon text-red-400 hover:bg-red-50 hover:text-red-500" title="Delete">
                 <i data-lucide="trash-2" class="w-4 h-4"></i>
             </button>
         </div>
@@ -378,6 +388,46 @@ function deleteProject(id) {
         renderProjectList('');
         lucide.createIcons();
     });
+}
+
+function duplicateProject(id) {
+    const p = state.projects.find(x => x.id === id);
+    if (!p) return;
+    
+    const clone = JSON.parse(JSON.stringify(p));
+    clone.id = 'proj_' + Date.now();
+    clone.name = clone.name + ' (COPY)';
+    
+    const idx = state.projects.findIndex(x => x.id === id);
+    state.projects.splice(idx + 1, 0, clone);
+    
+    saveToLocalStorage();
+    renderProjectList('');
+    showToast('Project duplicated!');
+}
+
+function moveProjectUp(id) {
+    const idx = state.projects.findIndex(x => x.id === id);
+    if (idx <= 0) return;
+    
+    const temp = state.projects[idx - 1];
+    state.projects[idx - 1] = state.projects[idx];
+    state.projects[idx] = temp;
+    
+    saveToLocalStorage();
+    renderProjectList('');
+}
+
+function moveProjectDown(id) {
+    const idx = state.projects.findIndex(x => x.id === id);
+    if (idx === -1 || idx >= state.projects.length - 1) return;
+    
+    const temp = state.projects[idx + 1];
+    state.projects[idx + 1] = state.projects[idx];
+    state.projects[idx] = temp;
+    
+    saveToLocalStorage();
+    renderProjectList('');
 }
 
 function closeModal() {

@@ -12,15 +12,18 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: {
-                        brand: '#111',
-                        accent: '#2563eb',
-                        'accent-light': '#eff6ff',
+                        brand: '#0a0a0a',
+                        accent: '#0a0a0a',
+                        'accent-light': '#f3f4f6',
                         surface: '#ffffff',
-                        muted: '#6b7280',
-                        border: '#e5e7eb',
+                        muted: '#737373',
+                        border: '#e5e5e5',
                         danger: '#ef4444',
                         success: '#22c55e',
+                    },
+                    boxShadow: {
+                        'card': '0 2px 8px -2px rgba(0,0,0,0.05), 0 4px 16px -4px rgba(0,0,0,0.02)',
+                        'card-hover': '0 12px 32px -4px rgba(0,0,0,0.1)',
                     }
                 }
             }
@@ -80,62 +83,65 @@
         /* Card */
         .card {
             background: #fff;
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-            transition: box-shadow 0.2s, transform 0.2s;
+            border: 1px solid #e5e5e5;
+            border-radius: 14px;
+            box-shadow: 0 2px 8px -2px rgba(0,0,0,0.05);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); transform: translateY(-1px); }
+        .card:hover { box-shadow: 0 12px 32px -4px rgba(0,0,0,0.1); transform: translateY(-2px); border-color: #d4d4d4; }
 
         /* Badge */
         .badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 10px; border-radius: 999px; font-size: 11px; font-weight: 500; }
-        .badge-blue { background: #eff6ff; color: #2563eb; }
+        .badge-blue { background: #f3f4f6; color: #171717; border: 1px solid #e5e5e5; }
         .badge-green { background: #f0fdf4; color: #16a34a; }
-        .badge-gray { background: #f3f4f6; color: #6b7280; }
+        .badge-gray { background: #f3f4f6; color: #525252; }
 
         /* Input styles */
         .form-input {
             width: 100%;
-            padding: 9px 13px;
-            border: 1.5px solid #e5e7eb;
-            border-radius: 8px;
+            padding: 10px 14px;
+            border: 1px solid #e5e5e5;
+            border-radius: 10px;
             font-size: 14px;
             color: #111;
             background: #fafafa;
-            transition: border-color 0.15s, box-shadow 0.15s;
+            transition: all 0.2s;
             outline: none;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.01);
         }
-        .form-input:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.08); background: #fff; }
-        .form-input::placeholder { color: #9ca3af; }
+        .form-input:focus { border-color: #0a0a0a; box-shadow: 0 0 0 3px rgba(10,10,10,0.08); background: #fff; }
+        .form-input::placeholder { color: #a3a3a3; }
 
         /* Label */
-        .form-label { display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 5px; letter-spacing: 0.03em; text-transform: uppercase; }
+        .form-label { display: block; font-size: 12px; font-weight: 600; color: #525252; margin-bottom: 6px; letter-spacing: 0.02em; }
 
         /* Video input group */
         .video-input-group { display: flex; align-items: center; gap: 8px; }
         .video-input-group .form-input { flex: 1; }
         .preview-btn {
             flex-shrink: 0;
-            padding: 9px 12px;
-            border: 1.5px solid #e5e7eb;
-            border-radius: 8px;
-            background: #f9fafb;
-            color: #6b7280;
+            padding: 10px 14px;
+            border: 1px solid #e5e5e5;
+            border-radius: 10px;
+            background: #fff;
+            color: #525252;
             cursor: pointer;
             font-size: 13px;
-            transition: all 0.15s;
+            font-weight: 500;
+            transition: all 0.2s;
             display: flex;
             align-items: center;
             gap: 6px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
         }
-        .preview-btn:hover { border-color: #2563eb; color: #2563eb; background: #eff6ff; }
+        .preview-btn:hover { border-color: #0a0a0a; color: #0a0a0a; background: #fafafa; }
 
         /* Tag input */
-        .tag-wrap { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px; border: 1.5px solid #e5e7eb; border-radius: 8px; background: #fafafa; min-height: 44px; cursor: text; }
-        .tag-wrap:focus-within { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.08); background: #fff; }
-        .tag-chip { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; background: #eff6ff; color: #2563eb; border-radius: 999px; font-size: 12px; font-weight: 500; }
-        .tag-chip button { color: #93c5fd; cursor: pointer; display: flex; align-items: center; }
-        .tag-chip button:hover { color: #1d4ed8; }
+        .tag-wrap { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px; border: 1px solid #e5e5e5; border-radius: 10px; background: #fafafa; min-height: 44px; cursor: text; transition: all 0.2s; }
+        .tag-wrap:focus-within { border-color: #0a0a0a; box-shadow: 0 0 0 3px rgba(10,10,10,0.08); background: #fff; }
+        .tag-chip { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; background: #f3f4f6; color: #171717; border-radius: 999px; font-size: 12px; font-weight: 500; border: 1px solid #e5e5e5; }
+        .tag-chip button { color: #737373; cursor: pointer; display: flex; align-items: center; transition: color 0.15s; }
+        .tag-chip button:hover { color: #ef4444; }
         .tag-input-inline { border: none; outline: none; background: transparent; font-size: 13px; min-width: 120px; }
 
         /* Modal */
@@ -143,37 +149,38 @@
         #modal-backdrop.open { display: flex !important; }
 
         /* Scrollbar */
-        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #d4d4d4; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #a3a3a3; }
 
         /* Nav tab active */
-        .nav-tab.active { background: #eff6ff; color: #2563eb; }
-        .nav-tab { color: #6b7280; }
-        .nav-tab:hover { background: #f9fafb; color: #374151; }
+        .nav-tab.active { background: #0a0a0a; color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .nav-tab { color: #525252; transition: all 0.2s; }
+        .nav-tab:hover:not(.active) { background: #f3f4f6; color: #171717; }
 
         /* Toast */
-        #toast { position: fixed; bottom: 24px; right: 24px; z-index: 9999; transition: all 0.3s; }
+        #toast { position: fixed; bottom: 32px; right: 32px; z-index: 9999; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
 
         /* Drag handle */
-        .drag-handle { cursor: grab; color: #d1d5db; }
-        .drag-handle:hover { color: #9ca3af; }
+        .drag-handle { cursor: grab; color: #d4d4d4; transition: color 0.2s; }
+        .drag-handle:hover { color: #737373; }
 
         /* Section header line */
         .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-        .section-header h3 { font-size: 13px; font-weight: 600; color: #9ca3af; letter-spacing: 0.08em; text-transform: uppercase; }
+        .section-header h3 { font-size: 13px; font-weight: 600; color: #737373; letter-spacing: 0.05em; text-transform: uppercase; }
 
         /* Btn */
-        .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; border: none; }
-        .btn-primary { background: #2563eb; color: #fff; }
-        .btn-primary:hover { background: #1d4ed8; }
-        .btn-outline { background: #fff; color: #374151; border: 1.5px solid #e5e7eb; }
-        .btn-outline:hover { border-color: #2563eb; color: #2563eb; }
-        .btn-danger { background: #fff; color: #ef4444; border: 1.5px solid #fee2e2; }
-        .btn-danger:hover { background: #fef2f2; }
-        .btn-sm { padding: 5px 11px; font-size: 12px; }
-        .btn-icon { padding: 6px; border-radius: 7px; background: transparent; border: none; cursor: pointer; transition: background 0.15s; color: #9ca3af; }
-        .btn-icon:hover { background: #f3f4f6; color: #374151; }
+        .btn { display: inline-flex; align-items: center; gap: 8px; padding: 9px 18px; border-radius: 10px; font-size: 13.5px; font-weight: 600; cursor: pointer; transition: all 0.2s; border: none; }
+        .btn-primary { background: #0a0a0a; color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .btn-primary:hover { background: #262626; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .btn-outline { background: #fff; color: #171717; border: 1px solid #e5e5e5; box-shadow: 0 1px 2px rgba(0,0,0,0.02); }
+        .btn-outline:hover { border-color: #0a0a0a; background: #fafafa; }
+        .btn-danger { background: #fff; color: #ef4444; border: 1px solid #fee2e2; }
+        .btn-danger:hover { background: #fef2f2; border-color: #fca5a5; }
+        .btn-sm { padding: 6px 12px; font-size: 12px; border-radius: 8px; }
+        .btn-icon { padding: 8px; border-radius: 8px; background: transparent; border: none; cursor: pointer; transition: all 0.2s; color: #737373; }
+        .btn-icon:hover { background: #f3f4f6; color: #171717; }
 
         /* Empty state */
         .empty-state { text-align: center; padding: 64px 32px; color: #9ca3af; }
@@ -244,13 +251,19 @@
         </div>
 
         <!-- Footer -->
-        <div class="p-4 border-t border-border space-y-2">
-            <button onclick="saveToLocalStorage()" class="btn btn-primary w-full justify-center text-sm">
+        <div class="p-5 border-t border-border space-y-2.5">
+            <button onclick="saveToLocalStorage()" class="btn btn-primary w-full justify-center">
                 <i data-lucide="save" class="w-4 h-4"></i> Save All Changes
             </button>
-            <button onclick="exportData()" class="btn btn-outline w-full justify-center text-sm">
+            <button onclick="exportData()" class="btn btn-outline w-full justify-center">
                 <i data-lucide="download" class="w-4 h-4"></i> Export JSON
             </button>
+            
+            <div class="pt-2">
+                <a href="index.html" class="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg text-sm font-medium text-muted hover:text-brand hover:bg-gray-100 transition-colors border border-dashed border-gray-300">
+                    <i data-lucide="external-link" class="w-4 h-4"></i> View Main Site
+                </a>
+            </div>
         </div>
     </aside>
 
