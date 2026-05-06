@@ -2403,6 +2403,34 @@
             // Interconnected Navigation Listeners
             document.querySelector('.pr-nav-prev').addEventListener('click', () => switchProjectReveal(-1));
             document.querySelector('.pr-nav-next').addEventListener('click', () => switchProjectReveal(1));
+            // ---- Light/Dark Theme Toggle for Project Reveal ----
+            (function initRevealThemeToggle() {
+                const reveal = document.getElementById('project-reveal');
+                const toggleBtn = document.getElementById('pr-theme-toggle');
+                const moonIcon = document.getElementById('pr-theme-icon-moon');
+                const sunIcon  = document.getElementById('pr-theme-icon-sun');
+                if (!toggleBtn) return;
+                gsap.set(toggleBtn, { opacity: 0, scale: 0.8 });
+                toggleBtn.addEventListener('click', () => {
+                    const isLight = reveal.classList.toggle('light');
+                    moonIcon.style.display = isLight ? 'none' : 'block';
+                    sunIcon.style.display  = isLight ? 'block' : 'none';
+                    toggleBtn.title = isLight ? 'Switch to Dark Mode' : 'Switch to Light Mode';
+                });
+                if (!window.__prToggleObserved) {
+                    window.__prToggleObserved = true;
+                    new MutationObserver(() => {
+                        if (reveal.classList.contains('active')) {
+                            gsap.to(toggleBtn, { opacity: 1, scale: 1, duration: 0.8, delay: 0.7, ease: 'power2.out' });
+                        } else {
+                            gsap.set(toggleBtn, { opacity: 0, scale: 0.8 });
+                            reveal.classList.remove('light');
+                            moonIcon.style.display = 'block';
+                            sunIcon.style.display  = 'none';
+                        }
+                    }).observe(reveal, { attributes: true, attributeFilter: ['class'] });
+                }
+            })();
 
             // Mouse wheel scroll for interconnected navigation (DISABLED TO ALLOW SCROLLING DOWN)
             let isSwitchingProject = false;

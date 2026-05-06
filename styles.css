@@ -489,6 +489,28 @@
         .pr-desc { font-family: 'Playfair Display', serif; font-size: clamp(1rem, 1.5vw, 1.2rem); line-height: 1.6; color: rgba(239, 236, 230, 0.8); max-width: 600px; margin: 0 auto; }
         .pr-close { position: fixed; top: 40px; right: 40px; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(12px); border: 1px solid rgba(239, 236, 230, 0.2); color: #EFECE6; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; padding: 12px 24px; cursor: pointer; opacity: 0; z-index: 10010; transition: background 0.3s, color 0.3s; border-radius: 30px; }
         .pr-close:hover { background: #EFECE6; color: #0D1B18; }
+        /* ---- LIGHT/DARK THEME TOGGLE BUTTON ---- */
+        .pr-theme-toggle { position: fixed; top: 40px; right: 210px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); backdrop-filter: blur(12px); border: 1px solid rgba(239,236,230,0.2); color: #EFECE6; cursor: pointer; opacity: 0; z-index: 10010; border-radius: 50%; transition: background 0.4s, color 0.4s, border-color 0.4s; }
+        .pr-theme-toggle:hover { background: rgba(255,255,255,0.15); border-color: rgba(239,236,230,0.5); }
+        /* ---- LIGHT MODE OVERRIDES ---- */
+        #project-reveal.light { background: #F0EBE1; color: #1a1a1a; }
+        #project-reveal.light .pr-reel-wrapper { background: #F0EBE1; transition: background 0.5s ease; }
+        #project-reveal.light .pr-title-side { color: rgba(26,26,26,0.55); }
+        #project-reveal.light .pr-meta-bc, #project-reveal.light .pr-portrait-brand { color: rgba(26,26,26,0.65); }
+        #project-reveal.light .pr-reel-gradient { background: radial-gradient(circle at center, transparent 0%, rgba(240,235,225,0.55) 100%); }
+        #project-reveal.light .pr-close { background: rgba(0,0,0,0.06); border-color: rgba(26,26,26,0.2); color: #1a1a1a; }
+        #project-reveal.light .pr-close:hover { background: #1a1a1a; color: #F0EBE1; }
+        #project-reveal.light .pr-theme-toggle { background: rgba(0,0,0,0.06); border-color: rgba(26,26,26,0.2); color: #1a1a1a; }
+        #project-reveal.light .pr-nav-btn { background: rgba(0,0,0,0.06); border-color: rgba(26,26,26,0.15); color: #1a1a1a; }
+        #project-reveal.light .pr-nav-btn:hover { background: rgba(0,0,0,0.12); }
+        #project-reveal.light .pr-client-details { background: #E8E2D6 !important; border-color: rgba(26,26,26,0.08) !important; }
+        #project-reveal.light .bg-\[\#050a09\], #project-reveal.light .bg-\[\#030605\] { background: #D9D3C7 !important; }
+        #project-reveal.light .text-white { color: #1a1a1a !important; }
+        #project-reveal.light .text-white\/90 { color: rgba(26,26,26,0.9) !important; }
+        #project-reveal.light .text-white\/60 { color: rgba(26,26,26,0.6) !important; }
+        #project-reveal.light .text-white\/40 { color: rgba(26,26,26,0.4) !important; }
+        #project-reveal.light .border-white\/10, #project-reveal.light .border-white\/20 { border-color: rgba(26,26,26,0.1) !important; }
+        #project-reveal.light .pr-cursor-pill { color: #1a1a1a; border-color: rgba(26,26,26,0.15); background: rgba(26,26,26,0.06); }
         .pr-nav-btn { position: fixed; top: 50%; transform: translateY(-50%); width: 64px; height: 64px; display: flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 50%; color: #EFECE6; cursor: pointer; z-index: 10008; pointer-events: auto; transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1); }
         .pr-nav-prev { left: 40px; }
         .pr-nav-next { right: 40px; }
@@ -687,6 +709,28 @@
         .pr-desc { font-family: 'Playfair Display', serif; font-size: clamp(1rem, 1.5vw, 1.2rem); line-height: 1.6; color: rgba(239, 236, 230, 0.8); max-width: 600px; margin: 0 auto; }
         .pr-close { position: fixed; top: 40px; right: 40px; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(12px); border: 1px solid rgba(239, 236, 230, 0.2); color: #EFECE6; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; padding: 12px 24px; cursor: pointer; opacity: 0; z-index: 10010; transition: background 0.3s, color 0.3s; border-radius: 30px; }
         .pr-close:hover { background: #EFECE6; color: #0D1B18; }
+        /* ---- LIGHT/DARK THEME TOGGLE BUTTON ---- */
+        .pr-theme-toggle { position: fixed; top: 40px; right: 210px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); backdrop-filter: blur(12px); border: 1px solid rgba(239,236,230,0.2); color: #EFECE6; cursor: pointer; opacity: 0; z-index: 10010; border-radius: 50%; transition: background 0.4s, color 0.4s, border-color 0.4s; }
+        .pr-theme-toggle:hover { background: rgba(255,255,255,0.15); border-color: rgba(239,236,230,0.5); }
+        /* ---- LIGHT MODE OVERRIDES ---- */
+        #project-reveal.light { background: #F0EBE1; color: #1a1a1a; }
+        #project-reveal.light .pr-reel-wrapper { background: #F0EBE1; transition: background 0.5s ease; }
+        #project-reveal.light .pr-title-side { color: rgba(26,26,26,0.55); }
+        #project-reveal.light .pr-meta-bc, #project-reveal.light .pr-portrait-brand { color: rgba(26,26,26,0.65); }
+        #project-reveal.light .pr-reel-gradient { background: radial-gradient(circle at center, transparent 0%, rgba(240,235,225,0.55) 100%); }
+        #project-reveal.light .pr-close { background: rgba(0,0,0,0.06); border-color: rgba(26,26,26,0.2); color: #1a1a1a; }
+        #project-reveal.light .pr-close:hover { background: #1a1a1a; color: #F0EBE1; }
+        #project-reveal.light .pr-theme-toggle { background: rgba(0,0,0,0.06); border-color: rgba(26,26,26,0.2); color: #1a1a1a; }
+        #project-reveal.light .pr-nav-btn { background: rgba(0,0,0,0.06); border-color: rgba(26,26,26,0.15); color: #1a1a1a; }
+        #project-reveal.light .pr-nav-btn:hover { background: rgba(0,0,0,0.12); }
+        #project-reveal.light .pr-client-details { background: #E8E2D6 !important; border-color: rgba(26,26,26,0.08) !important; }
+        #project-reveal.light .bg-\[\#050a09\], #project-reveal.light .bg-\[\#030605\] { background: #D9D3C7 !important; }
+        #project-reveal.light .text-white { color: #1a1a1a !important; }
+        #project-reveal.light .text-white\/90 { color: rgba(26,26,26,0.9) !important; }
+        #project-reveal.light .text-white\/60 { color: rgba(26,26,26,0.6) !important; }
+        #project-reveal.light .text-white\/40 { color: rgba(26,26,26,0.4) !important; }
+        #project-reveal.light .border-white\/10, #project-reveal.light .border-white\/20 { border-color: rgba(26,26,26,0.1) !important; }
+        #project-reveal.light .pr-cursor-pill { color: #1a1a1a; border-color: rgba(26,26,26,0.15); background: rgba(26,26,26,0.06); }
         .pr-nav-btn { position: fixed; top: 50%; transform: translateY(-50%); width: 64px; height: 64px; display: flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 50%; color: #EFECE6; cursor: pointer; z-index: 10008; pointer-events: auto; transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1); }
         .pr-nav-prev { left: 40px; }
         .pr-nav-next { right: 40px; }
