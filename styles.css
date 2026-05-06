@@ -490,7 +490,7 @@
         .pr-close { position: fixed; top: 40px; right: 40px; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(12px); border: 1px solid rgba(239, 236, 230, 0.2); color: #EFECE6; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; padding: 12px 24px; cursor: pointer; opacity: 0; z-index: 10010; transition: background 0.3s, color 0.3s; border-radius: 30px; }
         .pr-close:hover { background: #EFECE6; color: #0D1B18; }
         /* ---- LIGHT/DARK THEME TOGGLE BUTTON ---- */
-        .pr-theme-toggle { position: fixed; top: 40px; right: 210px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); backdrop-filter: blur(12px); border: 1px solid rgba(239,236,230,0.2); color: #EFECE6; cursor: pointer; opacity: 0; z-index: 10010; border-radius: 50%; transition: background 0.4s, color 0.4s, border-color 0.4s; }
+        .pr-theme-toggle { position: fixed; top: 40px; left: 40px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); backdrop-filter: blur(12px); border: 1px solid rgba(239,236,230,0.2); color: #EFECE6; cursor: pointer; opacity: 0; z-index: 10010; border-radius: 50%; transition: background 0.4s, color 0.4s, border-color 0.4s; }
         .pr-theme-toggle:hover { background: rgba(255,255,255,0.15); border-color: rgba(239,236,230,0.5); }
         /* ---- LIGHT MODE OVERRIDES ---- */
         #project-reveal.light { background: #F0EBE1; color: #1a1a1a; }
@@ -710,7 +710,7 @@
         .pr-close { position: fixed; top: 40px; right: 40px; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(12px); border: 1px solid rgba(239, 236, 230, 0.2); color: #EFECE6; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; padding: 12px 24px; cursor: pointer; opacity: 0; z-index: 10010; transition: background 0.3s, color 0.3s; border-radius: 30px; }
         .pr-close:hover { background: #EFECE6; color: #0D1B18; }
         /* ---- LIGHT/DARK THEME TOGGLE BUTTON ---- */
-        .pr-theme-toggle { position: fixed; top: 40px; right: 210px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); backdrop-filter: blur(12px); border: 1px solid rgba(239,236,230,0.2); color: #EFECE6; cursor: pointer; opacity: 0; z-index: 10010; border-radius: 50%; transition: background 0.4s, color 0.4s, border-color 0.4s; }
+        .pr-theme-toggle { position: fixed; top: 40px; left: 40px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); backdrop-filter: blur(12px); border: 1px solid rgba(239,236,230,0.2); color: #EFECE6; cursor: pointer; opacity: 0; z-index: 10010; border-radius: 50%; transition: background 0.4s, color 0.4s, border-color 0.4s; }
         .pr-theme-toggle:hover { background: rgba(255,255,255,0.15); border-color: rgba(239,236,230,0.5); }
         /* ---- LIGHT MODE OVERRIDES ---- */
         #project-reveal.light { background: #F0EBE1; color: #1a1a1a; }
