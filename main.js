@@ -2207,6 +2207,7 @@
                 
                 // Populate Typography
                 document.querySelector('.pr-meta-bc').innerText = metaBc;
+                document.querySelectorAll('.pr-portrait-brand').forEach(el => el.innerText = metaBc);
                 // document.querySelector('.pr-meta-tl').innerText = metaTl;
                 // document.querySelector('.pr-meta-tr').innerText = metaTr;
                 // document.querySelector('.pr-meta-bl').innerText = `0${index + 1}.`;
