@@ -1627,7 +1627,7 @@
                         gsap.set(reveal, { display: 'block', opacity: 0 });
                         reveal.classList.add('active');
                         gsap.to(reveal, { opacity: 1, duration: 0.4, ease: 'power2.inOut' });
-                        gsap.to(prMedia, { x: 0, y: 0, width: '100vw', height: '100vh', borderRadius: '0px', duration: 0.9, ease: 'power4.inOut', onComplete: () => { prMedia.style.opacity = 0; } });
+                        gsap.to(prMedia, { x: 0, y: 0, width: '100vw', height: '100vh', borderRadius: '0px', duration: 0.9, ease: 'power4.inOut' });
                         gsap.set(['.pr-title-side','.pr-center-stage','.pr-info-wrapper'], { y: 40, opacity: 0 });
                         gsap.set('.pr-reel-wrapper', { opacity: 0, scale: 1.05 });
                         gsap.to('.pr-reel-wrapper', { scale: 1, opacity: 1, duration: 1.0, ease: 'power3.out', delay: 0.3 });
