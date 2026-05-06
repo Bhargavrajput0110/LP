@@ -1526,7 +1526,7 @@
                         // Populate internal card marquees (Client Scroll inside card)
                         g.querySelectorAll('.project-card').forEach(card => {
                             gsap.set(card, { 
-                                clearProps: 'rotateY,rotateX,scale,filter,x,y,transform,transformOrigin,perspective,transformPerspective'
+                                clearProps: 'opacity,rotateY,rotateX,scale,filter,x,y,transform,transformOrigin,perspective,transformPerspective'
                             });
                             const media = card.querySelector('.card-media img, .card-media video');
                             if (media) {
