@@ -73,7 +73,7 @@
         }
     </script>
     <!-- Critical CSS - loaded externally for browser caching -->
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/styles.css?v=4">
 </head>
 
 <body>
@@ -1823,7 +1823,7 @@
         const _loadFB = () => {
             if (_fbReady) return;
             _fbReady = true;
-            import('/firebase-site.js?v=3').catch(e => console.warn('[FB] Load failed:', e));
+            import('/firebase-site.js?v=4').catch(e => console.warn('[FB] Load failed:', e));
         };
         const _fbTarget = document.querySelector('.spine-section') ||
                           document.querySelector('.cat-clickable');
@@ -1837,7 +1837,7 @@
             setTimeout(_loadFB, 2500);
         }
     </script>
-    <script type="module" src="/main.js?v=3"></script>
+    <script type="module" src="/main.js?v=4"></script>
 </body>
 
 </html>
