@@ -493,6 +493,11 @@
         .pr-theme-toggle { position: fixed; top: 40px; left: 40px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); backdrop-filter: blur(12px); border: 1px solid rgba(239,236,230,0.2); color: #EFECE6; cursor: pointer; opacity: 0; z-index: 10010; border-radius: 50%; transition: background 0.4s, color 0.4s, border-color 0.4s; }
         .pr-theme-toggle:hover { background: rgba(255,255,255,0.15); border-color: rgba(239,236,230,0.5); }
         /* ---- LIGHT MODE OVERRIDES ---- */
+        /* Portrait brand text — E7E7E7 in light mode so it stays legible over dark videos */
+        #project-reveal.light .pr-portrait-brand { color: #E7E7E7 !important; text-shadow: 0 1px 5px rgba(0,0,0,0.8); }
+        /* Keep portrait video containers dark in light mode — videos should not wash out */
+        #project-reveal.light .aspect-\[9\/16\] { background: #0d0d0d !important; border-color: rgba(255,255,255,0.08) !important; }
+        #project-reveal.light video { filter: none !important; }
         #project-reveal.light { background: #F0EBE1; color: #1a1a1a; }
         #project-reveal.light .pr-reel-wrapper { background: #F0EBE1; transition: background 0.5s ease; }
         #project-reveal.light .pr-title-side { color: rgba(26,26,26,0.55); }
@@ -713,6 +718,11 @@
         .pr-theme-toggle { position: fixed; top: 40px; left: 40px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); backdrop-filter: blur(12px); border: 1px solid rgba(239,236,230,0.2); color: #EFECE6; cursor: pointer; opacity: 0; z-index: 10010; border-radius: 50%; transition: background 0.4s, color 0.4s, border-color 0.4s; }
         .pr-theme-toggle:hover { background: rgba(255,255,255,0.15); border-color: rgba(239,236,230,0.5); }
         /* ---- LIGHT MODE OVERRIDES ---- */
+        /* Portrait brand text — E7E7E7 in light mode so it stays legible over dark videos */
+        #project-reveal.light .pr-portrait-brand { color: #E7E7E7 !important; text-shadow: 0 1px 5px rgba(0,0,0,0.8); }
+        /* Keep portrait video containers dark in light mode — videos should not wash out */
+        #project-reveal.light .aspect-\[9\/16\] { background: #0d0d0d !important; border-color: rgba(255,255,255,0.08) !important; }
+        #project-reveal.light video { filter: none !important; }
         #project-reveal.light { background: #F0EBE1; color: #1a1a1a; }
         #project-reveal.light .pr-reel-wrapper { background: #F0EBE1; transition: background 0.5s ease; }
         #project-reveal.light .pr-title-side { color: rgba(26,26,26,0.55); }
