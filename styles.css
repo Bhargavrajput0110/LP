@@ -469,7 +469,7 @@
         .pr-title-side { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(2rem, 4vw, 4.5rem); line-height: 1.1; color: rgba(239, 236, 230, 0.7); position: absolute; top: 50%; transform: translateY(-50%); z-index: 2; white-space: pre-line; pointer-events: none; width: 15vw; }
         .pr-title-left { right: calc(50% + 31vw); text-align: right; }
         .pr-title-right { left: calc(50% + 31vw); text-align: left; }
-        .pr-center-stage { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 3; width: 55vw; max-width: 1000px; pointer-events: none; }
+        .pr-center-stage { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; height: 100%; padding-top: 6vh; z-index: 3; width: 55vw; max-width: 1000px; pointer-events: none; }
         .pr-meta-row { width: 100%; display: flex; justify-content: space-between; align-items: center; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(239, 236, 230, 0.8); padding: 12px 0; }
         .pr-viewfinder { position: relative; width: 100%; aspect-ratio: 16/10; margin: 24px 0; pointer-events: none; border: 1px solid rgba(255,255,255,0.03); }
         .pr-corner { position: absolute; width: 24px; height: 24px; border-color: rgba(239, 236, 230, 0.5); border-style: solid; z-index: 10; pointer-events: none; transition: border-color 0.4s; }
@@ -667,7 +667,7 @@
         .pr-title-side { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(2rem, 4vw, 4.5rem); line-height: 1.1; color: rgba(239, 236, 230, 0.7); position: absolute; top: 50%; transform: translateY(-50%); z-index: 2; white-space: pre-line; pointer-events: none; width: 15vw; }
         .pr-title-left { right: calc(50% + 31vw); text-align: right; }
         .pr-title-right { left: calc(50% + 31vw); text-align: left; }
-        .pr-center-stage { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 3; width: 55vw; max-width: 1000px; pointer-events: none; }
+        .pr-center-stage { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; height: 100%; padding-top: 6vh; z-index: 3; width: 55vw; max-width: 1000px; pointer-events: none; }
         .pr-meta-row { width: 100%; display: flex; justify-content: space-between; align-items: center; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(239, 236, 230, 0.8); padding: 12px 0; }
         .pr-viewfinder { position: relative; width: 100%; aspect-ratio: 16/10; margin: 24px 0; pointer-events: none; border: 1px solid rgba(255,255,255,0.03); }
         .pr-corner { position: absolute; width: 24px; height: 24px; border-color: rgba(239, 236, 230, 0.5); border-style: solid; z-index: 10; pointer-events: none; transition: border-color 0.4s; }
