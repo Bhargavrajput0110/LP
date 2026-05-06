@@ -1,3 +1,27 @@
+# ── Static files: serve directly, never redirect ─────────────
+# These must come BEFORE the SPA catch-all below, so Netlify
+# doesn't intercept fetch('/public/collage.html') and return index.html
+[[redirects]]
+  from = "/public/*"
+  to = "/public/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/main.js"
+  to = "/main.js"
+  status = 200
+
+[[redirects]]
+  from = "/firebase-site.js"
+  to = "/firebase-site.js"
+  status = 200
+
+[[redirects]]
+  from = "/styles.css"
+  to = "/styles.css"
+  status = 200
+
+# ── SPA fallback: only for routes with no real file ──────────
 [[redirects]]
   from = "/*"
   to = "/index.html"
@@ -12,11 +36,11 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-# ── JS files: 1-day fresh, 7-day stale (not immutable — filenames aren't hashed) ─
+# ── JS files: always fresh on deploy ─────────────────────────
 [[headers]]
   for = "/main.js"
   [headers.values]
-    Cache-Control = "public, max-age=86400, stale-while-revalidate=604800"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 # ── CMS & Firebase files: always fresh (content changes with every CMS save) ─
 [[headers]]
