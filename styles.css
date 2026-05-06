@@ -497,19 +497,19 @@
         #project-reveal.light .pr-portrait-brand { color: #E7E7E7 !important; text-shadow: 0 1px 5px rgba(0,0,0,0.8); }
         /* Keep portrait video containers dark in light mode — videos should not wash out */
         #project-reveal.light .aspect-\[9\/16\] { background: #0d0d0d !important; border-color: rgba(255,255,255,0.08) !important; }
-        #project-reveal.light video { filter: none !important; }
-        #project-reveal.light { background: #F0EBE1; color: #1a1a1a; }
-        #project-reveal.light .pr-reel-wrapper { background: #F0EBE1; transition: background 0.5s ease; }
+        /* landscape reel background — neutral grey, not cream */
+        #project-reveal.light { background: #E7E7E7; color: #1a1a1a; }
+        #project-reveal.light .pr-reel-wrapper { background: #E7E7E7; transition: background 0.5s ease; }
         #project-reveal.light .pr-title-side { color: rgba(26,26,26,0.55); }
         #project-reveal.light .pr-meta-bc, #project-reveal.light .pr-portrait-brand { color: rgba(26,26,26,0.65); }
-        #project-reveal.light .pr-reel-gradient { background: radial-gradient(circle at center, transparent 0%, rgba(240,235,225,0.55) 100%); }
+        #project-reveal.light .pr-reel-gradient { background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.35) 100%); }
         #project-reveal.light .pr-close { background: rgba(0,0,0,0.06); border-color: rgba(26,26,26,0.2); color: #1a1a1a; }
-        #project-reveal.light .pr-close:hover { background: #1a1a1a; color: #F0EBE1; }
+        #project-reveal.light .pr-close:hover { background: #1a1a1a; color: #E7E7E7; }
         #project-reveal.light .pr-theme-toggle { background: rgba(0,0,0,0.06); border-color: rgba(26,26,26,0.2); color: #1a1a1a; }
         #project-reveal.light .pr-nav-btn { background: rgba(0,0,0,0.06); border-color: rgba(26,26,26,0.15); color: #1a1a1a; }
         #project-reveal.light .pr-nav-btn:hover { background: rgba(0,0,0,0.12); }
-        #project-reveal.light .pr-client-details { background: #E8E2D6 !important; border-color: rgba(26,26,26,0.08) !important; }
-        #project-reveal.light .bg-\[\#050a09\], #project-reveal.light .bg-\[\#030605\] { background: #D9D3C7 !important; }
+        #project-reveal.light .pr-client-details { background: #DEDEDE !important; border-color: rgba(26,26,26,0.08) !important; }
+        #project-reveal.light .bg-\[\#050a09\], #project-reveal.light .bg-\[\#030605\] { background: #D0D0D0 !important; }
         #project-reveal.light .text-white { color: #1a1a1a !important; }
         #project-reveal.light .text-white\/90 { color: rgba(26,26,26,0.9) !important; }
         #project-reveal.light .text-white\/60 { color: rgba(26,26,26,0.6) !important; }
@@ -722,19 +722,19 @@
         #project-reveal.light .pr-portrait-brand { color: #E7E7E7 !important; text-shadow: 0 1px 5px rgba(0,0,0,0.8); }
         /* Keep portrait video containers dark in light mode — videos should not wash out */
         #project-reveal.light .aspect-\[9\/16\] { background: #0d0d0d !important; border-color: rgba(255,255,255,0.08) !important; }
-        #project-reveal.light video { filter: none !important; }
-        #project-reveal.light { background: #F0EBE1; color: #1a1a1a; }
-        #project-reveal.light .pr-reel-wrapper { background: #F0EBE1; transition: background 0.5s ease; }
+        /* landscape reel background — neutral grey, not cream */
+        #project-reveal.light { background: #E7E7E7; color: #1a1a1a; }
+        #project-reveal.light .pr-reel-wrapper { background: #E7E7E7; transition: background 0.5s ease; }
         #project-reveal.light .pr-title-side { color: rgba(26,26,26,0.55); }
         #project-reveal.light .pr-meta-bc, #project-reveal.light .pr-portrait-brand { color: rgba(26,26,26,0.65); }
-        #project-reveal.light .pr-reel-gradient { background: radial-gradient(circle at center, transparent 0%, rgba(240,235,225,0.55) 100%); }
+        #project-reveal.light .pr-reel-gradient { background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.35) 100%); }
         #project-reveal.light .pr-close { background: rgba(0,0,0,0.06); border-color: rgba(26,26,26,0.2); color: #1a1a1a; }
-        #project-reveal.light .pr-close:hover { background: #1a1a1a; color: #F0EBE1; }
+        #project-reveal.light .pr-close:hover { background: #1a1a1a; color: #E7E7E7; }
         #project-reveal.light .pr-theme-toggle { background: rgba(0,0,0,0.06); border-color: rgba(26,26,26,0.2); color: #1a1a1a; }
         #project-reveal.light .pr-nav-btn { background: rgba(0,0,0,0.06); border-color: rgba(26,26,26,0.15); color: #1a1a1a; }
         #project-reveal.light .pr-nav-btn:hover { background: rgba(0,0,0,0.12); }
-        #project-reveal.light .pr-client-details { background: #E8E2D6 !important; border-color: rgba(26,26,26,0.08) !important; }
-        #project-reveal.light .bg-\[\#050a09\], #project-reveal.light .bg-\[\#030605\] { background: #D9D3C7 !important; }
+        #project-reveal.light .pr-client-details { background: #DEDEDE !important; border-color: rgba(26,26,26,0.08) !important; }
+        #project-reveal.light .bg-\[\#050a09\], #project-reveal.light .bg-\[\#030605\] { background: #D0D0D0 !important; }
         #project-reveal.light .text-white { color: #1a1a1a !important; }
         #project-reveal.light .text-white\/90 { color: rgba(26,26,26,0.9) !important; }
         #project-reveal.light .text-white\/60 { color: rgba(26,26,26,0.6) !important; }
