@@ -2113,7 +2113,73 @@
 
             // openDaOverlay / closeDaOverlay are defined above (before nav-trigger bindings)
             if (projectStartBtn) projectStartBtn.addEventListener('click', openDaOverlay);
-            daCloseBtns.forEach(btn => btn.addEventListener('click', closeDaOverlay));
+                        // --- DELEGATED GLOBAL LISTENERS (Fixes dynamic fragments) ---
+            document.addEventListener('click', (e) => {
+                // 1. Digital Audit Close (Return to Archive)
+                if (e.target.classList.contains('da-close-btn') || e.target.closest('.da-close-btn')) {
+                    if (typeof closeDaOverlay === 'function') closeDaOverlay();
+                }
+
+                // 2. Project Reveal Close (Back)
+                if (e.target.classList.contains('pr-close') || e.target.closest('.pr-close')) {
+                    const reveal = document.getElementById('project-reveal');
+                    if (!reveal || !reveal.classList.contains('active')) return;
+
+                    // IMMEDIATELY disable pointer events to prevent "freeze" feel
+                    reveal.style.pointerEvents = 'none';
+                    
+                    // Remove mouse listener
+                    if (reveal._onRevealMove) reveal.removeEventListener('mousemove', reveal._onRevealMove);
+
+                    // Restore media background for smooth collapse
+                    const prMedia = document.querySelector('.pr-media');
+                    if (prMedia) prMedia.style.opacity = 1;
+
+                    const ox = reveal.dataset.ox || 0;
+                    const oy = reveal.dataset.oy || 0;
+                    const ow = reveal.dataset.ow || '100vw';
+                    const oh = reveal.dataset.oh || '100vh';
+
+                    // Restore global cursor
+                    gsap.to('#c-ring, .cursor-trail', { scale: 1, opacity: 1, duration: 0.6, ease: 'power2.out' });
+
+                    const tl = gsap.timeline({
+                        onComplete: () => {
+                            reveal.classList.remove('active');
+                            reveal.style.display = 'none';
+                            reveal.style.pointerEvents = ''; // Reset for next open
+                            if (window.lenis) lenis.start();
+                            
+                            // Restore background visibility
+                            gsap.to('.project-card', { opacity: 1, duration: 0.8, ease: 'power2.out' });
+                            gsap.to('header, .work-header', { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' });
+
+                            // CLEANUP: Disconnect portrait video IntersectionObservers + clear all video memory
+                            const allVids = reveal.querySelectorAll('video');
+                            allVids.forEach(v => {
+                                if (v._ioObserver) { v._ioObserver.disconnect(); v._ioObserver = null; }
+                                v.pause();
+                                v.removeAttribute('src');
+                                v.load();
+                            });
+                        }
+                    });
+
+                    // Hide UI and collapse media
+                    tl.to('.pr-reel-wrapper, .pr-center-stage, .pr-info-wrapper, .pr-title-side, .pr-close, .pr-cursor-pill, .pr-nav-btn', { 
+                        opacity: 0, y: 20, duration: 0.3, ease: 'power2.in' 
+                    });
+                    
+                    if (prMedia) {
+                        tl.to(prMedia, { 
+                            x: ox, y: oy, width: ow, height: oh, borderRadius: '6px', 
+                            duration: 0.8, ease: 'power4.inOut' 
+                        }, 0.1);
+                    }
+                    
+                    tl.to(reveal, { opacity: 0, duration: 0.3 }, 0.6);
+                }
+            });
 
             // Cinematic Form Success State
             if (daForm) {
@@ -2388,6 +2454,16 @@
                 gsap.to('.pr-center-stage, .pr-info-wrapper', { y: -yDist, opacity: 0, duration: 0.5, ease: 'power2.inOut' });
                 gsap.to('.pr-reel-wrapper', { y: -yDist, opacity: 0, duration: 0.5, ease: 'power2.inOut', onComplete: () => {
                     populateRevealData(nextIndex);
+                // Update origin coordinates for seamless return to THIS specific card
+                const currentCard = activeCardsList[nextIndex];
+                if (currentCard) {
+                    const rect = currentCard.querySelector('.card-media').getBoundingClientRect();
+                    scroller.dataset.ox = rect.left;
+                    scroller.dataset.oy = rect.top;
+                    scroller.dataset.ow = rect.width;
+                    scroller.dataset.oh = rect.height;
+                    scroller._activeCard = currentCard;
+                }
                     
                     // Prep incoming elements (start from the opposite side)
                     gsap.set('.pr-center-stage, .pr-info-wrapper', { y: yDist, opacity: 0 });
@@ -2614,61 +2690,6 @@
                 });
             }
 
-            document.querySelector('.pr-close').addEventListener('click', () => {
-                const reveal = document.getElementById('project-reveal');
-                const ox = reveal.dataset.ox;
-                const oy = reveal.dataset.oy;
-                const ow = reveal.dataset.ow;
-                const oh = reveal.dataset.oh;
-                const card = reveal._activeCard;
-
-                // Show global cursor
-                gsap.to('#c-ring, .cursor-trail', { scale: 1, opacity: 1, duration: 0.6, ease: 'power2.out' });
-                
-                setTimeout(() => {
-                    const tl = gsap.timeline({
-                        onComplete: () => {
-                            reveal.classList.remove('active');
-                            gsap.set(reveal, { display: 'none' });
-                            lenis.start();
-                            // Restore background
-                            gsap.to('.project-card', { opacity: 1, duration: 0.8, ease: 'power2.out' });
-                            gsap.to('header, .work-header', { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' });
-                        }
-                    });
-                    
-                    // Remove mouse listener
-                    reveal.removeEventListener('mousemove', reveal._onRevealMove);
-
-                    // Restore pop background for smooth collapse
-                    const prMedia = document.querySelector('.pr-media');
-                    prMedia.style.opacity = 1;
-
-                    // Hide UI
-                    tl.to('.pr-reel-wrapper, .pr-center-stage, .pr-info-wrapper, .pr-title-side, .pr-close, .pr-cursor-pill, .pr-nav-btn', { opacity: 0, y: 20, duration: 0.3, ease: 'power2.in' })
-                      // Shrink media back to card size
-                      .to('.pr-media', { 
-                          x: ox, 
-                          y: oy, 
-                          width: ow, 
-                          height: oh, 
-                          borderRadius: '6px', 
-                          duration: 0.8, 
-                          ease: 'power4.inOut' 
-                      }, 0.1)
-                      .to(reveal, { opacity: 0, duration: 0.3 }, 0.6);
-                      
-                    // Disconnect portrait video IntersectionObservers + clear all video memory
-                    const allVids = reveal.querySelectorAll('video');
-                    allVids.forEach(v => {
-                        if (v._ioObserver) { v._ioObserver.disconnect(); v._ioObserver = null; }
-                        v.pause();
-                        v.removeAttribute('src');
-                        v.load();
-                    });
-                }, 100);
-            });
-            
             // Replaced React heavy ShaderGradient with optimized lightweight THREE.js spherical particles
             setTimeout(() => {
                 if(typeof initWorkThreeJS === 'function') initWorkThreeJS();
