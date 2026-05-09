@@ -1663,7 +1663,7 @@
             })();
 
             // Setup Lenis â€“ shorter duration on mobile for snappier native-like feel
-            lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), direction: 'vertical', gestureDirection: 'vertical', smooth: !isMobile, mouseMultiplier: 1, smoothTouch: false, touchMultiplier: 2, infinite: false });
+            lenis = window.lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), direction: 'vertical', gestureDirection: 'vertical', smooth: !isMobile, mouseMultiplier: 1, smoothTouch: false, touchMultiplier: 2, infinite: false });
             lenis.on('scroll', ScrollTrigger.update);
             lenis.on('scroll', ({ progress }) => {
                 document.getElementById('scroll-bar').style.transform = `scaleX(${progress})`;
@@ -2148,7 +2148,7 @@
                             reveal.classList.remove('active');
                             reveal.style.display = 'none';
                             reveal.style.pointerEvents = ''; // Reset for next open
-                            if (window.lenis) lenis.start();
+                            lenis.start();
                             
                             // Restore background visibility
                             gsap.to('.project-card', { opacity: 1, duration: 0.8, ease: 'power2.out' });

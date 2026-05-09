@@ -222,7 +222,7 @@
 
                         <!-- Gallery Item 1 -->
                         <div class="flex flex-col group cursor-pointer w-full max-w-[340px]"
-                            onmouseenter="this.querySelector('video').play()"
+                            onmouseenter="var v=this.querySelector('video'); if(v.src) v.play().catch(function(){})"
                             onmouseleave="this.querySelector('video').pause()">
                             <div
                                 class="relative w-full aspect-[9/16] overflow-hidden rounded-[2px] transition-transform duration-700 group-hover:scale-[1.02] border border-white/10 bg-[#050a09]">
@@ -247,7 +247,7 @@
 
                         <!-- Gallery Item 2 (Centerpiece, Same Size) -->
                         <div class="flex flex-col group cursor-pointer w-full max-w-[340px] z-20"
-                            onmouseenter="this.querySelector('video').play()"
+                            onmouseenter="var v=this.querySelector('video'); if(v.src) v.play().catch(function(){})"
                             onmouseleave="this.querySelector('video').pause()">
                             <div
                                 class="relative w-full aspect-[9/16] overflow-hidden rounded-[2px] transition-transform duration-700 group-hover:scale-[1.02] border border-white/20 shadow-[0_0_80px_rgba(255,255,255,0.02)] bg-[#050a09]">
@@ -272,7 +272,7 @@
 
                         <!-- Gallery Item 3 -->
                         <div class="flex flex-col group cursor-pointer w-full max-w-[340px] hidden md:flex"
-                            onmouseenter="this.querySelector('video').play()"
+                            onmouseenter="var v=this.querySelector('video'); if(v.src) v.play().catch(function(){})"
                             onmouseleave="this.querySelector('video').pause()">
                             <div
                                 class="relative w-full aspect-[9/16] overflow-hidden rounded-[2px] transition-transform duration-700 group-hover:scale-[1.02] border border-white/10 bg-[#050a09]">
@@ -1870,7 +1870,7 @@
             setTimeout(_loadFB, 2500);
         }
     </script>
-    <script type="module" src="/main.js?v=10"></script>
+    <script type="module" src="/main.js?v=11"></script>
 </body>
 
 </html>
