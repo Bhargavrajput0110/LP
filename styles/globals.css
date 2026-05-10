@@ -160,13 +160,13 @@
         .hero-grade { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(3,3,4,0.3) 0%, rgba(3,3,4,0.8) 100%); transition: background 1s; }
         
         .hero-content { text-align: center; z-index: 10; display: flex; flex-direction: column; align-items: center; }
-        .hero-slate { font-size: 10px; letter-spacing: 0.4em; color: var(--landing-light); margin-bottom: 3vh; display: flex; gap: 16px; align-items: center;}
+        .hero-slate { font-size: 10px; letter-spacing: 0.4em; color: var(--landing-light); display: flex; gap: 16px; align-items: center;}
         .hero-title { font-size: clamp(4rem, 12vw, 10rem); line-height: 0.85; margin: 0; padding-left: 0.06em; margin-right: -0.04em; text-shadow: 0 0 40px rgba(0,0,0,0.5); text-align: center; color: var(--landing-light); }
         .hero-title .char { display: inline-block; will-change: transform, opacity; }
         /* Chromatic Aberration fx */
         .hero-title span { text-shadow: var(--ca) 0 0 rgba(255,0,0,0.5), calc(var(--ca) * -1) 0 0 rgba(0,255,255,0.5); transition: text-shadow 0.3s; }
         
-        .hero-cats { margin-top: 4vh; font-size: 10px; letter-spacing: 0.3em; color: var(--landing-light); display: flex; gap: 16px; align-items: center;}
+        .hero-cats { font-size: 10px; letter-spacing: 0.3em; color: var(--landing-light); display: flex; gap: 16px; align-items: center;}
         .hero-cats .dot { color: var(--landing-light); }
         
         .hero-now-playing { position: absolute; bottom: 40px; right: 40px; text-align: right; font-size: 10px; letter-spacing: 0.2em; }
