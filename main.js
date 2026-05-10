@@ -2156,7 +2156,12 @@
                         onComplete: () => {
                             gsap.set(reveal, { display: 'none' });
                             reveal.style.pointerEvents = '';
-                            lenis.start();
+                            
+                            // ONLY restart Lenis if the Category Overlay is NOT currently active
+                            const catOverlay = document.getElementById('cat-collage-overlay');
+                            if (!catOverlay || catOverlay.style.display === 'none' || catOverlay.style.display === '') {
+                                lenis.start();
+                            }
                             gsap.to('.project-card', { opacity: 1, duration: 0.6 });
                             gsap.to('header, .work-header', { opacity: 1, y: 0, duration: 0.6 });
                             // Pause videos only — don't clear src to avoid media abort errors
