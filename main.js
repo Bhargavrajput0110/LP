@@ -2168,31 +2168,6 @@
                     });
                 }
             });
-                        }
-                    });
-
-                    // Hide UI and collapse media
-                    tl.to('.pr-reel-wrapper, .pr-center-stage, .pr-info-wrapper, .pr-title-side, .pr-close, .pr-cursor-pill, .pr-nav-btn', { 
-                        opacity: 0, y: 20, duration: 0.3, ease: 'power2.in' 
-                    });
-                    
-                    // Collapse media back — only if we have real pixel values
-                    const numOx = parseFloat(ox);
-                    const numOy = parseFloat(oy);
-                    const numOw = parseFloat(ow);
-                    const numOh = parseFloat(oh);
-                    const hasValidCoords = prMedia && !isNaN(numOw) && numOw > 0;
-
-                    if (hasValidCoords) {
-                        tl.to(prMedia, { 
-                            x: numOx, y: numOy, width: numOw, height: numOh, borderRadius: '6px', 
-                            duration: 0.8, ease: 'power4.inOut' 
-                        }, 0.1);
-                    }
-                    
-                    tl.to(reveal, { opacity: 0, duration: 0.3 }, hasValidCoords ? 0.6 : 0.3);
-                }
-            });
 
             // Cinematic Form Success State
             if (daForm) {
