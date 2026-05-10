@@ -1637,6 +1637,11 @@
                         gsap.to('.pr-info-wrapper', { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out', delay: 0.7 });
                         gsap.to('.pr-close, .pr-cursor-pill, .pr-nav-btn', { opacity: 1, scale: 1, duration: 0.8, delay: 0.7 });
                         reveal._activeCard = card;
+                        // Store origin coords so BACK animation collapses correctly (prevents GSAP NaN freeze)
+                        reveal.dataset.ox = rect.left;
+                        reveal.dataset.oy = rect.top;
+                        reveal.dataset.ow = rect.width;
+                        reveal.dataset.oh = rect.height;
                     });
                 });
             }
@@ -2170,14 +2175,21 @@
                         opacity: 0, y: 20, duration: 0.3, ease: 'power2.in' 
                     });
                     
-                    if (prMedia) {
+                    // Collapse media back — only if we have real pixel values
+                    const numOx = parseFloat(ox);
+                    const numOy = parseFloat(oy);
+                    const numOw = parseFloat(ow);
+                    const numOh = parseFloat(oh);
+                    const hasValidCoords = prMedia && !isNaN(numOw) && numOw > 0;
+
+                    if (hasValidCoords) {
                         tl.to(prMedia, { 
-                            x: ox, y: oy, width: ow, height: oh, borderRadius: '6px', 
+                            x: numOx, y: numOy, width: numOw, height: numOh, borderRadius: '6px', 
                             duration: 0.8, ease: 'power4.inOut' 
                         }, 0.1);
                     }
                     
-                    tl.to(reveal, { opacity: 0, duration: 0.3 }, 0.6);
+                    tl.to(reveal, { opacity: 0, duration: 0.3 }, hasValidCoords ? 0.6 : 0.3);
                 }
             });
 
