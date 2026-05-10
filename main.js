@@ -2130,43 +2130,44 @@
                     const reveal = document.getElementById('project-reveal');
                     if (!reveal || !reveal.classList.contains('active')) return;
 
-                    // IMMEDIATELY disable pointer events to prevent "freeze" feel
+                    // Immediately lock — prevents double-trigger
+                    reveal.classList.remove('active');
                     reveal.style.pointerEvents = 'none';
-                    
+
                     // Remove mouse listener
                     if (reveal._onRevealMove) reveal.removeEventListener('mousemove', reveal._onRevealMove);
 
-                    // Restore media background for smooth collapse
-                    const prMedia = document.querySelector('.pr-media');
-                    if (prMedia) prMedia.style.opacity = 1;
+                    // Kill ALL pending open-animation tweens to prevent conflicts
+                    gsap.killTweensOf(reveal);
+                    gsap.killTweensOf('.pr-reel-wrapper');
+                    gsap.killTweensOf('.pr-center-stage');
+                    gsap.killTweensOf('.pr-info-wrapper');
+                    gsap.killTweensOf('.pr-title-side');
+                    gsap.killTweensOf('.pr-close');
+                    gsap.killTweensOf('.pr-cursor-pill');
+                    gsap.killTweensOf('.pr-nav-btn');
 
-                    const ox = reveal.dataset.ox || 0;
-                    const oy = reveal.dataset.oy || 0;
-                    const ow = reveal.dataset.ow || '100vw';
-                    const oh = reveal.dataset.oh || '100vh';
+                    // Restore cursor
+                    gsap.to('#c-ring, .cursor-trail', { scale: 1, opacity: 1, duration: 0.4 });
 
-                    // Restore global cursor
-                    gsap.to('#c-ring, .cursor-trail', { scale: 1, opacity: 1, duration: 0.6, ease: 'power2.out' });
-
-                    const tl = gsap.timeline({
+                    // Simple reliable fade-out — no complex collapse
+                    gsap.to(reveal, {
+                        opacity: 0, duration: 0.4, ease: 'power2.in',
                         onComplete: () => {
-                            reveal.classList.remove('active');
-                            reveal.style.display = 'none';
-                            reveal.style.pointerEvents = ''; // Reset for next open
+                            gsap.set(reveal, { display: 'none' });
+                            reveal.style.pointerEvents = '';
                             lenis.start();
-                            
-                            // Restore background visibility
-                            gsap.to('.project-card', { opacity: 1, duration: 0.8, ease: 'power2.out' });
-                            gsap.to('header, .work-header', { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' });
-
-                            // CLEANUP: Disconnect portrait video IntersectionObservers + clear all video memory
-                            const allVids = reveal.querySelectorAll('video');
-                            allVids.forEach(v => {
+                            gsap.to('.project-card', { opacity: 1, duration: 0.6 });
+                            gsap.to('header, .work-header', { opacity: 1, y: 0, duration: 0.6 });
+                            // Pause videos only — don't clear src to avoid media abort errors
+                            reveal.querySelectorAll('video').forEach(v => {
                                 if (v._ioObserver) { v._ioObserver.disconnect(); v._ioObserver = null; }
                                 v.pause();
-                                v.removeAttribute('src');
-                                v.load();
                             });
+                        }
+                    });
+                }
+            });
                         }
                     });
 
