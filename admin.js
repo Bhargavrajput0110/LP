@@ -214,7 +214,14 @@ function filterProjects(q) {
 
 function projectRow(p) {
     const cats = (p.categories || []).map(c =>
-        `<span class="badge badge-blue">${c}</span>`
+        `<span class="badge badge-blue" style="display:inline-flex;align-items:center;gap:4px;padding-right:4px;">
+            ${c}
+            <button type="button" style="display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;background:rgba(0,0,0,0.12);border:none;cursor:pointer;padding:0;flex-shrink:0;"
+                title="Remove from this category"
+                onclick="event.stopPropagation();quickRemoveCatFromProject('${p.id}','${c.replace(/'/g,\"\\\\'\")}')">
+                <i data-lucide="x" class="w-2.5 h-2.5"></i>
+            </button>
+        </span>`
     ).join('');
 
     const hasLand = p.reel ? `<span class="orient-badge orient-landscape"><i data-lucide="monitor" class="w-2.5 h-2.5"></i> Landscape</span>` : '';
@@ -530,26 +537,71 @@ function renderCategories() {
 }
 
 function categoryRow(c, i) {
-    const count = state.projects.filter(p => (p.categories || []).includes(c.id)).length;
-    return `<div class="cat-row" id="cat-${i}">
-        <div class="flex items-center gap-3 flex-1 min-w-0">
-            <i data-lucide="grip-vertical" class="w-4 h-4 drag-handle"></i>
-            <div class="flex-1 min-w-0">
+    const assigned = state.projects.filter(p => (p.categories || []).includes(c.id));
+    const count = assigned.length;
+
+    const clientChips = assigned.map(p => {
+        const thumb = p.thumbnail
+            ? `<img src="${p.thumbnail}" style="width:20px;height:20px;border-radius:4px;object-fit:cover;flex-shrink:0;" onerror="this.style.display='none'">`
+            : `<span style="width:20px;height:20px;border-radius:4px;background:#e5e7eb;flex-shrink:0;display:inline-block;"></span>`;
+        const safeCatId = c.id.replace(/'/g, "\\'");
+        return `<span style="display:inline-flex;align-items:center;gap:5px;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:20px;padding:3px 8px 3px 4px;font-size:11px;color:#374151;max-width:180px;">
+            ${thumb}
+            <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100px;" title="${p.name}">${p.name}</span>
+            <button type="button" title="Remove from this category"
+                style="display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;background:rgba(0,0,0,0.08);border:none;cursor:pointer;padding:0;flex-shrink:0;margin-left:2px;"
+                onclick="event.stopPropagation();quickRemoveCatFromProject('${p.id}','${safeCatId}')">
+                <i data-lucide="x" class="w-2.5 h-2.5"></i>
+            </button>
+        </span>`;
+    }).join('');
+
+    const addOptions = state.projects
+        .filter(p => !(p.categories || []).includes(c.id))
+        .map(p => `<option value="${p.id}">${p.name}</option>`)
+        .join('');
+
+    const safeCatId2 = c.id.replace(/'/g, "\\'");
+
+    return `<div class="cat-row" id="cat-${i}" style="flex-direction:column;align-items:stretch;gap:12px;">
+        <!-- Top bar: name editor, label, delete -->
+        <div style="display:flex;align-items:center;gap:12px;">
+            <i data-lucide="grip-vertical" class="w-4 h-4 drag-handle" style="flex-shrink:0;"></i>
+            <div style="flex:1;min-width:0;">
                 <input class="form-input text-sm font-medium py-1.5" value="${c.id}"
                     onchange="updateCatId(${i},this.value)"
                     style="background:transparent;border-color:transparent;"
                     onfocus="this.style.borderColor='#2563eb';this.style.background='#fff'"
                     onblur="this.style.borderColor='transparent';this.style.background='transparent'">
-                <p class="text-xs text-muted ml-1">${count} project${count !== 1 ? 's' : ''} assigned</p>
             </div>
-        </div>
-        <div class="flex items-center gap-2 flex-shrink-0">
-            <input class="form-input text-xs py-1.5 w-28" value="${c.label}" placeholder="Short label"
+            <input class="form-input text-xs py-1.5" value="${c.label}" placeholder="Short label"
                 onchange="updateCatLabel(${i},this.value)"
-                style="background:#f9fafb;">
-            <button onclick="deleteCategory(${i})" class="btn-icon text-red-400 hover:bg-red-50">
+                style="background:#f9fafb;width:112px;flex-shrink:0;">
+            <button onclick="deleteCategory(${i})" class="btn-icon text-red-400 hover:bg-red-50" style="flex-shrink:0;">
                 <i data-lucide="trash-2" class="w-4 h-4"></i>
             </button>
+        </div>
+
+        <!-- Assigned clients panel -->
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px 14px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:8px;flex-wrap:wrap;">
+                <span style="font-size:11px;color:#6b7280;font-weight:600;display:flex;align-items:center;gap:4px;">
+                    <i data-lucide="layout-grid" class="w-3 h-3"></i>
+                    ${count} client card${count !== 1 ? 's' : ''} assigned
+                </span>
+                ${addOptions
+                    ? `<select style="font-size:11px;padding:4px 8px;border:1px solid #d1d5db;border-radius:6px;background:#fff;color:#374151;cursor:pointer;"
+                          onchange="quickAddProjectToCat(this,'${safeCatId2}')">
+                          <option value="">＋ Add client card…</option>
+                          ${addOptions}
+                      </select>`
+                    : `<span style="font-size:11px;color:#16a34a;font-weight:600;">✓ All clients assigned</span>`
+                }
+            </div>
+            ${count > 0
+                ? `<div style="display:flex;flex-wrap:wrap;gap:6px;">${clientChips}</div>`
+                : `<p style="font-size:11px;color:#9ca3af;font-style:italic;margin:0;">No clients yet. Use the dropdown above to assign.</p>`
+            }
         </div>
     </div>`;
 }
@@ -577,6 +629,31 @@ function updateCatId(i, val) {
 function updateCatLabel(i, val) {
     state.categories[i].label = val.trim();
     saveToLocalStorage();
+}
+
+// ── Quick category ↔ project assignment helpers ──────────────
+function quickRemoveCatFromProject(projectId, catId) {
+    const p = state.projects.find(x => x.id === projectId);
+    if (!p) return;
+    p.categories = (p.categories || []).filter(c => c !== catId);
+    saveToLocalStorage();
+    if (currentTab === 'projects') renderProjects();
+    if (currentTab === 'categories') renderCategories();
+    lucide.createIcons();
+}
+
+function quickAddProjectToCat(sel, catId) {
+    if (!sel.value) return;
+    const p = state.projects.find(x => x.id === sel.value);
+    if (!p) { sel.value = ''; return; }
+    if (!(p.categories || []).includes(catId)) {
+        p.categories = [...(p.categories || []), catId];
+        saveToLocalStorage();
+    }
+    sel.value = '';
+    renderCategories();
+    if (currentTab === 'projects') renderProjects();
+    lucide.createIcons();
 }
 
 function deleteCategory(i) {

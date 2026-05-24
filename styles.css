@@ -461,7 +461,7 @@
         /* Landscape reel wrapper - always full screen, flex-centered for letterboxing */
         .pr-reel-wrapper { position: absolute; inset: 0; width: 100vw; height: 100vh; background: #050a09; cursor: pointer; opacity: 0; z-index: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         /* Landscape 16:9 (1920x1080) - fits viewport without cropping */
-        .pr-reel-video { position: relative; inset: auto; width: min(100vw, calc(100vh * (16 / 9))); height: min(100vh, calc(100vw * (9 / 16))); object-fit: contain; flex-shrink: 0; z-index: 1; will-change: transform; transform: translateZ(0); }
+        .pr-reel-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; flex-shrink: 0; z-index: 1; will-change: transform; transform: translateZ(0); }
         /* Portrait correction - for wrongly-oriented source files */
         .pr-reel-video.rotate-correction { width: min(100vh, calc(100vw * (16 / 9))) !important; height: min(100vw, calc(100vh * (9 / 16))) !important; transform: rotate(-90deg) translateZ(0) !important; position: relative !important; inset: auto !important; }
         .pr-reel-gradient { position: absolute; inset: 0; background: radial-gradient(circle at center, transparent 0%, rgba(5,10,9,0.7) 100%); z-index: 3; pointer-events: none; transition: opacity 0.6s ease; }
@@ -493,14 +493,14 @@
         .pr-theme-toggle { position: fixed; top: 40px; left: 40px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); backdrop-filter: blur(12px); border: 1px solid rgba(239,236,230,0.2); color: #EFECE6; cursor: pointer; opacity: 0; z-index: 10010; border-radius: 50%; transition: background 0.4s, color 0.4s, border-color 0.4s; }
         .pr-theme-toggle:hover { background: rgba(255,255,255,0.15); border-color: rgba(239,236,230,0.5); }
         /* ---- LIGHT MODE OVERRIDES ---- */
-        /* Portrait brand text � E7E7E7 in light mode so it stays legible over dark videos */
-        /* Portrait brand � pure white on hover so it pops over the playing video */
+        /* Portrait brand text � E7E7E7 in light mode so it stays legible over dark videos */
+        /* Portrait brand � pure white on hover so it pops over the playing video */
         #project-reveal.light .group:hover .pr-portrait-brand,
         #project-reveal .group:hover .pr-portrait-brand { color: #FFFFFF !important; text-shadow: 0 1px 6px rgba(0,0,0,0.95) !important; }
         #project-reveal.light .pr-portrait-brand { color: #E7E7E7 !important; text-shadow: 0 1px 5px rgba(0,0,0,0.8); }
-        /* Keep portrait video containers dark in light mode � videos should not wash out */
+        /* Keep portrait video containers dark in light mode � videos should not wash out */
         #project-reveal.light .aspect-\[9\/16\] { background: #0d0d0d !important; border-color: rgba(255,255,255,0.08) !important; }
-        /* landscape reel background � neutral grey, not cream */
+        /* landscape reel background � neutral grey, not cream */
         #project-reveal.light { background: #E7E7E7; color: #1a1a1a; }
         #project-reveal.light .pr-reel-wrapper { background: #E7E7E7; transition: background 0.5s ease; }
         #project-reveal.light .pr-title-side { color: rgba(26,26,26,0.55); }
@@ -512,7 +512,7 @@
         #project-reveal.light .pr-nav-btn { background: rgba(0,0,0,0.06); border-color: rgba(26,26,26,0.15); color: #1a1a1a; }
         #project-reveal.light .pr-nav-btn:hover { background: rgba(0,0,0,0.12); }
         #project-reveal.light .pr-client-details { background: #DEDEDE !important; border-color: rgba(26,26,26,0.08) !important; }
-        /* reel wrappers stay dark in light mode � only page bg changes */
+        /* reel wrappers stay dark in light mode � only page bg changes */
         #project-reveal.light .text-white { color: #1a1a1a !important; }
         #project-reveal.light .text-white\/90 { color: rgba(26,26,26,0.9) !important; }
         #project-reveal.light .text-white\/60 { color: rgba(26,26,26,0.6) !important; }
@@ -689,7 +689,7 @@
         /* Landscape reel wrapper - always full screen, flex-centered for letterboxing */
         .pr-reel-wrapper { position: absolute; inset: 0; width: 100vw; height: 100vh; background: #050a09; cursor: pointer; opacity: 0; z-index: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         /* Landscape 16:9 (1920x1080) - fits viewport without cropping */
-        .pr-reel-video { position: relative; inset: auto; width: min(100vw, calc(100vh * (16 / 9))); height: min(100vh, calc(100vw * (9 / 16))); object-fit: contain; flex-shrink: 0; z-index: 1; will-change: transform; transform: translateZ(0); }
+        .pr-reel-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; flex-shrink: 0; z-index: 1; will-change: transform; transform: translateZ(0); }
         /* Portrait correction - for wrongly-oriented source files */
         .pr-reel-video.rotate-correction { width: min(100vh, calc(100vw * (16 / 9))) !important; height: min(100vw, calc(100vh * (9 / 16))) !important; transform: rotate(-90deg) translateZ(0) !important; position: relative !important; inset: auto !important; }
         .pr-reel-gradient { position: absolute; inset: 0; background: radial-gradient(circle at center, transparent 0%, rgba(5,10,9,0.7) 100%); z-index: 3; pointer-events: none; transition: opacity 0.6s ease; }
@@ -721,14 +721,14 @@
         .pr-theme-toggle { position: fixed; top: 40px; left: 40px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); backdrop-filter: blur(12px); border: 1px solid rgba(239,236,230,0.2); color: #EFECE6; cursor: pointer; opacity: 0; z-index: 10010; border-radius: 50%; transition: background 0.4s, color 0.4s, border-color 0.4s; }
         .pr-theme-toggle:hover { background: rgba(255,255,255,0.15); border-color: rgba(239,236,230,0.5); }
         /* ---- LIGHT MODE OVERRIDES ---- */
-        /* Portrait brand text � E7E7E7 in light mode so it stays legible over dark videos */
-        /* Portrait brand � pure white on hover so it pops over the playing video */
+        /* Portrait brand text � E7E7E7 in light mode so it stays legible over dark videos */
+        /* Portrait brand � pure white on hover so it pops over the playing video */
         #project-reveal.light .group:hover .pr-portrait-brand,
         #project-reveal .group:hover .pr-portrait-brand { color: #FFFFFF !important; text-shadow: 0 1px 6px rgba(0,0,0,0.95) !important; }
         #project-reveal.light .pr-portrait-brand { color: #E7E7E7 !important; text-shadow: 0 1px 5px rgba(0,0,0,0.8); }
-        /* Keep portrait video containers dark in light mode � videos should not wash out */
+        /* Keep portrait video containers dark in light mode � videos should not wash out */
         #project-reveal.light .aspect-\[9\/16\] { background: #0d0d0d !important; border-color: rgba(255,255,255,0.08) !important; }
-        /* landscape reel background � neutral grey, not cream */
+        /* landscape reel background � neutral grey, not cream */
         #project-reveal.light { background: #E7E7E7; color: #1a1a1a; }
         #project-reveal.light .pr-reel-wrapper { background: #E7E7E7; transition: background 0.5s ease; }
         #project-reveal.light .pr-title-side { color: rgba(26,26,26,0.55); }
@@ -740,7 +740,7 @@
         #project-reveal.light .pr-nav-btn { background: rgba(0,0,0,0.06); border-color: rgba(26,26,26,0.15); color: #1a1a1a; }
         #project-reveal.light .pr-nav-btn:hover { background: rgba(0,0,0,0.12); }
         #project-reveal.light .pr-client-details { background: #DEDEDE !important; border-color: rgba(26,26,26,0.08) !important; }
-        /* reel wrappers stay dark in light mode � only page bg changes */
+        /* reel wrappers stay dark in light mode � only page bg changes */
         #project-reveal.light .text-white { color: #1a1a1a !important; }
         #project-reveal.light .text-white\/90 { color: rgba(26,26,26,0.9) !important; }
         #project-reveal.light .text-white\/60 { color: rgba(26,26,26,0.6) !important; }
@@ -1374,4 +1374,211 @@
     70% { transform: translate(0%, 15%); }
     80% { transform: translate(3%, 35%); }
     90% { transform: translate(-10%, 10%); }
+}
+
+
+/* ================================================================
+   MOBILE OPTIMIZATION ENHANCEMENTS
+   Added: Improved touch targets, dvh support, safe-area insets,
+   scroll snapping, font scaling, and layout fixes for small screens
+   ================================================================ */
+
+/* ── 1. iOS Safari: use dynamic viewport height for full-screen sections ── */
+@supports (height: 100dvh) {
+    .hero-container,
+    .work-gateway-section,
+    .gateway-window {
+        height: 100dvh;
+        min-height: 100dvh;
+    }
+    #preloader {
+        height: 100dvh;
+    }
+}
+
+/* ── 2. Safe-area insets for iPhone notch / home-bar ── */
+header {
+    padding-top: max(20px, env(safe-area-inset-top));
+    padding-left: max(20px, env(safe-area-inset-left));
+    padding-right: max(20px, env(safe-area-inset-right));
+}
+
+.floating-socials {
+    bottom: max(32px, env(safe-area-inset-bottom));
+    right: max(24px, env(safe-area-inset-right));
+}
+
+/* ── 3. Touch target minimum size (44×44px) for all interactive buttons ── */
+@media (pointer: coarse) {
+    .nav-link,
+    .floating-social-btn,
+    .pr-close,
+    .pr-nav-btn {
+        min-height: 44px;
+        min-width: 44px;
+    }
+
+    /* Hamburger-style nav on coarse pointer devices */
+    .nav-links {
+        row-gap: 8px;
+    }
+
+    /* Larger tap area for card interactions */
+    .project-card,
+    .cat-clickable {
+        -webkit-tap-highlight-color: transparent;
+    }
+}
+
+/* ── 4. Prevent font-size bump on iOS orientation change ── */
+html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+/* ── 5. Smooth scroll momentum on iOS ── */
+[data-lenis-prevent],
+.pr-scroll-container,
+.cat-collage-body {
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ── 6. Small phone (max-width: 390px) — Extra small screen tuning ── */
+@media (max-width: 390px) {
+    .hero-title {
+        font-size: clamp(3rem, 18vw, 5rem);
+    }
+
+    .hero-slate,
+    .hero-cats {
+        font-size: 9px;
+        padding: 8px 16px;
+        letter-spacing: 0.1em;
+    }
+
+    .pre-word .pre-word-ghost,
+    .pre-word .pre-word-fill {
+        font-size: clamp(2.5rem, 15vw, 4rem);
+    }
+
+    .reel-track-container {
+        overflow-x: scroll;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+    }
+
+    .reel-track > div {
+        scroll-snap-align: start;
+        flex-shrink: 0;
+    }
+
+    /* Reduce excessive padding on philosophy section */
+    .philosophy-content {
+        padding-left: 5vw;
+        padding-right: 5vw;
+        margin-right: 0;
+    }
+}
+
+/* ── 7. Landscape phone ── */
+@media (max-height: 500px) and (orientation: landscape) {
+    .hero-container {
+        height: auto;
+        min-height: 100svh;
+        padding: 80px 5vw 40px;
+    }
+
+    .hero-title {
+        font-size: clamp(2.5rem, 10vw, 5rem);
+    }
+
+    #preloader {
+        height: 100svh;
+    }
+}
+
+/* ── 8. Project Reveal overlay — mobile full-screen layout ── */
+@media (max-width: 768px) {
+    #project-reveal {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Stack portrait gallery vertically on mobile */
+    .pr-client-details .flex.flex-col.md\\:flex-row {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* Ensure back button is large enough to tap */
+    .pr-close {
+        top: max(16px, env(safe-area-inset-top));
+        right: max(12px, env(safe-area-inset-right));
+        padding: 10px 20px;
+    }
+
+    .pr-theme-toggle {
+        top: max(16px, env(safe-area-inset-top));
+    }
+}
+
+/* ── 9. Collage overlay header — mobile padding fix ── */
+@media (max-width: 768px) {
+    .cat-collage-header {
+        padding: 16px 20px;
+        gap: 12px;
+    }
+
+    .cat-collage-body {
+        padding: 40px 20px;
+    }
+}
+
+/* ── 10. Digital Audit overlay — mobile fix ── */
+@media (max-width: 768px) {
+    #da-overlay header {
+        padding: 20px max(20px, env(safe-area-inset-left));
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+    }
+
+    #da-overlay .da-hero {
+        padding-top: 120px;
+    }
+}
+
+/* ── 11. Floating socials — hide label line on very small screens ── */
+@media (max-width: 390px) {
+    .floating-socials .social-line {
+        display: none;
+    }
+}
+
+/* ── 12. Work section gateway — ensure it fills screen properly on mobile ── */
+@media (max-width: 768px) {
+    .work-gateway-section {
+        min-height: 100svh;
+    }
+
+    .gateway-window {
+        width: 100vw;
+        min-height: 100svh;
+        border-radius: 0;
+    }
+}
+
+/* ── 13. Timecode HUD — hide on very narrow screens to avoid overlap ── */
+@media (max-width: 390px) {
+    .global-tc {
+        display: none;
+    }
+}
+
+/* ── 14. Scroll-bar progress indicator — adjust for mobile ── */
+@media (max-width: 768px) {
+    #scroll-bar {
+        height: 2px;
+        opacity: 0.5;
+    }
 }

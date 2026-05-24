@@ -499,19 +499,61 @@
         /* Category row */
         .cat-row {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
+            flex-direction: column;
+            align-items: stretch;
             padding: 12px 16px;
             border: 1.5px solid #e5e7eb;
             border-radius: 10px;
             background: #fff;
-            gap: 12px;
+            gap: 10px;
             transition: all 0.15s;
         }
 
         .cat-row:hover {
             border-color: #bfdbfe;
             background: #f8fbff;
+        }
+
+        /* ── Category: assigned-clients panel ── */
+        .cat-chip-x {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.08);
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            flex-shrink: 0;
+            color: #6b7280;
+            transition: background 0.15s, color 0.15s;
+        }
+        .cat-chip-x:hover {
+            background: #ef4444;
+            color: #fff;
+        }
+
+        /* ── Project list: removable category badge ── */
+        .badge-blue .cat-badge-x {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            background: rgba(30,64,175,0.15);
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            flex-shrink: 0;
+            color: #1e40af;
+            transition: background 0.15s, color 0.15s;
+        }
+        .badge-blue .cat-badge-x:hover {
+            background: #ef4444;
+            color: #fff;
         }
 
         /* Video preview modal */

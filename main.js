@@ -1692,7 +1692,7 @@
                     wrapper.innerHTML = html;
                     _mount.appendChild(wrapper.firstElementChild);
                     _fragmentCache[name] = true;
-                } catch(e) { console.warn('[LP] Fragment load failed:', name, e); }
+                } catch(e) { console.warn('[LP] Fragment load failed:', name, e); if(window.showLPToast) window.showLPToast('Content failed to load. Please refresh and try again.'); }
             }
 
             // DA OVERLAY STATE
@@ -2130,7 +2130,7 @@
                     const reveal = document.getElementById('project-reveal');
                     if (!reveal || !reveal.classList.contains('active')) return;
 
-                    // Immediately lock — prevents double-trigger
+                    // Immediately lock ï¿½ prevents double-trigger
                     reveal.classList.remove('active');
                     reveal.style.pointerEvents = 'none';
 
@@ -2150,7 +2150,7 @@
                     // Restore cursor
                     gsap.to('#c-ring, .cursor-trail', { scale: 1, opacity: 1, duration: 0.4 });
 
-                    // Simple reliable fade-out — no complex collapse
+                    // Simple reliable fade-out ï¿½ no complex collapse
                     gsap.to(reveal, {
                         opacity: 0, duration: 0.4, ease: 'power2.in',
                         onComplete: () => {
@@ -2164,7 +2164,7 @@
                             }
                             gsap.to('.project-card', { opacity: 1, duration: 0.6 });
                             gsap.to('header, .work-header', { opacity: 1, y: 0, duration: 0.6 });
-                            // Pause videos only — don't clear src to avoid media abort errors
+                            // Pause videos only ï¿½ don't clear src to avoid media abort errors
                             reveal.querySelectorAll('video').forEach(v => {
                                 if (v._ioObserver) { v._ioObserver.disconnect(); v._ioObserver = null; }
                                 v.pause();
@@ -2358,7 +2358,7 @@
                         const grad = document.createElement('div');
                         grad.className = 'pr-reel-gradient';
                         reelWrap.appendChild(grad);
-                        preloadedVid.play().catch(e => console.warn('Playback blocked:', e));
+                        preloadedVid.play().catch(() => { /* autoplay policy */ });
                         card._preloadedVideo = null;
                     } else {
                         // Show loading shimmer while video buffers
@@ -2384,7 +2384,7 @@
                             if (loader) loader.remove();
                             vid.style.transition = 'opacity 0.4s ease';
                             vid.style.opacity = '1';
-                            vid.play().catch(e => console.warn('Playback blocked:', e));
+                            vid.play().catch(() => { /* autoplay policy */ });
                         };
 
                         // PERF: canplaythrough (not canplay) â€” fires when browser has enough buffer
