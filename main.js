@@ -37,15 +37,15 @@
         const SHOWREEL = [
             { title: 'KOA CAFE', mood: 'goldenWarmth' },
             { title: 'FINCA RESTRO CAFE', mood: 'goldenWarmth' },
-            { title: 'FORTUNE INN PROMENADE', mood: 'pureWhite' },
+            { title: 'FORTUNE INN PROMENADE', mood: 'darkEditorial' },
             { title: 'LUCE & OMBRA', mood: 'darkEditorial' },
             { title: 'OPTIC HOUSE', mood: 'goldenWarmth' },
             { title: 'SIGNATURE EYEWEAR', mood: 'darkEditorial' },
             { title: 'FORTUNE PARK DAHEJ', mood: 'goldenWarmth' },
             { title: 'KATHIYAWADI VILLAGE', mood: 'goldenWarmth' },
             { title: 'LEXUS SPACE LLP', mood: 'darkEditorial' },
-            { title: 'EASYDENT', mood: 'pureWhite' },
-            { title: 'THE DENTA PROJECT', mood: 'pureWhite' },
+            { title: 'EASYDENT', mood: 'goldenWarmth' },
+            { title: 'THE DENTA PROJECT', mood: 'darkEditorial' },
             { title: 'FACETYME', mood: 'darkEditorial' }
         ];
 
