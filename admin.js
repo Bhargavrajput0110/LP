@@ -218,7 +218,7 @@ function projectRow(p) {
             ${c}
             <button type="button" style="display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;background:rgba(0,0,0,0.12);border:none;cursor:pointer;padding:0;flex-shrink:0;"
                 title="Remove from this category"
-                onclick="event.stopPropagation();quickRemoveCatFromProject('${p.id}','${c.replace(/'/g,\"\\\\'\")}')">
+                onclick="event.stopPropagation();quickRemoveCatFromProject('${p.id}','${c.replace(/'/g, "\\'")}')">
                 <i data-lucide="x" class="w-2.5 h-2.5"></i>
             </button>
         </span>`

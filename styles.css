@@ -1405,7 +1405,7 @@ header {
 
 .floating-socials {
     bottom: max(32px, env(safe-area-inset-bottom));
-    right: max(24px, env(safe-area-inset-right));
+    left: max(32px, env(safe-area-inset-left));
 }
 
 /* ── 3. Touch target minimum size (44×44px) for all interactive buttons ── */
