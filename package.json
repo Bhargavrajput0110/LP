@@ -1,7 +1,8 @@
 {
   "scripts": {
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "build": "esbuild main.js --minify --outfile=main.min.js && esbuild styles.css --minify --outfile=styles.min.css"
   },
   "dependencies": {
     "@react-spring/three": "^10.0.3",
