@@ -209,11 +209,11 @@
                     el.addEventListener('mouseenter', () => {
                         const txt = el.getAttribute('data-cursor');
                         this.labelEl.innerText = txt;
-                        gsap.to(this.ringEl, { width: 64, height: 64, backgroundColor: 'rgba(var(--scene-accent-rgb), 0.1)', borderColor: 'var(--scene-accent)', duration: 0.3 });
+                        gsap.to(this.ringEl, { width: 44, height: 44, backgroundColor: 'rgba(var(--scene-accent-rgb), 0.1)', borderColor: 'var(--scene-accent)', duration: 0.3 });
                         gsap.to(this.labelEl, { opacity: 1, duration: 0.2 });
                     });
                     el.addEventListener('mouseleave', () => {
-                        gsap.to(this.ringEl, { width: 32, height: 32, backgroundColor: 'transparent', borderColor: 'rgba(232,168,50,0.55)', duration: 0.3 });
+                        gsap.to(this.ringEl, { width: 20, height: 20, backgroundColor: 'transparent', borderColor: 'rgba(232,168,50,0.55)', duration: 0.3 });
                         gsap.to(this.labelEl, { opacity: 0, duration: 0.2 });
                     });
                 });
