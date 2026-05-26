@@ -1802,6 +1802,7 @@ body.low-perf .butterfly-wrap {
     border-radius: 30px;
     cursor: pointer;
     transition: all 0.3s;
+    margin-top: 45px;
 }
 .cat-collage-close:hover {
     background: rgba(255, 255, 255, 0.12);
@@ -2598,6 +2599,7 @@ body.low-perf .butterfly-wrap {
     border-radius: 30px;
     cursor: pointer;
     transition: all 0.3s;
+    margin-top: 45px;
 }
 .cat-collage-close:hover {
     background: rgba(255, 255, 255, 0.12);
@@ -4103,6 +4105,10 @@ html {
     .cat-collage-header {
         padding: 16px 20px;
         gap: 12px;
+    }
+
+    .cat-collage-close {
+        margin-top: 0;
     }
 
     .cat-collage-body {
