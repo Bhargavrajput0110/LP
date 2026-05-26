@@ -1635,7 +1635,7 @@
                         gsap.to('.pr-title-left', { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out', delay: 0.5 });
                         gsap.to('.pr-title-right', { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out', delay: 0.6 });
                         gsap.to('.pr-info-wrapper', { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out', delay: 0.7 });
-                        gsap.to('.pr-close, .pr-cursor-pill, .pr-nav-btn', { opacity: 1, scale: 1, duration: 0.8, delay: 0.7 });
+                        gsap.to('.pr-close, .pr-nav-btn', { opacity: 1, scale: 1, duration: 0.8, delay: 0.7 });
                         reveal._activeCard = card;
                         // Store origin coords so BACK animation collapses correctly (prevents GSAP NaN freeze)
                         reveal.dataset.ox = rect.left;
@@ -2144,7 +2144,7 @@
                     gsap.killTweensOf('.pr-info-wrapper');
                     gsap.killTweensOf('.pr-title-side');
                     gsap.killTweensOf('.pr-close');
-                    gsap.killTweensOf('.pr-cursor-pill');
+                    
                     gsap.killTweensOf('.pr-nav-btn');
 
                     // Restore cursor
@@ -2415,7 +2415,7 @@
                 // Bind pill controls after short delay
                 setTimeout(() => {
                     const vid = reelWrap.querySelector('video');
-                    const pill = document.querySelector('.pr-cursor-pill');
+                    const pill = null;
                     if (!vid || !pill) return;
                     reelWrap.onmouseenter = () => pill.innerText = vid.paused ? 'PLAY' : 'PAUSE';
                     reelWrap.onmouseleave = () => pill.innerText = '';
@@ -2622,10 +2622,10 @@
                     gsap.to('.pr-info-wrapper', { y: 0, opacity: 1, duration: 1.0, ease: 'power3.out', delay: 0.5 });
                     
                     // 4. UI Elements
-                    gsap.to('.pr-close, .pr-cursor-pill, .pr-nav-btn', { opacity: 1, scale: 1, duration: 0.8, delay: 0.7 });
+                    gsap.to('.pr-close, .pr-nav-btn', { opacity: 1, scale: 1, duration: 0.8, delay: 0.7 });
 
                     // Mouse movement tracking for reveal pill
-                    const revealPill = document.querySelector('.pr-cursor-pill');
+                    const revealPill = null;
                     revealPill.innerText = ''; // reset text
                     const onRevealMove = (e) => {
                         gsap.to(revealPill, { x: e.clientX, y: e.clientY, duration: 0.3, ease: 'power2.out' });
