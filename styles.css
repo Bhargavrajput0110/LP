@@ -3738,12 +3738,7 @@ body.low-perf .butterfly-wrap {
     height: 48px;
     background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.15));
 }
-.social-btns-row {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 12px;
-}
+
 .floating-social-btn {
     width: 44px;
     height: 44px;
