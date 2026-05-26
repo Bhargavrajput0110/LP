@@ -56,7 +56,7 @@
         }
         .cursor-ring {
             position: fixed; top: 0; left: 0;
-            width: 32px; height: 32px;
+            width: 20px; height: 20px;
             border: 1px solid rgba(232,168,50,0.55);
             border-radius: 50%;
             pointer-events: none; z-index: 10030;
