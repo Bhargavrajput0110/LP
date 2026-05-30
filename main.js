@@ -932,26 +932,14 @@
             window._magneticBound = true;
             
             // Magnetic Buttons
-            const magnetics = document.querySelectorAll('.nav-link, .cta-button, .filter-btn, .project-card');
+            const magnetics = document.querySelectorAll('.nav-link, .cta-button, .filter-btn');
             magnetics.forEach(btn => {
-                const isCard = btn.classList.contains('project-card');
-                const pullPower = isCard ? 0.05 : 0.2;
-                
                 btn.addEventListener('mousemove', (e) => {
                     const rect = btn.getBoundingClientRect();
                     const rx = e.clientX - rect.left - rect.width / 2;
                     const ry = e.clientY - rect.top - rect.height / 2;
                     
-                    if(isCard) {
-                        // Card pull effect is subtle, mostly pulls the cursor ring
-                        const ringEl = document.getElementById('c-ring');
-                        const ox = rx * 0.4;
-                        const oy = ry * 0.4;
-                        // We don't move the card itself much, but we could
-                        gsap.to(btn, { x: rx * 0.02, y: ry * 0.02, duration: 0.4 });
-                    } else {
-                        gsap.to(btn, { x: rx * pullPower, y: ry * pullPower, scale: 1.05, duration: 0.4, ease: 'power2.out', color: 'var(--scene-accent)', textShadow: '0 0 10px var(--gold-bloom)' });
-                    }
+                    gsap.to(btn, { x: rx * 0.2, y: ry * 0.2, scale: 1.05, duration: 0.4, ease: 'power2.out', color: 'var(--scene-accent)', textShadow: '0 0 10px var(--gold-bloom)' });
                 });
                 btn.addEventListener('mouseleave', () => {
                     gsap.to(btn, { x: 0, y: 0, scale: 1, duration: 0.6, ease: 'elastic.out(1, 0.3)', color: '', textShadow: 'none' });
@@ -1166,12 +1154,19 @@
                 _cachedCards = Array.from(document.querySelectorAll(
                     '.spine-track .project-card:not([style*="display: none"]), .spine-track .category-title-card'
                 ));
-                _cachedCardMeta = _cachedCards.map(card => ({
-                    card,
-                    isProject: card.classList.contains('project-card'),
-                    media: card.querySelector('.card-media img') || card.querySelector('.card-media video'),
-                    info: card.querySelector('.card-info')
-                }));
+                _cachedCardMeta = _cachedCards.map(card => {
+                    const offsetLeft = card.offsetLeft || 0;
+                    const width = card.offsetWidth || 0;
+                    return {
+                        card,
+                        isProject: card.classList.contains('project-card'),
+                        media: card.querySelector('.card-media img') || card.querySelector('.card-media video'),
+                        info: card.querySelector('.card-info'),
+                        staticOffsetLeft: offsetLeft,
+                        staticWidth: width,
+                        staticCenterOffset: offsetLeft + width * 0.5
+                    };
+                });
                 _cachedFilterBtns = Array.from(document.querySelectorAll('.filter-btn'));
                 _cachedActiveTextEl = document.querySelector('.active-chapter-text');
                 _cachedCx = window.innerWidth / 2;
@@ -1190,7 +1185,7 @@
                 scrollTrigger: {
                     trigger: "#work",
                     start: "top top",
-                    end: "+=25000",
+                    end: "+=10000",
                     pin: true,
                     scrub: 1,
                     invalidateOnRefresh: true,
@@ -1211,14 +1206,13 @@
                         let closestMeta = _cachedCardMeta[0];
                         let minDist = Infinity;
 
-                        // PERF: Single loop — batch all reads (getBCR), then batch all writes (gsap.set)
-                        // Read phase — measure all rects first
-                        const rects = _cachedCardMeta.map(m => m.card.getBoundingClientRect());
+                        // PERF: Avoid layout thrashing by calling getBoundingClientRect() ONLY ONCE on the track container.
+                        // Individual card positions are computed relative to this value using cached static offset values.
+                        const trackLeft = track.getBoundingClientRect().left;
 
                         // Write phase — no reads inside this loop
-                        _cachedCardMeta.forEach((m, i) => {
-                            const rect = rects[i];
-                            const cardCenter = rect.left + rect.width * 0.5;
+                        _cachedCardMeta.forEach((m) => {
+                            const cardCenter = trackLeft + m.staticCenterOffset;
                             const dist = Math.abs((cx * 0.8) - cardCenter);
                             if (dist < minDist) { minDist = dist; closestMeta = m; }
 
@@ -1249,11 +1243,12 @@
                             voidStage.setMood(closestMeta.card.dataset.mood);
                         }
 
-                        // Active category detection (read phase already done above)
+                        // Active category detection (using trackLeft + staticOffsetLeft)
                         let activeFilter = 'ALL';
                         if (prog > 0.1) {
-                            _cachedCardMeta.forEach((m, i) => {
-                                if (!m.isProject && rects[i].left < window.innerWidth * 0.7) {
+                            _cachedCardMeta.forEach((m) => {
+                                const cardLeft = trackLeft + m.staticOffsetLeft;
+                                if (!m.isProject && cardLeft < window.innerWidth * 0.7) {
                                     activeFilter = m.card.dataset.category || 'ALL';
                                 }
                             });
@@ -1297,10 +1292,13 @@
             spineScrollTrigger.to('.gateway-ui', { opacity: 1, scale: 1, ease: 'power2.out', duration: 0.8 }, 4.2);
 
             // Click Interaction to fast-forward into the work section from the closed gateway state
+            // Works both when entering from top (progress ~0) AND returning from below/About (progress ~1)
             const gatewayWindow = document.querySelector('.gateway-window');
             gatewayWindow.addEventListener('click', () => {
                 const st = ScrollTrigger.getById("workSpine");
-                if (st && st.progress < 0.15) { 
+                if (!st) return;
+                // Gateway UI is visible at start (progress < 0.15) or end/return (progress > 0.85)
+                if (st.progress < 0.15 || st.progress > 0.85) {
                     const targetScroll = st.start + (st.end - st.start) * 0.2;
                     lenis.scrollTo(targetScroll, { duration: 1.5, ease: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
                 }
@@ -1363,14 +1361,15 @@
                         // Scroll to specific Chapter
                         const catCard = document.querySelector(`.category-title-card[data-category="${filter}"]`);
                         if (catCard) {
-                            const trackWidth = track.scrollWidth - window.innerWidth / 2;
-                            const catLeft = catCard.offsetLeft;
-                            
-                            // Map the distance along the track to the timeline's progress
-                            const fraction = Math.min(1, catLeft / trackWidth);
-                            // The horizontal scroll phase spans progress 0.2 to 1.0 (which is 80% of the timeline)
-                            const totalProgress = 0.2 + (fraction * 0.8);
-                            
+                            // The track animates: x = 0 → -(track.scrollWidth - vw/2) over progress 0.2→1.0
+                            // To center the card: trackX = vw/2 - cardCenter
+                            // → fraction = (cardCenter - vw/2) / (track.scrollWidth - vw/2)
+                            const vw = window.innerWidth;
+                            const cardCenter = catCard.offsetLeft + catCard.offsetWidth / 2;
+                            const totalTravel = track.scrollWidth - vw / 2;
+                            const fraction = Math.max(0, Math.min(0.98, (cardCenter - vw / 2) / totalTravel));
+                            const totalProgress = 0.2 + fraction * 0.8;
+
                             const targetScroll = st.start + (st.end - st.start) * totalProgress;
                             lenis.scrollTo(targetScroll, { duration: 1.5, ease: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
                         }
@@ -1601,9 +1600,77 @@
             function wireCollageCardListeners() {
                 // Expose globally so firebase-site.js can re-wire after live updates
                 window.__wireCollageCards = wireCollageCardListeners;
+
+                // Initialize global muted setting if not already present
+                if (typeof window.projectCardsMuted === 'undefined') {
+                    window.projectCardsMuted = false;
+                }
+
                 catOverlay.querySelectorAll('.project-card').forEach((card) => {
                     if (card._collageWired) return;
                     card._collageWired = true;
+
+                    const video = card.querySelector('.card-media video');
+                    const soundBtn = card.querySelector('.card-sound-btn');
+
+                    if (video) {
+                        card.addEventListener('mouseenter', () => {
+                            video.style.opacity = 1;
+                            video.muted = window.projectCardsMuted;
+
+                            if (soundBtn) {
+                                const mutedIcon = soundBtn.querySelector('.sound-icon-muted');
+                                const unmutedIcon = soundBtn.querySelector('.sound-icon-unmuted');
+                                if (window.projectCardsMuted) {
+                                    mutedIcon.classList.remove('hidden');
+                                    unmutedIcon.classList.add('hidden');
+                                } else {
+                                    mutedIcon.classList.add('hidden');
+                                    unmutedIcon.classList.remove('hidden');
+                                }
+                            }
+
+                            video.play().catch(() => { /* Autoplay block */ });
+                        });
+
+                        card.addEventListener('mouseleave', () => {
+                            video.style.opacity = 0;
+                            video.pause();
+                        });
+
+                        if (soundBtn) {
+                            soundBtn.addEventListener('click', (e) => {
+                                e.stopPropagation();
+                                e.preventDefault();
+
+                                window.projectCardsMuted = !window.projectCardsMuted;
+
+                                catOverlay.querySelectorAll('.project-card').forEach(c => {
+                                    const v = c.querySelector('.card-media video');
+                                    const btn = c.querySelector('.card-sound-btn');
+                                    if (v) {
+                                        v.muted = window.projectCardsMuted;
+                                    }
+                                    if (btn) {
+                                        const mi = btn.querySelector('.sound-icon-muted');
+                                        const ui = btn.querySelector('.sound-icon-unmuted');
+                                        if (window.projectCardsMuted) {
+                                            mi.classList.remove('hidden');
+                                            ui.classList.add('hidden');
+                                        } else {
+                                            mi.classList.add('hidden');
+                                            ui.classList.remove('hidden');
+                                        }
+                                    }
+                                });
+
+                                // Synchronize the reveal sound toggle button's UI if it exists
+                                if (typeof window.updateRevealSoundUI === 'function') {
+                                    window.updateRevealSoundUI();
+                                }
+                            });
+                        }
+                    }
 
                     card.addEventListener('mouseenter', () => {
                         const reelSrc = card.dataset.reel;
@@ -1622,6 +1689,10 @@
                     });
 
                     card.addEventListener('click', () => {
+                        if (video) {
+                            video.style.opacity = 0;
+                            video.pause();
+                        }
                         const reveal = document.getElementById('project-reveal');
                         if (reveal.classList.contains('active')) return;
                         const activeGrid = catOverlay.querySelector('.cat-grid.active');
@@ -2368,7 +2439,13 @@
                         const grad = document.createElement('div');
                         grad.className = 'pr-reel-gradient';
                         reelWrap.appendChild(grad);
-                        preloadedVid.play().catch(() => { /* autoplay policy */ });
+                        preloadedVid.muted = window.projectCardsMuted;
+                        preloadedVid.autoplay = true;
+                        preloadedVid.setAttribute('autoplay', '');
+                        preloadedVid.play().catch(() => {
+                            preloadedVid.muted = true;
+                            preloadedVid.play().catch(()=>{});
+                        });
                         card._preloadedVideo = null;
                     } else {
                         // Show loading shimmer while video buffers
@@ -2383,7 +2460,9 @@
                         vid.src = reelSrc;
                         vid.loop = true;
                         vid.playsInline = true;
-                        vid.muted = true;
+                        vid.autoplay = true;
+                        vid.setAttribute('autoplay', '');
+                        vid.muted = window.projectCardsMuted;
                         vid.preload = 'auto';
                         vid.style.opacity = '0';
                         reelWrap.insertBefore(vid, reelWrap.firstChild);
@@ -2394,7 +2473,11 @@
                             if (loader) loader.remove();
                             vid.style.transition = 'opacity 0.4s ease';
                             vid.style.opacity = '1';
-                            vid.play().catch(() => { /* autoplay policy */ });
+                            vid.muted = window.projectCardsMuted;
+                            vid.play().catch(() => {
+                                vid.muted = true;
+                                vid.play().catch(()=>{});
+                            });
                         };
 
                         // PERF: canplaythrough (not canplay) — fires when browser has enough buffer
@@ -2422,17 +2505,151 @@
                     reelWrap.innerHTML = `<img class="pr-reel-video" src="${imgSrc}" style="object-fit: cover; width: 100%; height: 100%;" loading="lazy"><div class="pr-reel-gradient"></div>`;
                 }
 
-                // Bind pill controls after short delay
+                // Bind reel click audio controls (Instagram Reels style) and portrait video audio overrides
                 setTimeout(() => {
                     const vid = reelWrap.querySelector('video');
-                    const pill = null;
-                    if (!vid || !pill) return;
-                    reelWrap.onmouseenter = () => pill.innerText = vid.paused ? 'PLAY' : 'PAUSE';
-                    reelWrap.onmouseleave = () => pill.innerText = '';
-                    reelWrap.onclick = () => {
-                        if (vid.paused) { vid.play().catch(()=>{}); pill.innerText = 'PAUSE'; }
-                        else { vid.pause(); pill.innerText = 'PLAY'; }
-                    };
+                    if (vid) {
+                        reelWrap.onclick = () => {
+                            window.projectCardsMuted = !window.projectCardsMuted;
+                            
+                            // Toggle sound of the currently playing reveal video
+                            vid.muted = window.projectCardsMuted;
+                            
+                            // Update the reveal toggle sound icon
+                            if (typeof window.updateRevealSoundUI === 'function') {
+                                window.updateRevealSoundUI();
+                            }
+                            
+                            // Show temporary audio indicator (Instagram style)
+                            let indicator = reelWrap.querySelector('.pr-audio-indicator');
+                            if (!indicator) {
+                                indicator = document.createElement('div');
+                                indicator.className = 'pr-audio-indicator';
+                                reelWrap.appendChild(indicator);
+                            }
+                            
+                            // Set the icon inside the indicator (stroke SVGs match theme toggle)
+                            indicator.innerHTML = window.projectCardsMuted ? `
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="24" height="24">
+                                    <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+                                    <line x1="23" y1="9" x2="17" y2="15" stroke-linecap="round"/>
+                                    <line x1="17" y1="9" x2="23" y2="15" stroke-linecap="round"/>
+                                </svg>
+                            ` : `
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="24" height="24">
+                                    <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+                                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14" stroke-linecap="round"/>
+                                </svg>
+                            `;
+
+                            // Animate using GSAP
+                            gsap.killTweensOf(indicator);
+                            gsap.fromTo(indicator, 
+                                { opacity: 0, scale: 0.5 },
+                                { 
+                                    opacity: 1, 
+                                    scale: 1, 
+                                    duration: 0.3, 
+                                    ease: 'back.out(1.7)',
+                                    onComplete: () => {
+                                        gsap.to(indicator, { opacity: 0, scale: 0.8, duration: 0.4, delay: 0.5 });
+                                    }
+                                }
+                            );
+
+                            // Sync up the card icons in the collage grids too
+                            document.querySelectorAll('.project-card').forEach(c => {
+                                const v = c.querySelector('.card-media video');
+                                const btn = c.querySelector('.card-sound-btn');
+                                if (v) {
+                                    v.muted = window.projectCardsMuted;
+                                }
+                                if (btn) {
+                                    const mi = btn.querySelector('.sound-icon-muted');
+                                    const ui = btn.querySelector('.sound-icon-unmuted');
+                                    if (window.projectCardsMuted) {
+                                        mi.classList.remove('hidden');
+                                        ui.classList.add('hidden');
+                                    } else {
+                                        mi.classList.add('hidden');
+                                        ui.classList.remove('hidden');
+                                    }
+                                }
+                            });
+                        };
+                    }
+
+                    // Initialize/Reset portrait sound buttons and video mute state
+                    [vid1, vid2, vid3].forEach(videoEl => {
+                        if (!videoEl) return;
+                        videoEl.muted = true;
+                        const group = videoEl.closest('.group');
+                        if (group) {
+                            const btn = group.querySelector('.portrait-sound-btn');
+                            if (btn) {
+                                const mi = btn.querySelector('.sound-icon-muted');
+                                const ui = btn.querySelector('.sound-icon-unmuted');
+                                if (mi && ui) {
+                                    mi.classList.remove('hidden');
+                                    ui.classList.add('hidden');
+                                }
+                            }
+                        }
+                    });
+
+                    // Connect portrait video audio toggle
+                    [vid1, vid2, vid3].forEach(videoEl => {
+                        if (!videoEl) return;
+                        const group = videoEl.closest('.group');
+                        if (!group || group._wiredAudio) return;
+                        group._wiredAudio = true;
+                        
+                        group.addEventListener('click', (e) => {
+                            // Toggle mute state of this video
+                            videoEl.muted = !videoEl.muted;
+                            
+                            // Sync the UI of this card's sound button
+                            const btn = group.querySelector('.portrait-sound-btn');
+                            if (btn) {
+                                const mi = btn.querySelector('.sound-icon-muted');
+                                const ui = btn.querySelector('.sound-icon-unmuted');
+                                if (videoEl.muted) {
+                                    mi.classList.remove('hidden');
+                                    ui.classList.add('hidden');
+                                    btn.classList.remove('is-unmuted');
+                                } else {
+                                    mi.classList.add('hidden');
+                                    ui.classList.remove('hidden');
+                                    btn.classList.add('is-unmuted');
+                                }
+                            }
+                            
+                            // If this video is now unmuted, we should mute the main background reel video
+                            // and also mute any other portrait video that might be playing sound
+                            if (!videoEl.muted) {
+                                const mainVid = reelWrap.querySelector('video');
+                                if (mainVid) mainVid.muted = true;
+                                
+                                // Mute all other portrait videos to prevent multi-audio mess
+                                [vid1, vid2, vid3].forEach(otherVid => {
+                                    if (otherVid && otherVid !== videoEl) {
+                                        otherVid.muted = true;
+                                        const otherGroup = otherVid.closest('.group');
+                                        const otherBtn = otherGroup ? otherGroup.querySelector('.portrait-sound-btn') : null;
+                                        if (otherBtn) {
+                                            const omi = otherBtn.querySelector('.sound-icon-muted');
+                                            const oui = otherBtn.querySelector('.sound-icon-unmuted');
+                                            if (omi && oui) {
+                                                omi.classList.remove('hidden');
+                                                oui.classList.add('hidden');
+                                                otherBtn.classList.remove('is-unmuted');
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                    });
                 }, 300);
 
                 // Inject Description at bottom (REMOVED per request)
@@ -2482,32 +2699,107 @@
             // Interconnected Navigation Listeners
             document.querySelector('.pr-nav-prev').addEventListener('click', () => switchProjectReveal(-1));
             document.querySelector('.pr-nav-next').addEventListener('click', () => switchProjectReveal(1));
-            // ---- Light/Dark Theme Toggle for Project Reveal ----
-            (function initRevealThemeToggle() {
+            // ---- Theme & Sound Toggles for Project Reveal ----
+            (function initRevealToggles() {
                 const reveal = document.getElementById('project-reveal');
-                const toggleBtn = document.getElementById('pr-theme-toggle');
+                const themeBtn = document.getElementById('pr-theme-toggle');
+                const soundBtn = document.getElementById('pr-sound-toggle');
+                
                 const moonIcon = document.getElementById('pr-theme-icon-moon');
                 const sunIcon  = document.getElementById('pr-theme-icon-sun');
-                if (!toggleBtn) return;
-                gsap.set(toggleBtn, { opacity: 0, scale: 0.8 });
-                toggleBtn.addEventListener('click', () => {
-                    const isLight = reveal.classList.toggle('light');
-                    moonIcon.style.display = isLight ? 'none' : 'block';
-                    sunIcon.style.display  = isLight ? 'block' : 'none';
-                    toggleBtn.title = isLight ? 'Switch to Dark Mode' : 'Switch to Light Mode';
-                });
+                const soundMutedIcon = document.getElementById('pr-sound-icon-muted');
+                const soundUnmutedIcon = document.getElementById('pr-sound-icon-unmuted');
+
+                if (themeBtn) {
+                    gsap.set(themeBtn, { opacity: 0, scale: 0.8 });
+                    themeBtn.addEventListener('click', () => {
+                        const isLight = reveal.classList.toggle('light');
+                        if (moonIcon) moonIcon.style.display = isLight ? 'none' : 'block';
+                        if (sunIcon) sunIcon.style.display  = isLight ? 'block' : 'none';
+                        themeBtn.title = isLight ? 'Switch to Dark Mode' : 'Switch to Light Mode';
+                    });
+                }
+
+                function updateRevealSoundUI() {
+                    if (!soundBtn) return;
+                    const isMuted = window.projectCardsMuted;
+                    if (soundMutedIcon) soundMutedIcon.style.display = isMuted ? 'block' : 'none';
+                    if (soundUnmutedIcon) soundUnmutedIcon.style.display = isMuted ? 'none' : 'block';
+                    soundBtn.title = isMuted ? 'Unmute Sound' : 'Mute Sound';
+                }
+
+                if (soundBtn) {
+                    gsap.set(soundBtn, { opacity: 0, scale: 0.8 });
+                    
+                    // Expose update functions globally so they can sync up
+                    window.updateRevealSoundUI = updateRevealSoundUI;
+
+                    soundBtn.addEventListener('click', () => {
+                        window.projectCardsMuted = !window.projectCardsMuted;
+                        
+                        // Toggle sound of the currently playing reveal video
+                        const activeRevealVid = reveal.querySelector('.pr-reel-wrapper video');
+                        if (activeRevealVid) {
+                            activeRevealVid.muted = window.projectCardsMuted;
+                        }
+                        
+                        // Update UI here
+                        updateRevealSoundUI();
+
+                        // Sync up the card icons in the collage grids too
+                        document.querySelectorAll('.project-card').forEach(c => {
+                            const v = c.querySelector('.card-media video');
+                            const btn = c.querySelector('.card-sound-btn');
+                            if (v) {
+                                v.muted = window.projectCardsMuted;
+                            }
+                            if (btn) {
+                                const mi = btn.querySelector('.sound-icon-muted');
+                                const ui = btn.querySelector('.sound-icon-unmuted');
+                                if (window.projectCardsMuted) {
+                                    mi.classList.remove('hidden');
+                                    ui.classList.add('hidden');
+                                } else {
+                                    mi.classList.add('hidden');
+                                    ui.classList.remove('hidden');
+                                }
+                            }
+                        });
+                    });
+                }
+
                 if (!window.__prToggleObserved) {
                     window.__prToggleObserved = true;
                     new MutationObserver(() => {
+                        const btns = [];
+                        if (themeBtn) btns.push(themeBtn);
+                        if (soundBtn) btns.push(soundBtn);
+                        
                         if (reveal.classList.contains('active')) {
-                            gsap.to(toggleBtn, { opacity: 1, scale: 1, duration: 0.8, delay: 0.7, ease: 'power2.out' });
+                            updateRevealSoundUI();
+                            gsap.to(btns, { opacity: 1, scale: 1, duration: 0.8, delay: 0.7, ease: 'power2.out' });
                         } else {
-                            gsap.set(toggleBtn, { opacity: 0, scale: 0.8 });
-                            moonIcon.style.display = 'block';
-                            sunIcon.style.display  = 'none';
+                            gsap.set(btns, { opacity: 0, scale: 0.8 });
+                            if (moonIcon) moonIcon.style.display = 'block';
+                            if (sunIcon) sunIcon.style.display  = 'none';
                         }
                     }).observe(reveal, { attributes: true, attributeFilter: ['class'] });
                 }
+
+                // Listen to scroll inside the reveal overlay to mute the background video when scrolled out of view
+                reveal.addEventListener('scroll', () => {
+                    const mainVid = reveal.querySelector('.pr-reel-wrapper video');
+                    if (!mainVid) return;
+                    
+                    const threshold = window.innerHeight * 0.5;
+                    const isScrolledDown = reveal.scrollTop > threshold;
+                    
+                    if (isScrolledDown) {
+                        mainVid.muted = true;
+                    } else {
+                        mainVid.muted = window.projectCardsMuted;
+                    }
+                }, { passive: true });
             })();
 
             // Mouse wheel scroll for interconnected navigation (DISABLED TO ALLOW SCROLLING DOWN)
@@ -2685,8 +2977,8 @@
                         gsap.to(wrap, {
                             rotateY: 0,
                             rotateX: 0,
-                            duration: 1.5,
-                            ease: 'elastic.out(1, 0.3)'
+                            duration: 0.8,
+                            ease: 'power2.out'
                         });
                     });
                 });

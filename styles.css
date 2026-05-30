@@ -1172,6 +1172,110 @@ body.low-perf .butterfly-wrap {
     opacity: 1;
 }
 
+/* Card Sound Toggle Button */
+.card-sound-btn {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(10, 10, 15, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #efece6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 12;
+    opacity: 0;
+    transition: opacity 0.3s ease, background 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    pointer-events: auto;
+}
+
+.project-card:hover .card-sound-btn {
+    opacity: 1;
+}
+
+.card-sound-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: var(--scene-accent);
+    color: var(--scene-accent);
+    transform: scale(1.1);
+}
+
+.card-sound-btn svg {
+    width: 14px;
+    height: 14px;
+    pointer-events: none;
+    transition: transform 0.2s ease;
+}
+
+.card-sound-btn:active svg {
+    transform: scale(0.85);
+}
+
+.card-sound-btn .hidden {
+    display: none !important;
+}
+
+/* Portrait Reels Sound Toggle Button */
+.portrait-sound-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(10, 10, 15, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #efece6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 12;
+    opacity: 0.35;
+    transition: opacity 0.35s ease, background 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    pointer-events: auto;
+}
+
+.group:hover .portrait-sound-btn {
+    opacity: 1;
+}
+
+/* When unmuted, always keep full opacity so user knows sound is on */
+.portrait-sound-btn.is-unmuted {
+    opacity: 0.85;
+}
+
+.portrait-sound-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: var(--scene-accent);
+    color: var(--scene-accent);
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+.portrait-sound-btn svg {
+    width: 20px;
+    height: 20px;
+    pointer-events: none;
+    transition: transform 0.2s ease;
+}
+
+.portrait-sound-btn:active svg {
+    transform: scale(0.85);
+}
+
+.portrait-sound-btn .hidden {
+    display: none !important;
+}
+
 .card-scroll-wheel {
     position: absolute;
     bottom: 25px;
@@ -1558,7 +1662,7 @@ body.low-perf .butterfly-wrap {
 }
 /* ---- LIGHT/DARK THEME TOGGLE BUTTON ---- */
 .pr-theme-toggle {
-    position: fixed;
+    position: absolute;
     top: 40px;
     left: 40px;
     width: 44px;
@@ -1582,6 +1686,34 @@ body.low-perf .butterfly-wrap {
 .pr-theme-toggle:hover {
     background: rgba(255, 255, 255, 0.15);
     border-color: rgba(239, 236, 230, 0.5);
+}
+.pr-sound-toggle {
+    position: absolute;
+    top: 104px;
+    left: 40px;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(239, 236, 230, 0.2);
+    color: #efece6;
+    cursor: pointer;
+    opacity: 0;
+    z-index: 10010;
+    border-radius: 50%;
+    transition:
+        background 0.4s,
+        color 0.4s,
+        border-color 0.4s,
+        transform 0.2s;
+}
+.pr-sound-toggle:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(239, 236, 230, 0.5);
+    transform: scale(1.08);
 }
 /* ---- LIGHT MODE OVERRIDES ---- */
 /* Portrait brand text � E7E7E7 in light mode so it stays legible over dark videos */
@@ -1629,6 +1761,11 @@ body.low-perf .butterfly-wrap {
     color: #e7e7e7;
 }
 #project-reveal.light .pr-theme-toggle {
+    background: rgba(0, 0, 0, 0.06);
+    border-color: rgba(26, 26, 26, 0.2);
+    color: #1a1a1a;
+}
+#project-reveal.light .pr-sound-toggle {
     background: rgba(0, 0, 0, 0.06);
     border-color: rgba(26, 26, 26, 0.2);
     color: #1a1a1a;
@@ -2355,7 +2492,7 @@ body.low-perf .butterfly-wrap {
 }
 /* ---- LIGHT/DARK THEME TOGGLE BUTTON ---- */
 .pr-theme-toggle {
-    position: fixed;
+    position: absolute;
     top: 40px;
     left: 40px;
     width: 44px;
@@ -2379,6 +2516,34 @@ body.low-perf .butterfly-wrap {
 .pr-theme-toggle:hover {
     background: rgba(255, 255, 255, 0.15);
     border-color: rgba(239, 236, 230, 0.5);
+}
+.pr-sound-toggle {
+    position: absolute;
+    top: 104px;
+    left: 40px;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(239, 236, 230, 0.2);
+    color: #efece6;
+    cursor: pointer;
+    opacity: 0;
+    z-index: 10010;
+    border-radius: 50%;
+    transition:
+        background 0.4s,
+        color 0.4s,
+        border-color 0.4s,
+        transform 0.2s;
+}
+.pr-sound-toggle:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(239, 236, 230, 0.5);
+    transform: scale(1.08);
 }
 /* ---- LIGHT MODE OVERRIDES ---- */
 /* Portrait brand text � E7E7E7 in light mode so it stays legible over dark videos */
@@ -2426,6 +2591,11 @@ body.low-perf .butterfly-wrap {
     color: #e7e7e7;
 }
 #project-reveal.light .pr-theme-toggle {
+    background: rgba(0, 0, 0, 0.06);
+    border-color: rgba(26, 26, 26, 0.2);
+    color: #1a1a1a;
+}
+#project-reveal.light .pr-sound-toggle {
     background: rgba(0, 0, 0, 0.06);
     border-color: rgba(26, 26, 26, 0.2);
     color: #1a1a1a;
@@ -4163,4 +4333,30 @@ html {
         height: 2px;
         opacity: 0.5;
     }
+}
+
+/* Instagram-style temporary audio state indicator on video wrapper */
+.pr-audio-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgba(10, 10, 15, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #efece6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 20;
+    opacity: 0;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+.pr-audio-indicator svg {
+    width: 24px;
+    height: 24px;
 }

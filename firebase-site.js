@@ -57,6 +57,7 @@ function makeCard(p, index, catLabel) {
     const logo = optimizeImageUrl(p.logo || DEFAULT_LOGO);
     const num = String(index).padStart(2, '0');
     const desc = (p.desc || '').replace(/"/g, '&quot;');
+    const hasReel = p.reel && p.reel.startsWith('http');
     return `<article class="project-card glass" style="opacity: 1 !important; visibility: visible !important;"
                 data-mood="${p.mood || 'pureWhite'}"
                 data-cursor="VIEW"
@@ -68,6 +69,19 @@ function makeCard(p, index, catLabel) {
                 data-instagram="${p.instagram || ''}">
         <div class="card-media">
             <img src="${thumb}" alt="${p.name}" loading="lazy" width="800" height="800">
+            ${hasReel ? `
+            <video src="${p.reel}" loop muted playsinline></video>
+            <button class="card-sound-btn" aria-label="Toggle Sound">
+                <!-- Muted icon (default) -->
+                <svg class="sound-icon-muted" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3.63 3.63L2.05 5.2l4.13 4.13L5 10v4h3l5 5v-4.88l4.12 4.12c-.56.38-1.18.69-1.87.89v2.02c1.23-.27 2.35-.86 3.29-1.68l2.21 2.21 1.41-1.41L3.63 3.63zM10 15.17L7.83 13H7v-2h.83l.88-.88L10 11.25v3.92zM19 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.21.05-.42.05-.63zm1.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C21.93 14.86 22.5 13.5 22.5 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM14 3.23v2.06c2.89.86 5 3.54 5 6.71 0 .34-.02.68-.07 1.01l1.54 1.54c.33-.8.53-1.66.53-2.55 0-4.28-2.99-7.86-7-8.77z"/>
+                </svg>
+                <!-- Unmuted icon -->
+                <svg class="sound-icon-unmuted hidden" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                </svg>
+            </button>
+            ` : ''}
             <div class="card-brand-logo"><img src="${logo}" alt="${p.name}" loading="lazy" width="800" height="800"></div>
             <div class="card-overlay"></div>
             <div class="card-cursor-inner font-counter">VIEW</div>
