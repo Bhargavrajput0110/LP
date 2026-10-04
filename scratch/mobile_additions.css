@@ -1,0 +1,206 @@
+
+/* ================================================================
+   MOBILE OPTIMIZATION ENHANCEMENTS
+   Added: Improved touch targets, dvh support, safe-area insets,
+   scroll snapping, font scaling, and layout fixes for small screens
+   ================================================================ */
+
+/* ── 1. iOS Safari: use dynamic viewport height for full-screen sections ── */
+@supports (height: 100dvh) {
+    .hero-container,
+    .work-gateway-section,
+    .gateway-window {
+        height: 100dvh;
+        min-height: 100dvh;
+    }
+    #preloader {
+        height: 100dvh;
+    }
+}
+
+/* ── 2. Safe-area insets for iPhone notch / home-bar ── */
+header {
+    padding-top: max(20px, env(safe-area-inset-top));
+    padding-left: max(20px, env(safe-area-inset-left));
+    padding-right: max(20px, env(safe-area-inset-right));
+}
+
+.floating-socials {
+    bottom: max(32px, env(safe-area-inset-bottom));
+    left: max(32px, env(safe-area-inset-left));
+}
+
+/* ── 3. Touch target minimum size (44×44px) for all interactive buttons ── */
+@media (pointer: coarse) {
+    .nav-link,
+    .floating-social-btn,
+    .pr-close,
+    .pr-nav-btn {
+        min-height: 44px;
+        min-width: 44px;
+    }
+
+    /* Hamburger-style nav on coarse pointer devices */
+    .nav-links {
+        row-gap: 8px;
+    }
+
+    /* Larger tap area for card interactions */
+    .project-card,
+    .cat-clickable {
+        -webkit-tap-highlight-color: transparent;
+    }
+}
+
+/* ── 4. Prevent font-size bump on iOS orientation change ── */
+html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+/* ── 5. Smooth scroll momentum on iOS ── */
+[data-lenis-prevent],
+.pr-scroll-container,
+.cat-collage-body {
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ── 6. Small phone (max-width: 390px) — Extra small screen tuning ── */
+@media (max-width: 390px) {
+    .hero-title {
+        font-size: clamp(3rem, 18vw, 5rem);
+    }
+
+    .hero-slate,
+    .hero-cats {
+        font-size: 9px;
+        padding: 8px 16px;
+        letter-spacing: 0.1em;
+    }
+
+    .pre-word .pre-word-ghost,
+    .pre-word .pre-word-fill {
+        font-size: clamp(2.5rem, 15vw, 4rem);
+    }
+
+    .reel-track-container {
+        overflow-x: scroll;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+    }
+
+    .reel-track > div {
+        scroll-snap-align: start;
+        flex-shrink: 0;
+    }
+
+    /* Reduce excessive padding on philosophy section */
+    .philosophy-content {
+        padding-left: 5vw;
+        padding-right: 5vw;
+        margin-right: 0;
+    }
+}
+
+/* ── 7. Landscape phone ── */
+@media (max-height: 500px) and (orientation: landscape) {
+    .hero-container {
+        height: auto;
+        min-height: 100svh;
+        padding: 80px 5vw 40px;
+    }
+
+    .hero-title {
+        font-size: clamp(2.5rem, 10vw, 5rem);
+    }
+
+    #preloader {
+        height: 100svh;
+    }
+}
+
+/* ── 8. Project Reveal overlay — mobile full-screen layout ── */
+@media (max-width: 768px) {
+    #project-reveal {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Stack portrait gallery vertically on mobile */
+    .pr-client-details .flex.flex-col.md\\:flex-row {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* Ensure back button is large enough to tap */
+    .pr-close {
+        top: max(16px, env(safe-area-inset-top));
+        right: max(12px, env(safe-area-inset-right));
+        padding: 10px 20px;
+    }
+
+    .pr-theme-toggle {
+        top: max(16px, env(safe-area-inset-top));
+    }
+}
+
+/* ── 9. Collage overlay header — mobile padding fix ── */
+@media (max-width: 768px) {
+    .cat-collage-header {
+        padding: 16px 20px;
+        gap: 12px;
+    }
+
+    .cat-collage-body {
+        padding: 40px 20px;
+    }
+}
+
+/* ── 10. Digital Audit overlay — mobile fix ── */
+@media (max-width: 768px) {
+    #da-overlay header {
+        padding: 20px max(20px, env(safe-area-inset-left));
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+    }
+
+    #da-overlay .da-hero {
+        padding-top: 120px;
+    }
+}
+
+/* ── 11. Floating socials — hide label line on very small screens ── */
+@media (max-width: 390px) {
+    .floating-socials .social-line {
+        display: none;
+    }
+}
+
+/* ── 12. Work section gateway — ensure it fills screen properly on mobile ── */
+@media (max-width: 768px) {
+    .work-gateway-section {
+        min-height: 100svh;
+    }
+
+    .gateway-window {
+        width: 100vw;
+        min-height: 100svh;
+        border-radius: 0;
+    }
+}
+
+/* ── 13. Timecode HUD — hide on very narrow screens to avoid overlap ── */
+@media (max-width: 390px) {
+    .global-tc {
+        display: none;
+    }
+}
+
+/* ── 14. Scroll-bar progress indicator — adjust for mobile ── */
+@media (max-width: 768px) {
+    #scroll-bar {
+        height: 2px;
+        opacity: 0.5;
+    }
+}

@@ -1,6 +1,6 @@
 {
-  "name": "Limitless Productions",
-  "short_name": "Limitless",
+  "name": "YourBrand",
+  "short_name": "YourBrand",
   "description": "Premium cinematic agency based in Vadodara",
   "start_url": "/",
   "display": "standalone",
@@ -9,12 +9,12 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "/public/images/logo.png",
+      "src": "https://dummyimage.com/400x100/050507/ffffff.png&text=YOURBRAND",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/public/images/logo.png",
+      "src": "https://dummyimage.com/400x100/050507/ffffff.png&text=YOURBRAND",
       "sizes": "512x512",
       "type": "image/png"
     }

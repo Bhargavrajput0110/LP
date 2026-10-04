@@ -6,9 +6,9 @@ import { getFirestore, doc, onSnapshot } from 'https://www.gstatic.com/firebasej
 
 const firebaseConfig = {
     apiKey: 'AIzaSyD1vnMRo_cCcqpzuV9prlrOiUIavz7nv6g',
-    authDomain: 'limitless-cms.firebaseapp.com',
-    projectId: 'limitless-cms',
-    storageBucket: 'limitless-cms.firebasestorage.app',
+    authDomain: 'yourbrand-cms.firebaseapp.com',
+    projectId: 'yourbrand-cms',
+    storageBucket: 'yourbrand-cms.firebasestorage.app',
     messagingSenderId: '795014578598',
     appId: '1:795014578598:web:449def7c57453637480f67'
 };

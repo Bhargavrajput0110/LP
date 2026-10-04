@@ -1,5 +1,5 @@
 // ============================================================
-// LIMITLESS CMS — admin.js
+// YOURBRAND CMS — admin.js
 // ============================================================
 
 // ── Default data — uses SEED_PROJECTS from admin-seed.js ──
@@ -130,7 +130,7 @@ function renderOverview() {
         </div>
 
         <div class="card p-6 mb-6">
-            <p class="text-sm font-semibold mb-1">👋 Welcome to Limitless CMS</p>
+            <p class="text-sm font-semibold mb-1">👋 Welcome to YourBrand CMS</p>
             <p class="text-sm text-muted">Use the <b>Projects</b> tab to add, edit or remove project cards. Use <b>Categories</b> to manage your category tiles. When done, click <b>Save All Changes</b> then <b>Export JSON</b> to apply them to your live site.</p>
         </div>
 
@@ -961,10 +961,10 @@ function exportData() {
     const url  = URL.createObjectURL(blob);
     const a    = document.createElement('a');
     a.href = url;
-    a.download = 'limitless-content.json';
+    a.download = 'yourbrand-content.json';
     a.click();
     URL.revokeObjectURL(url);
-    showToast('Exported limitless-content.json!');
+    showToast('Exported yourbrand-content.json!');
 }
 
 // ── TOAST ──────────────────────────────────────────────────

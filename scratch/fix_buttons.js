@@ -1,0 +1,1 @@
+const fs = require('fs'); let code = fs.readFileSync('main.js', 'utf8'); code = code.replace('projectStartBtn.addEventListener(\'click\', openDaOverlay)', 'projectStartBtn.addEventListener(\'click\', openContactOverlay)'); fs.writeFileSync('main.js', code);  

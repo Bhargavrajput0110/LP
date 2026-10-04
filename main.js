@@ -29,22 +29,22 @@
         // CONFIG & STATE
         // -------------------------------------------------------------
         const SCENE_MODES = {
-            goldenWarmth:  { accent: '#FFBE2B', bg: '#090704', cursorColor: 0xFFD66A, glowColor: 'rgba(255,190,43,0.45)', grain: 0.04, gradientBottom: 'rgba(3,3,4,0.8)',   textColor: '#F4F0E8' },
+            goldenWarmth:  { accent: '#CC2200', bg: '#080404', cursorColor: 0xFF2200, glowColor: 'rgba(180,20,0,0.6)',  grain: 0.09, gradientBottom: 'rgba(3,3,4,0.8)',   textColor: '#F4F0E8' },
             darkEditorial: { accent: '#CC2200', bg: '#080404', cursorColor: 0xFF2200, glowColor: 'rgba(180,20,0,0.6)',  grain: 0.09, gradientBottom: 'rgba(3,3,4,0.8)',   textColor: '#F4F0E8' },
             pureWhite:     { accent: '#FFFFFF', bg: '#06040C', cursorColor: 0xFFFFFF, glowColor: 'rgba(255,255,255,0.55)', grain: 0.02, gradientBottom: 'rgba(3,3,4,0.8)', textColor: '#8b0000' },
         };
 
         const SHOWREEL = [
-            { title: 'KOA CAFE', mood: 'goldenWarmth' },
-            { title: 'FINCA RESTRO CAFE', mood: 'goldenWarmth' },
+            { title: 'KOA CAFE', mood: 'darkEditorial' },
+            { title: 'FINCA RESTRO CAFE', mood: 'darkEditorial' },
             { title: 'FORTUNE INN PROMENADE', mood: 'darkEditorial' },
             { title: 'LUCE & OMBRA', mood: 'darkEditorial' },
-            { title: 'OPTIC HOUSE', mood: 'goldenWarmth' },
+            { title: 'OPTIC HOUSE', mood: 'darkEditorial' },
             { title: 'SIGNATURE EYEWEAR', mood: 'darkEditorial' },
-            { title: 'FORTUNE PARK DAHEJ', mood: 'goldenWarmth' },
-            { title: 'KATHIYAWADI VILLAGE', mood: 'goldenWarmth' },
+            { title: 'FORTUNE PARK DAHEJ', mood: 'darkEditorial' },
+            { title: 'KATHIYAWADI VILLAGE', mood: 'darkEditorial' },
             { title: 'LEXUS SPACE LLP', mood: 'darkEditorial' },
-            { title: 'EASYDENT', mood: 'goldenWarmth' },
+            { title: 'EASYDENT', mood: 'darkEditorial' },
             { title: 'THE DENTA PROJECT', mood: 'darkEditorial' },
             { title: 'FACETYME', mood: 'darkEditorial' }
         ];
@@ -239,7 +239,7 @@
                         }
                     });
                     card.addEventListener('mouseleave', () => {
-                        gsap.to(this.ringEl, { borderColor: 'rgba(232,168,50,0.55)', duration: 0.6 });
+                        gsap.to(this.ringEl, { borderColor: 'rgba(204,34,0,0.6)', duration: 0.6 });
                         gsap.to(this.trails, { backgroundColor: 'var(--scene-accent)', duration: 0.6 });
                     });
                 });
@@ -359,7 +359,7 @@
                 this.scene.add(this.dust);
 
                 // Volumetric Cursor Light
-                this.light = new THREE.PointLight(SCENE_MODES.goldenWarmth.cursorColor, 5, 20);
+                this.light = new THREE.PointLight(SCENE_MODES.darkEditorial.cursorColor, 5, 20);
                 this.scene.add(this.light);
                 
                 // Dim Ambient
@@ -383,7 +383,7 @@
 
                 this.particleMat = new THREE.ShaderMaterial({
                     uniforms: {
-                        uColor: { value: new THREE.Color(SCENE_MODES.goldenWarmth.cursorColor) }
+                        uColor: { value: new THREE.Color(SCENE_MODES.darkEditorial.cursorColor) }
                     },
                     vertexShader: `
                         attribute float life;
@@ -433,7 +433,7 @@
                         uStrength: { value: 0.0 },   // animated 0Î“Ã¥Ã†peakÎ“Ã¥Ã†0
                         uFreq:     { value: 14.0 },  // ripple frequency
                         uSpeed:    { value: 8.0 },   // wave travel speed
-                        uColor:    { value: new THREE.Color(0xE8A832) }, // tint flash
+                        uColor:    { value: new THREE.Color(0xCC2200) }, // tint flash
                         uTint:     { value: 0.0 },   // tint amount
                     },
                     vertexShader: `
@@ -581,10 +581,10 @@
                     // Tint intensity: hit then fade out over 150ms + 500ms tail
                     .to(u.uTint,     { value: 0.18,  duration: 0.15, ease: 'power1.in'  }, 0)
                     .to(u.uTint,     { value: 0.0,   duration: 0.50, ease: 'power2.out' }, 0.15)
-                    // Colour: Red (0ms) Î“Ã¥Ã† Gold (50ms) Î“Ã¥Ã† White (100ms) Î“Ã¥Ã† settles
-                    .to(u.uColor.value, { r: 0.910, g: 0.659, b: 0.196, duration: 0.05, ease: 'none' }, 0.00)
+                    // Colour: Red (0ms) -> Deep Red (50ms) -> White (100ms) -> settles
+                    .to(u.uColor.value, { r: 0.8, g: 0.133, b: 0.0, duration: 0.05, ease: 'none' }, 0.00)
                     .to(u.uColor.value, { r: 1.0,   g: 1.0,   b: 1.0,   duration: 0.05, ease: 'none' }, 0.05)
-                    .to(u.uColor.value, { r: 0.91,  g: 0.659, b: 0.196, duration: 0.35, ease: 'power2.out' }, 0.10);
+                    .to(u.uColor.value, { r: 0.8,  g: 0.133, b: 0.0, duration: 0.35, ease: 'power2.out' }, 0.10);
             }
             resize() {
                 this.camera.aspect = window.innerWidth / window.innerHeight;
@@ -1440,7 +1440,7 @@
             };
 
             async function openCatCollage(categoryName) {
-                console.log('[LP] Opening Category:', categoryName);
+                console.log('[YB] Opening Category:', categoryName);
                 if (catOverlay && catOverlay.hasAttribute('data-lazy-partial')) {
                     try {
                         const url = catOverlay.getAttribute('data-lazy-partial');
@@ -1457,18 +1457,19 @@
                             catCountEl = document.getElementById('cat-collage-count');
                             catGrids = document.querySelectorAll('.cat-grid');
                             
-                            if (catCloseBtn) catCloseBtn.addEventListener('click', closeCatCollage);
+                            
+                            if (catCloseBtn) catCloseBtn.addEventListener('click', () => closeCatCollage(false));
                             const catExitBtn = document.getElementById('cat-collage-exit');
                             if (catExitBtn) {
                                 catExitBtn.addEventListener('click', () => {
-                                    closeCatCollage();
+                                    closeCatCollage(false);
                                     const backBtn = document.querySelector('.archive-back-btn');
                                     if (backBtn) backBtn.click();
                                 });
                             }
                         }
                     } catch (e) {
-                        console.error('[LP] Error loading collage partial:', e);
+                        console.error('[YB] Error loading collage partial:', e);
                     }
                 }
 
@@ -1556,10 +1557,26 @@
                 requestAnimationFrame(() => { catOverlay.style.opacity = '1'; });
                 wireCollageCardListeners();
                 lenis.stop();
+                document.body.style.overflow = 'hidden';
+                document.body.classList.add('cat-collage-active');
+                
+                // Add to history so Back button can close it
+                if (!history.state || history.state.overlay !== 'cat-collage') {
+                    history.pushState({ overlay: 'cat-collage' }, '', '');
+                }
             }
 
-            function closeCatCollage() {
+            function closeCatCollage(isPopState = false) {
+                if (catOverlay.style.display === 'none') return;
+                
                 catOverlay.style.opacity = '0';
+                document.body.style.overflow = '';
+                document.body.classList.remove('cat-collage-active');
+                
+                if (!isPopState && history.state && history.state.overlay === 'cat-collage') {
+                    history.back();
+                }
+
                 setTimeout(() => {
                     catOverlay.style.display = 'none';
                     catOverlay.style.pointerEvents = 'none';
@@ -1570,19 +1587,19 @@
 
             document.querySelectorAll('.cat-clickable').forEach(catCard => {
                 catCard.addEventListener('click', (e) => {
-                    console.log('[LP] Category Clicked:', catCard.dataset.category);
+                    console.log('[YB] Category Clicked:', catCard.dataset.category);
                     e.stopPropagation();
                     const catName = (catCard.dataset.category || '').replace(/&amp;/g, '&');
                     openCatCollage(catName);
                 });
             });
 
-            catCloseBtn && catCloseBtn.addEventListener('click', closeCatCollage);
+            catCloseBtn && catCloseBtn.addEventListener('click', () => closeCatCollage(false));
 
             const catExitBtn = document.getElementById('cat-collage-exit');
             if (catExitBtn) {
                 catExitBtn.addEventListener('click', () => {
-                    closeCatCollage();
+                    closeCatCollage(false);
                     const backBtn = document.querySelector('.archive-back-btn');
                     if (backBtn) backBtn.click();
                 });
@@ -1593,7 +1610,108 @@
 
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape' && catOverlay && catOverlay.style.display === 'block' && !document.getElementById('project-reveal').classList.contains('active')) {
-                    closeCatCollage();
+                    closeCatCollage(false);
+                }
+            });
+
+            // Intercept Mouse Back/Forward (buttons 3 & 4) to prevent teleporting out of overlays
+            let mouseNavFlag = false;
+            let catNavFlag = false;
+            document.addEventListener('mousedown', (e) => {
+                if (e.button === 3 || e.button === 4) {
+                    const reveal = document.getElementById('project-reveal');
+                    const catOv = document.getElementById('cat-collage-overlay');
+
+                    if (reveal && reveal.classList.contains('active')) {
+                        // Inside project reveal: switch project instead of navigating back
+                        if (e.button === 3 && typeof switchProjectReveal === 'function') {
+                            switchProjectReveal(-1, true);
+                        } else if (e.button === 4 && typeof switchProjectReveal === 'function') {
+                            switchProjectReveal(1, true);
+                        }
+                        mouseNavFlag = true;
+                        setTimeout(() => mouseNavFlag = false, 300);
+                    } else if (catOv && catOv.style.display === 'block') {
+                        // Inside cat-collage but no project open: close collage gracefully
+                        if (e.button === 3) {
+                            catNavFlag = true;
+                            setTimeout(() => catNavFlag = false, 300);
+                            // Let history.back() fire naturally — we'll intercept in popstate
+                        }
+                    }
+                }
+            }, { capture: true });
+
+            window.addEventListener('popstate', (e) => {
+                const reveal = document.getElementById('project-reveal');
+                const catOv = document.getElementById('cat-collage-overlay');
+
+                // Case 1: Mouse back was used while inside project-reveal → we already switched project, just restore state
+                if (mouseNavFlag) {
+                    if (reveal && reveal.classList.contains('active')) {
+                        history.pushState({ overlay: 'project-reveal', index: typeof currentRevealIndex !== 'undefined' ? currentRevealIndex : 0 }, '', '');
+                        mouseNavFlag = false;
+                        return;
+                    }
+                    mouseNavFlag = false;
+                }
+
+                const state = e.state;
+
+                // Case 2: Popped to project-reveal state
+                if (state && state.overlay === 'project-reveal') {
+                    if (reveal && reveal.classList.contains('active')) {
+                        if (typeof switchProjectReveal === 'function' && typeof currentRevealIndex !== 'undefined' && state.index !== undefined && state.index !== currentRevealIndex) {
+                            switchProjectReveal(state.index - currentRevealIndex, true);
+                        }
+                    }
+                    return;
+                }
+
+                // Case 3: Popped away from project-reveal → close reveal only, keep collage open
+                if (reveal && reveal.classList.contains('active')) {
+                    if (typeof closeProjectReveal === 'function') closeProjectReveal(true);
+                    // If we popped to cat-collage state, make sure collage stays open
+                    if (state && state.overlay === 'cat-collage') {
+                        // Collage is still open, push the state back so another back press still works
+                        setTimeout(() => {
+                            if (catOv && catOv.style.display === 'block') {
+                                if (!history.state || history.state.overlay !== 'cat-collage') {
+                                    history.pushState({ overlay: 'cat-collage' }, '', '');
+                                }
+                            }
+                        }, 50);
+                    }
+                    return;
+                }
+
+                // Case 4: Popped to cat-collage state (no reveal open)
+                if (state && state.overlay === 'cat-collage') {
+                    // Collage should stay open — push the state back to keep it in the stack
+                    if (catOv && catOv.style.display === 'block') {
+                        history.pushState({ overlay: 'cat-collage' }, '', '');
+                    }
+                    return;
+                }
+
+                // Case 5: Mouse-back flag from cat-collage with no state → close collage gracefully
+                if (catNavFlag) {
+                    catNavFlag = false;
+                    if (catOv && catOv.style.display === 'block') {
+                        closeCatCollage(true);
+                    }
+                    return;
+                }
+
+                // Case 6: Popped to null/external state while cat-collage is open → close gracefully
+                if (catOv && catOv.style.display === 'block') {
+                    closeCatCollage(true);
+                    // Prevent actually leaving the page by pushing a neutral state
+                    setTimeout(() => {
+                        if (!history.state) {
+                            history.pushState({}, '', '');
+                        }
+                    }, 50);
                 }
             });
 
@@ -1707,6 +1825,7 @@
                         gsap.set(prMedia, { opacity: 1, x: rect.left, y: rect.top, width: rect.width, height: rect.height, borderRadius: '6px' });
                         gsap.set(reveal, { display: 'block', opacity: 0 });
                         reveal.classList.add('active');
+                        document.body.style.overflow = 'hidden';
                         gsap.to(reveal, { opacity: 1, duration: 0.4, ease: 'power2.inOut' });
                         gsap.to(prMedia, { x: 0, y: 0, width: '100vw', height: '100vh', borderRadius: '0px', duration: 0.9, ease: 'power4.inOut', onComplete: () => { prMedia.style.opacity = 0; } });
                         gsap.set(['.pr-title-side','.pr-center-stage','.pr-info-wrapper','.pr-meta-top'], { y: 40, opacity: 0 });
@@ -1773,7 +1892,7 @@
                     wrapper.innerHTML = html;
                     _mount.appendChild(wrapper.firstElementChild);
                     _fragmentCache[name] = true;
-                } catch(e) { console.warn('[LP] Fragment load failed:', name, e); if(window.showLPToast) window.showLPToast('Content failed to load. Please refresh and try again.'); }
+                } catch(e) { console.warn('[YB] Fragment load failed:', name, e); if(window.showLPToast) window.showLPToast('Content failed to load. Please refresh and try again.'); }
             }
 
             // DA OVERLAY STATE
@@ -1787,6 +1906,7 @@
                 if (!daOverlay) return;
                 isDaOpen = true;
                 lenis.stop();
+                document.body.style.overflow = 'hidden';
                 initDaThreeJS();
                 animateDa();
                 gsap.to(daOverlay, { opacity: 1, pointerEvents: 'auto', duration: 0.6, ease: 'power2.out' });
@@ -1802,6 +1922,7 @@
                 cancelAnimationFrame(daReqFrame);
                 const _daEl = document.getElementById('da-overlay');
                 if (!_daEl) return;
+                document.body.style.overflow = '';
                 gsap.to('.da-animate-element', { y: -20, opacity: 0, duration: 0.3, ease: 'power2.in' });
                 gsap.to(_daEl, {
                     opacity: 0, pointerEvents: 'none', duration: 0.6, ease: 'power2.inOut', delay: 0.1,
@@ -2208,52 +2329,62 @@
 
                 // 2. Project Reveal Close (Back)
                 if (e.target.classList.contains('pr-close') || e.target.closest('.pr-close')) {
-                    const reveal = document.getElementById('project-reveal');
-                    if (!reveal || !reveal.classList.contains('active')) return;
-
-                    // Immediately lock � prevents double-trigger
-                    reveal.classList.remove('active');
-                    reveal.style.pointerEvents = 'none';
-
-                    // Remove mouse listener
-                    if (reveal._onRevealMove) reveal.removeEventListener('mousemove', reveal._onRevealMove);
-
-                    // Kill ALL pending open-animation tweens to prevent conflicts
-                    gsap.killTweensOf(reveal);
-                    gsap.killTweensOf('.pr-reel-wrapper');
-                    gsap.killTweensOf('.pr-center-stage');
-                    gsap.killTweensOf('.pr-info-wrapper');
-                    gsap.killTweensOf('.pr-title-side');
-                    gsap.killTweensOf('.pr-close');
-                    
-                    gsap.killTweensOf('.pr-nav-btn');
-
-                    // Restore cursor
-                    gsap.to('#c-ring, .cursor-trail', { scale: 1, opacity: 1, duration: 0.4 });
-
-                    // Simple reliable fade-out � no complex collapse
-                    gsap.to(reveal, {
-                        opacity: 0, duration: 0.4, ease: 'power2.in',
-                        onComplete: () => {
-                            gsap.set(reveal, { display: 'none' });
-                            reveal.style.pointerEvents = '';
-                            
-                            // ONLY restart Lenis if the Category Overlay is NOT currently active
-                            const catOverlay = document.getElementById('cat-collage-overlay');
-                            if (!catOverlay || catOverlay.style.display === 'none' || catOverlay.style.display === '') {
-                                lenis.start();
-                            }
-                            gsap.to('.project-card', { opacity: 1, duration: 0.6 });
-                            gsap.to('header, .work-header', { opacity: 1, y: 0, duration: 0.6 });
-                            // Pause videos only � don't clear src to avoid media abort errors
-                            reveal.querySelectorAll('video').forEach(v => {
-                                if (v._ioObserver) { v._ioObserver.disconnect(); v._ioObserver = null; }
-                                v.pause();
-                            });
-                        }
-                    });
+                    if (typeof closeProjectReveal === 'function') closeProjectReveal(false);
                 }
             });
+
+            function closeProjectReveal(isPopState = false) {
+                const reveal = document.getElementById('project-reveal');
+                if (!reveal || !reveal.classList.contains('active')) return;
+
+                // Immediately lock prevents double-trigger
+                reveal.classList.remove('active');
+                document.body.style.overflow = '';
+                reveal.style.pointerEvents = 'none';
+
+                if (!isPopState && history.state && history.state.overlay === 'project-reveal') {
+                    history.back();
+                }
+
+                // Remove mouse listener
+                if (reveal._onRevealMove) reveal.removeEventListener('mousemove', reveal._onRevealMove);
+
+                // Kill ALL pending open-animation tweens to prevent conflicts
+                gsap.killTweensOf(reveal);
+                gsap.killTweensOf('.pr-reel-wrapper');
+                gsap.killTweensOf('.pr-center-stage');
+                gsap.killTweensOf('.pr-info-wrapper');
+                gsap.killTweensOf('.pr-title-side');
+                gsap.killTweensOf('.pr-close');
+                
+                gsap.killTweensOf('.pr-nav-btn');
+
+                // Restore cursor
+                gsap.to('#c-ring, .cursor-trail', { scale: 1, opacity: 1, duration: 0.4 });
+
+                // Simple reliable fade-out no complex collapse
+                gsap.to(reveal, {
+                    opacity: 0, duration: 0.4, ease: 'power2.in',
+                    onComplete: () => {
+                        gsap.set(reveal, { display: 'none' });
+                        reveal.style.pointerEvents = '';
+                        
+                        // ONLY restart Lenis if the Category Overlay is NOT currently active
+                        const catOverlay = document.getElementById('cat-collage-overlay');
+                        if (!catOverlay || catOverlay.style.display === 'none' || catOverlay.style.display === '') {
+                            lenis.start();
+                        }
+                        gsap.to('.project-card', { opacity: 1, duration: 0.6 });
+                        gsap.to('header, .work-header', { opacity: 1, y: 0, duration: 0.6 });
+                        // Pause videos only don't clear src to avoid media abort errors
+                        reveal.querySelectorAll('video').forEach(v => {
+                            if (v._ioObserver) { v._ioObserver.disconnect(); v._ioObserver = null; }
+                            v.pause();
+                        });
+                    }
+                });
+            }
+
 
             // Cinematic Form Success State
             if (daForm) {
@@ -2286,7 +2417,7 @@
                                 WE'LL BE<br>IN TOUCH.
                             </h2>
                             <p style="font-family:'Inter',sans-serif; font-size:0.95rem; color:rgba(255,255,255,0.6); max-width:320px; line-height:1.7; margin:0 0 40px;">
-                                Your brief has landed at <span style="color:var(--audit-accent,#E8A832);">contact@limitlessproductions.in</span>.<br>
+                                Your brief has landed at <span style="color:var(--audit-accent,#E8A832);">contact@YourBrand.in</span>.<br>
                                 Expect a response within 24 hours.
                             </p>
                             <div style="font-family:'Space Mono',monospace; font-size:10px; letter-spacing:0.2em; color:rgba(255,255,255,0.3); text-transform:uppercase;">
@@ -2334,12 +2465,12 @@
                 const imgSrc = card.querySelector('img').src;
                 
                 // Read exact layout data from card, or fallback to smart defaults
-                const titleLeft = card.dataset.titleLeft ? card.dataset.titleLeft.replace(/\\n/g, '\n') : baseTitle.split(' ')[0] || 'Limitless';
+                const titleLeft = card.dataset.titleLeft ? card.dataset.titleLeft.replace(/\\n/g, '\n') : baseTitle.split(' ')[0] || 'YourBrand';
                 const titleRight = card.dataset.titleRight ? card.dataset.titleRight.replace(/\\n/g, '\n') : baseTitle.split(' ')[1] || 'Productions';
                 
                 const metaTl = card.dataset.metaTl || "";
                 const metaTr = card.dataset.metaTr || "";
-                const metaBc = `${baseTitle} X LIMITLESS`;
+                const metaBc = `${baseTitle} X YOURBRAND`;
                 
                 const desc = card.dataset.desc || "";
                 const cardVideo = card.querySelector('video');
@@ -2659,7 +2790,7 @@
                 reveal._activeCard = card;
             }
 
-            function switchProjectReveal(direction) {
+            function switchProjectReveal(direction, isPopState = false) {
                 let nextIndex = currentRevealIndex + direction;
                 if(nextIndex < 0) nextIndex = activeCardsList.length - 1;
                 if(nextIndex >= activeCardsList.length) nextIndex = 0;
@@ -2669,6 +2800,11 @@
                 
                 // Vertical distance for the cascade effect
                 const yDist = window.innerHeight * 0.4 * direction;
+
+                // Push state for the new project
+                if (!isPopState) {
+                    history.pushState({ overlay: 'project-reveal', index: nextIndex }, '', '');
+                }
 
                 // Dynamic Cascading/Stack Animation (Vertical & Scale)
                 gsap.to('.pr-center-stage, .pr-info-wrapper', { y: -yDist, opacity: 0, duration: 0.5, ease: 'power2.inOut' });
@@ -2822,14 +2958,12 @@
             // Keyboard Navigation (Arrow Keys & Escape)
             document.addEventListener('keydown', (e) => {
                 const reveal = document.getElementById('project-reveal');
-                if (!reveal.classList.contains('active')) return; // Only trigger if overlay is open
+                if (!reveal.classList.contains('active')) return;
                 
-                if (e.key === 'ArrowLeft') {
-                    switchProjectReveal(-1);
-                } else if (e.key === 'ArrowRight') {
-                    switchProjectReveal(1);
-                } else if (e.key === 'Escape') {
-                    document.querySelector('.pr-close').click();
+                if (e.key === 'ArrowRight' || e.key === 'ArrowDown') switchProjectReveal(1);
+                if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') switchProjectReveal(-1);
+                if (e.key === 'Escape') {
+                    if (typeof closeProjectReveal === 'function') closeProjectReveal();
                 }
             });
 
@@ -2897,6 +3031,12 @@
                     
                     gsap.set(reveal, { display: 'block', opacity: 0 });
                     reveal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+
+                    // Initial history state for project reveal
+                    if (!history.state || history.state.overlay !== 'project-reveal') {
+                        history.pushState({ overlay: 'project-reveal', index: activeIndex !== -1 ? activeIndex : index }, '', '');
+                    }
                     
                     // Hide background elements
                     gsap.to('.project-card', { opacity: 0, duration: 0.6, ease: 'power2.out' });

@@ -10,7 +10,7 @@ const U='HIGH QUALITY UGC ADS',E='ENTERTAINMENT & EVENTS',FA='FASHION & JEWELS',
 const mk=(n,c,o={})=>{const reel=(u)=>!u?'':(u.startsWith('http')?u:CV+u);return{id:'p_'+n.replace(/[^a-z0-9]/gi,'_').toLowerCase(),name:n,desc:o.d||'',thumbnail:o.t||T,reel:reel(o.r),reel1:reel(o.r1),reel2:reel(o.r2),reel3:reel(o.r3),logo:o.l?CI+o.l:'',mood:o.m||'pureWhite',instagram:o.i||'',categories:c};};
 const V={
   'LUCE & OMBRA':{r:'v1775387773/L_O_-_Compilation_zhxxhh.mp4',r1:'v1775387779/L_O_Kirti_Reel_3_new_grade_drqhmh.mp4',r2:'v1775387792/L_O_-_FEB_Compilation_Reel_2_xbnbyh.mp4',r3:'v1775626019/L_O_-_Coming_Soon_Final_hkejpx.mp4',i:'@luceandombra.eyewear',m:'darkEditorial',l:'Optichouse_Signature___Corporate_Logo_page-0001-1_i28nqi.png'},
-  'FINCA RESTRO CAFE':{r:'https://res.cloudinary.com/dfstyia4c/video/upload/v1777794982/Finca_-_Model_Reel_Horizontal_CC_jv8538.mp4',i:'@finca.restrocafe',m:'goldenWarmth',l:'WhatsApp_Image_2023-08-19_at_12.37.24_PM_acnuea.png'},
+  'FINCA RESTRO CAFE':{r:'https://player.vimeo.com/external/434045526.sd.mp4?s=c27eecc69a27dbc4ff2b87d38afc35f1a9e7c02d&profile_id=164',i:'@finca.restrocafe',m:'goldenWarmth',l:'WhatsApp_Image_2023-08-19_at_12.37.24_PM_acnuea.png'},
   'KOA CAFE':{r:'v1775626654/KOA_-_Horizontal_a7illr.mp4',r1:'v1775390843/KOA_-_March_Compilation_klammi.mp4',r2:'v1775390851/KOA_-_Model_1_Glow_dspqoc.mp4',r3:'v1775388661/KOA_Cafe_-_March_Ultimate_Compilation_Reel_kue22s.mp4',i:'@koacafe.official',m:'goldenWarmth',l:'WhatsApp_Image_2023-08-19_at_12.37.24_PM_acnuea.png'},
   'FORTUNE INN PROMENADE':{r:'v1775559494/Fortune_Inn_Promenade_-_March_Desert_Reel_2_vs2xe8.mp4',r1:'v1775559587/FIP_-_FEB_Compilation_Reel_1_qqhbo5.mp4',r2:'v1775559490/FIP_-_3_friends_FINAL_qhnneg.mp4',r3:'v1775559486/FIP_-_Compilation_3_un77gd.mp4',i:'@fortuneinnpromenadevadodara',m:'goldenWarmth',l:'Suba_Logo_Original_-_Transparent_uv9wqy.png'},
   'DR. PRIYANKA':{r:'v1775561554/Dr._Priyanka_-_March_UEB_Horizontal_Reel_1_hzq046.mp4',r1:'v1775561547/DR_Priyanka_-_3_ew5p3r.mp4',r2:'v1775561591/DR_Priyanka_-_1_gl0y9p.mp4',r3:'v1775561547/DR_Priyanka_-_3_ew5p3r.mp4',l:'Vasu_Healthcare_Logo_pew3ww.png'},
@@ -19,7 +19,7 @@ const V={
   'OPTIC HOUSE':{r:'v1775389629/Signature_feb_compilation_2_yxwc0v.mp4',r1:'v1775389631/Signature_Eyewear_-_March_B_-_Roll_Edit_Reel_1_rtbd30.mp4',r2:'v1775390387/Signature_Final_2_h6w6vf.mp4',r3:'v1775626958/Signature_feb_compilation_1_gbfp40.mp4',i:'@optichouseofficial.in',l:'Optichouse_Signature___Corporate_Logo_page-0001-1_i28nqi.png'},
 };
 const RAW=[
-  ['LIMITLESS X CLIENTS',[U]],['AMAR VSL 2.0',[U]],['BLACK BUNNY',[U]],['SIGNATURE EYEWEAR',[U,LI]],
+  ['YOURBRAND X CLIENTS',[U]],['AMAR VSL 2.0',[U]],['BLACK BUNNY',[U]],['SIGNATURE EYEWEAR',[U,LI]],
   ['ESPI',[U,ED]],['BROOKFIELDZ',[U,RE]],['FINCA',[U]],['PACIFIC CONSULT',[U]],
   ['SADGURU INSTITUE',[U,ED]],['DECATHLON',[U,SP]],['KATHIAYAWADI VILLAGE',[U,FB]],
   ['TOTAL DENTAL PROJECT',[U]],['EASYDENT',[U,HB]],['KIDSTER',[U,LI]],['LEXUS',[U]],
@@ -54,10 +54,10 @@ const RAW=[
 ];
 const SEED_PROJECTS=RAW.map(([n,c])=>mk(n,c,V[n]||{}));
 const SEED_TALENTS = [
-    { name: "Aria Vance", id: "001", cat: "EDITORIAL", img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb", works: "LUCE & OMBRA, KOA", vids: "https://res.cloudinary.com/dfstyia4c/video/upload/v1775388052/LUCE_OMBRA_-_TEASER_1_p7y5x5.mp4", comment: "CRAFTING SILENCES IN A WORLD OF NOISE." },
-    { name: "Julian Ross", id: "002", cat: "COMMERCIAL", img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d", works: "SIGNATURE EYEWEAR", vids: "https://res.cloudinary.com/dfstyia4c/video/upload/v1775389629/Signature_feb_compilation_2_yxwc0v.mp4", comment: "EVERY FRAME IS A LEGACY IN THE MAKING." },
-    { name: "Elara Sky", id: "003", cat: "LIFESTYLE", img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1", works: "DR. PRIYANKA", vids: "https://res.cloudinary.com/dfstyia4c/video/upload/v1775561554/Dr._Priyanka_-_March_UEB_Horizontal_Reel_1_hzq046.mp4", comment: "AUTHENTICITY OVER PERFECTION, ALWAYS." },
-    { name: "Kai Ren", id: "004", cat: "COMMERCIAL", img: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce", works: "THE DENTAL PROJECT", vids: "https://res.cloudinary.com/dfstyia4c/video/upload/v1775558775/TDP_-_Script_2_xwnchw.mp4", comment: "WHERE PRECISION MEETS PURE EMOTION." },
+    { name: "Aria Vance", id: "001", cat: "EDITORIAL", img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb", works: "LUCE & OMBRA, KOA", vids: "https://player.vimeo.com/external/494252666.sd.mp4?s=25e36ff5c13e56aebc2826a6c4b2c15982e0fb5f&profile_id=164", comment: "CRAFTING SILENCES IN A WORLD OF NOISE." },
+    { name: "Julian Ross", id: "002", cat: "COMMERCIAL", img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d", works: "SIGNATURE EYEWEAR", vids: "https://player.vimeo.com/external/403616003.sd.mp4?s=d4529edbdcb1e07b7194639c09c13b30e8c89de5&profile_id=164", comment: "EVERY FRAME IS A LEGACY IN THE MAKING." },
+    { name: "Elara Sky", id: "003", cat: "LIFESTYLE", img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1", works: "DR. PRIYANKA", vids: "https://player.vimeo.com/external/434045526.sd.mp4?s=c27eecc69a27dbc4ff2b87d38afc35f1a9e7c02d&profile_id=164", comment: "AUTHENTICITY OVER PERFECTION, ALWAYS." },
+    { name: "Kai Ren", id: "004", cat: "COMMERCIAL", img: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce", works: "THE DENTAL PROJECT", vids: "https://player.vimeo.com/external/494252666.sd.mp4?s=25e36ff5c13e56aebc2826a6c4b2c15982e0fb5f&profile_id=164", comment: "WHERE PRECISION MEETS PURE EMOTION." },
     { name: "Sofia Kim", id: "005", cat: "LIFESTYLE", img: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04", works: "SUBA ELITE", vids: "", comment: "DEFINING THE MODERN LUXURY NARRATIVE." },
     { name: "Oscar Wilde", id: "006", cat: "EDITORIAL", img: "https://images.unsplash.com/photo-1488161628813-04466f872be2", works: "OPTIC HOUSE", vids: "", comment: "CHASING THE LIGHT, FINDING THE SOUL." },
     { name: "Mia Thorne", id: "007", cat: "EDITORIAL", img: "https://images.unsplash.com/photo-1517841905240-472988babdf9", works: "JAWED HABIB", vids: "", comment: "VIBRANCE IS A REVOLUTION OF STRENGTH." },

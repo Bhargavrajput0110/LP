@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Talent Archive | Limitless Productions</title>
-    <link rel="icon" type="image/png" href="public/images/logo.png">
+    <title>Talent Archive | YourBrand</title>
+    <link rel="icon" type="image/png" href="https://dummyimage.com/400x100/050507/ffffff.png&text=YOURBRAND">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -264,7 +264,7 @@
     <div class="fixed-ui">
         <header class="fixed-header">
             <a href="index.html" class="logo-wrap">
-                <img src="public/images/logo.png" alt="Limitless">
+                <img src="https://dummyimage.com/400x100/050507/ffffff.png&text=YOURBRAND" alt="YourBrand">
             </a>
             <a href="index.html" class="btn-exit uppercase">EXIT ARCHIVE</a>
         </header>
@@ -292,7 +292,7 @@
     <main class="universe-canvas">
         <div class="cylinder-track" id="track">
             <div class="central-core">
-                <img src="public/images/logo.png" alt="Limitless">
+                <img src="https://dummyimage.com/400x100/050507/ffffff.png&text=YOURBRAND" alt="YourBrand">
             </div>
         </div>
     </main>
@@ -321,9 +321,9 @@
 
         const firebaseConfig = {
             apiKey: "AIzaSyD1vnMRo_cCcqpzuV9prlrOiUIavz7nv6g",
-            authDomain: "limitless-cms.firebaseapp.com",
-            projectId: "limitless-cms",
-            storageBucket: "limitless-cms.firebasestorage.app",
+            authDomain: "yourbrand-cms.firebaseapp.com",
+            projectId: "yourbrand-cms",
+            storageBucket: "yourbrand-cms.firebasestorage.app",
             messagingSenderId: "795014578598",
             appId: "1:795014578598:web:449def7c57453637480f67"
         };
@@ -332,10 +332,10 @@
         const db  = getFirestore(app);
 
         let talents = [
-            { name: "Aria Vance", id: "001", cat: "EDITORIAL", img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb", works: "LUCE & OMBRA, KOA", vids: "https://res.cloudinary.com/dfstyia4c/video/upload/v1775388052/LUCE_OMBRA_-_TEASER_1_p7y5x5.mp4", comment: "CRAFTING SILENCES IN A WORLD OF NOISE." },
-            { name: "Julian Ross", id: "002", cat: "COMMERCIAL", img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d", works: "SIGNATURE EYEWEAR", vids: "https://res.cloudinary.com/dfstyia4c/video/upload/v1775389629/Signature_feb_compilation_2_yxwc0v.mp4", comment: "EVERY FRAME IS A LEGACY IN THE MAKING." },
-            { name: "Elara Sky", id: "003", cat: "LIFESTYLE", img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1", works: "DR. PRIYANKA", vids: "https://res.cloudinary.com/dfstyia4c/video/upload/v1775561554/Dr._Priyanka_-_March_UEB_Horizontal_Reel_1_hzq046.mp4", comment: "AUTHENTICITY OVER PERFECTION, ALWAYS." },
-            { name: "Kai Ren", id: "004", cat: "COMMERCIAL", img: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce", works: "THE DENTAL PROJECT", vids: "https://res.cloudinary.com/dfstyia4c/video/upload/v1775558775/TDP_-_Script_2_xwnchw.mp4", comment: "WHERE PRECISION MEETS PURE EMOTION." },
+            { name: "Aria Vance", id: "001", cat: "EDITORIAL", img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb", works: "LUCE & OMBRA, KOA", vids: "https://player.vimeo.com/external/403616003.sd.mp4?s=d4529edbdcb1e07b7194639c09c13b30e8c89de5&profile_id=164", comment: "CRAFTING SILENCES IN A WORLD OF NOISE." },
+            { name: "Julian Ross", id: "002", cat: "COMMERCIAL", img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d", works: "SIGNATURE EYEWEAR", vids: "https://player.vimeo.com/external/434045526.sd.mp4?s=c27eecc69a27dbc4ff2b87d38afc35f1a9e7c02d&profile_id=164", comment: "EVERY FRAME IS A LEGACY IN THE MAKING." },
+            { name: "Elara Sky", id: "003", cat: "LIFESTYLE", img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1", works: "DR. PRIYANKA", vids: "https://player.vimeo.com/external/494252666.sd.mp4?s=25e36ff5c13e56aebc2826a6c4b2c15982e0fb5f&profile_id=164", comment: "AUTHENTICITY OVER PERFECTION, ALWAYS." },
+            { name: "Kai Ren", id: "004", cat: "COMMERCIAL", img: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce", works: "THE DENTAL PROJECT", vids: "https://player.vimeo.com/external/403616003.sd.mp4?s=d4529edbdcb1e07b7194639c09c13b30e8c89de5&profile_id=164", comment: "WHERE PRECISION MEETS PURE EMOTION." },
             { name: "Sofia Kim", id: "005", cat: "LIFESTYLE", img: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04", works: "SUBA ELITE", vids: "", comment: "DEFINING THE MODERN LUXURY NARRATIVE." },
             { name: "Oscar Wilde", id: "006", cat: "EDITORIAL", img: "https://images.unsplash.com/photo-1488161628813-04466f872be2", works: "OPTIC HOUSE", vids: "", comment: "CHASING THE LIGHT, FINDING THE SOUL." },
             { name: "Mia Thorne", id: "007", cat: "EDITORIAL", img: "https://images.unsplash.com/photo-1517841905240-472988babdf9", works: "JAWED HABIB", vids: "", comment: "VIBRANCE IS A REVOLUTION OF STRENGTH." },
